@@ -229,6 +229,8 @@ if (isset($_SESSION["user_vec"])) {
                                             }
                                         }
                                     }
+                                }else{
+                                    $weigdeliveryfee = 0;
                                 }
                                 #
                                 ?>
@@ -247,6 +249,8 @@ if (isset($_SESSION["user_vec"])) {
                                         $finalPricePerItem = $price - $discountAmount;
                                         $price_tot = ($finalPricePerItem * $cartdata["qty"]) + $price_tot;
                                     }
+                                }else{
+                                    $price_tot = 0;
                                 }
                                 ?>
                                 <div class="bg-color-three rounded-8 p-24">
