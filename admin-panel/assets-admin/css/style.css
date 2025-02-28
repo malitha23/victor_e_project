@@ -1,0 +1,36 @@
+.blueOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.486);
+    /* Blue color with transparency */
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.blueOverlay .d-flex {
+    height: 100%;
+}
+
+.blueOverlay .text-center {
+    color: rgb(0, 0, 0);
+}
+
+.x {
+    --bs-btn-color: #ffffff  !important;
+    --bs-btn-bg: #2141f3  !important;
+    --bs-btn-border-color: #2141f3  !important;
+    --bs-btn-hover-color: #ffffff  !important;
+    --bs-btn-hover-bg: #3a49b3  !important; /* Lighter blue on hover */
+    --bs-btn-hover-border-color: #3a49b3  !important;
+    --bs-btn-focus-shadow-rgb: 18, 21, 53  !important;
+    --bs-btn-active-color: #ffffff  !important;
+    --bs-btn-active-bg: #232a66  !important;
+    --bs-btn-active-border-color: #3a49b3  !important;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125)  !important;
+    --bs-btn-disabled-color: #fff  !important;
+    --bs-btn-disabled-bg: #3b427d  !important;
+    --bs-btn-disabled-border-color: #3b427d  !important;
+}
