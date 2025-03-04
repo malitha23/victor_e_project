@@ -25,8 +25,7 @@ if (isset($_SESSION["a"])) {
 
     <body class="loading_body">
       <!--  Body Wrapper -->
-      <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-        data-sidebar-position="fixed" data-header-position="fixed">
+      <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
         <?php
 
         require "side.php";
@@ -61,8 +60,20 @@ if (isset($_SESSION["a"])) {
 
                   <div class="col-6 mt-4">
                     <div class="form-floating">
-                      <select class="form-select rounded-0" aria-label="Floating label select example">
-                        <option selected>Select Product Group</option>
+                      <?php
+                      $p_g = Databases::Search("SELECT * FROM `group`");
+                      $p_n = $p_g->num_rows;
+                      ?>
+                      <select id="Product_Group" class="form-select rounded-0" aria-label="Floating label select example">
+                        <option value="0" selected>Select Product Group</option>
+                        <?php
+                        for ($i = 0; $i < $p_n; $i++) {
+                          $gd = $p_g->fetch_assoc();
+                        ?>
+                          <option value="<?php echo $gd["id"] ?>"><?php echo $gd["group_name"]; ?></option>
+                        <?php
+                        }
+                        ?>
                       </select>
                       <label>Select your product group here</label>
                     </div>
@@ -79,13 +90,13 @@ if (isset($_SESSION["a"])) {
                           <div class="modal-body">
                             <div class="col-12">
                               <div class="form-floating">
-                                <input type="text" class="form-control rounded-0" placeholder="title of the product">
+                                <input id="ngname" type="text" class="form-control rounded-0" placeholder="title of the product">
                                 <label>Group Name</label>
                               </div>
                             </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn x"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</button>
+                            <button onclick="addnewgroup();" type="button" class="btn x"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</button>
                           </div>
                         </div>
                       </div>
@@ -95,8 +106,20 @@ if (isset($_SESSION["a"])) {
 
                   <div class="col-6 mt-4">
                     <div class="form-floating">
-                      <select class="form-select rounded-0" aria-label="Floating label select example">
+                      <?php
+                      $category = Databases::Search("SELECT * FROM `category`");
+                      $category_num = $category->num_rows;
+                      ?>
+                      <select id="product_category" class="form-select rounded-0" aria-label="Floating label select example">
                         <option selected>Select product category</option>
+                        <?php
+                        for ($i = 0; $i < $category_num; $i++) {
+                          $categoryd = $category->fetch_assoc();
+                        ?>
+                          <option value="<?php echo $categoryd["id"] ?>"><?php echo $categoryd["name"] ?></option>
+                        <?php
+                        }
+                        ?>
                       </select>
                       <label>Select your product category here</label>
                     </div>
@@ -113,13 +136,30 @@ if (isset($_SESSION["a"])) {
                           <div class="modal-body">
                             <div class="col-12">
                               <div class="form-floating">
-                                <input type="text" class="form-control rounded-0" placeholder="title of the product">
+                                <input id="newCategory" type="text" class="form-control rounded-0" placeholder="title of the product">
                                 <label>Category Name</label>
+                              </div>
+                              <div class="form-floating">
+                                <?php
+                                $p_g = Databases::Search("SELECT * FROM `group`");
+                                $p_n = $p_g->num_rows;
+                                ?>
+                                <select id="groupid" class="form-select rounded-0" aria-label="Floating label select example">
+                                  <option value="0" selected>Select Product Group</option>
+                                  <?php
+                                  for ($i = 0; $i < $p_n; $i++) {
+                                    $gd = $p_g->fetch_assoc();
+                                  ?>
+                                    <option value="<?php echo $gd["id"] ?>"><?php echo $gd["group_name"]; ?></option>
+                                  <?php
+                                  }
+                                  ?>
+                                </select> <label>select Product Group</label>
                               </div>
                             </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn x"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</button>
+                            <button onclick="adnewCategory();" type="button" class="btn x"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</button>
                           </div>
                         </div>
                       </div>
@@ -129,8 +169,19 @@ if (isset($_SESSION["a"])) {
 
                   <div class="col-6 mt-4">
                     <div class="form-floating">
-                      <select class="form-select rounded-0" aria-label="Floating label select example">
-                        <option selected>Select Product Condition</option>
+                      <?php
+                      $Condition = Databases::Search("SELECT * FROM `condition`");
+                      $Conditionnum = $Condition->num_rows;
+                      ?>
+                      <select id="Condition" class="form-select rounded-0" aria-label="Floating label select example">
+                        <?php
+                        for ($i = 0; $i < $Conditionnum; $i++) {
+                          $Conditiondata = $Condition->fetch_assoc();
+                        ?>
+                          <option value="<?php echo $Conditiondata["id"]; ?>"><?php echo $Conditiondata["name"]; ?></option>
+                        <?php
+                        }
+                        ?>
                       </select>
                       <label>Select Product Condition</label>
                     </div>
@@ -138,8 +189,20 @@ if (isset($_SESSION["a"])) {
 
                   <div class="col-6 mt-4">
                     <div class="form-floating">
+                      <?php
+                      $status = Databases::Search("SELECT * FROM `status`");
+                      $statusnum = $status->num_rows;
+                      ?>
                       <select class="form-select rounded-0" aria-label="Floating label select example">
-                        <option selected>Select Product Status</option>
+                        <?php
+                        for ($i = 0; $i < $statusnum; $i++) {
+                          $statusD = $status->fetch_assoc();
+                        ?>
+                          <option value="<?php echo $statusD["id"] ?>" selected><?php echo $statusD["name"] ?></option>
+                        <?php
+                        }
+                        ?>
+                        <option value="0" selected>Select Product Status</option>
                       </select>
                       <label>Select Product Status</label>
                     </div>
@@ -150,7 +213,7 @@ if (isset($_SESSION["a"])) {
                       <div class="col-6">
                         <div class="input-group">
                           <div class="form-floating is-invalid">
-                            <input type="text" class="form-control rounded-0" placeholder="Enter Amount" required>
+                            <input id="Weight" type="text" class="form-control rounded-0" placeholder="Enter Amount" required>
                             <label>Product Weight ( Ex:-3.450 )</label>
                           </div>
                           <span class="input-group-text rounded-0">kg</span>
@@ -160,29 +223,26 @@ if (isset($_SESSION["a"])) {
                   </div>
 
                   <div class="col-12 mt-4 mb-3">
-                    <textarea class="form-control rounded-0" name="editor1" placeholder="Product Description" style="height: 100px"></textarea>
+                    <textarea id="desc" class="form-control rounded-0" name="editor1" placeholder="Product Description" style="height: 100px"></textarea>
                   </div>
 
                   <div class="col-12 mb-3">
                     <div class="row d-flex justify-content-center">
                       <div class="col-8 col-md-4 mb-2" style="height: 200px;">
                         <input type="file" class="d-none" id="img_input_1">
-                        <div class="border-x log-link d-flex justify-content-center align-items-center h-100 outer-div" id="di_1"
-                          onclick="tProductImage(1);"><span class="small" id="img_span_1">Image 1</span>
+                        <div class="border-x log-link d-flex justify-content-center align-items-center h-100 outer-div" id="di_1" onclick="tProductImage(1);"><span class="small" id="img_span_1">Image 1</span>
                           <img src="" class="img-fluid" id="img_div_1">
                         </div>
                       </div>
                       <div class="col-8 col-md-4  mb-2" style="height: 200px;">
                         <input type="file" class="d-none" id="img_input_2">
-                        <div class="border-x log-link d-flex justify-content-center align-items-center h-100" id="di_2"
-                          onclick="tProductImage(2);"><span class="small" id="img_span_2">Image 2</span>
+                        <div class="border-x log-link d-flex justify-content-center align-items-center h-100" id="di_2" onclick="tProductImage(2);"><span class="small" id="img_span_2">Image 2</span>
                           <img src="" class="img-fluid" id="img_div_2">
                         </div>
                       </div>
                       <div class="col-8 col-md-4 mb-2" style="height: 200px;">
                         <input type="file" class="d-none" id="img_input_3">
-                        <div class="border-x log-link d-flex justify-content-center align-items-center h-100" id="di_3"
-                          onclick="tProductImage(3);"><span class="small" id="img_span_3">Image 3</span>
+                        <div class="border-x log-link d-flex justify-content-center align-items-center h-100" id="di_3" onclick="tProductImage(3);"><span class="small" id="img_span_3">Image 3</span>
                           <img src="" class="img-fluid" id="img_div_3">
                         </div>
                       </div>
@@ -259,7 +319,7 @@ if (isset($_SESSION["a"])) {
               </div>
 
             </div>
-            
+
           </div>
         </div>
       </div>
@@ -288,7 +348,7 @@ if (isset($_SESSION["a"])) {
       <script src="assets-admin/libs/apexcharts/dist/apexcharts.min.js"></script>
       <script src="assets-admin/libs/simplebar/dist/simplebar.js"></script>
       <script src="assets-admin/js/dashboard.js"></script>
-
+      <script src="sahan.js"></script>
       <!-- overlay -->
       <div class="blueOverlay d-none">
         <div class="d-flex justify-content-center align-items-center h-100">
