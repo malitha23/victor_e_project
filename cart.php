@@ -214,13 +214,27 @@ if ($carto > 0) {
                             <?php
                             }
                             ?>
-
-                            <div class="flex-between flex-wrap gap-16 mt-16">
-                                <div class="flex-align gap-16" style="margin-top: 10px !important;">
-                                    <input type="text" class="common-input" placeholder="Coupon Code">
-                                    <button type="submit" class="btn btn-main py-18 w-100 rounded-8">Apply Coupon</button>
+                            <?php
+                            if ($guesbatch_id == 0) {
+                            ?>
+                                <div class="flex-between flex-wrap gap-16 mt-16">
+                                    <div class="flex-align gap-16" style="margin-top: 10px !important;">
+                                        <input type="text" class="common-input" placeholder="Coupon Code">
+                                        <button type="submit" class="btn btn-main py-18 w-100 rounded-8">Apply Coupon</button>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php
+                            } else {
+                            ?>
+                                <div class="flex-between flex-wrap gap-16 mt-16">
+                                    <div class="flex-align gap-16" style="margin-top: 10px !important;">
+                                        <input disabled type="text" class="common-input" placeholder="Coupon Code">
+                                        <button disabled type="submit" class="btn btn-main py-18 w-100 rounded-8">Apply Coupon</button>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4">
@@ -306,12 +320,12 @@ if ($carto > 0) {
                             if ($cartnum > 0) {
                                 $price_tot = 0;
                                 for ($i = 0; $i < $cartnum; $i++) {
-                                    if($guesbatch_id == 0){
+                                    if ($guesbatch_id == 0) {
                                         $cartdata = $cart->fetch_assoc();
                                         $batch = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $cartdata["batch_id"] . "' ");
                                         $discountpre = $cartdata["discount"];
                                         $qty = $cartdata["qty"];
-                                    }else{
+                                    } else {
                                         foreach ($_SESSION["guest"] as $order) {
                                             $batch_id =    $order["batch_id"];
                                         }
