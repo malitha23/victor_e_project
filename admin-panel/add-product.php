@@ -53,7 +53,7 @@ if (isset($_SESSION["a"])) {
                 <div class="row m-3">
                   <div class="col-12 mt-4">
                     <div class="form-floating">
-                      <input type="text" class="form-control rounded-0" placeholder="title of the product">
+                      <input type="text" id="title" class="form-control rounded-0" placeholder="title of the product">
                       <label>Product Title</label>
                     </div>
                   </div>
@@ -167,6 +167,74 @@ if (isset($_SESSION["a"])) {
                     <!--Add New Category Modal-->
                   </div>
 
+                  <!-- sub !-->
+                  <div class="col-6 mt-4">
+                    <div class="form-floating">
+                      <?php
+                      $sub_category = Databases::Search("SELECT * FROM `sub_category`");
+                      $sub_category_num = $sub_category->num_rows;
+                      ?>
+                      <select id="product_category" class="form-select rounded-0" aria-label="Floating label select example">
+                        <option selected>Select product sub category</option>
+                        <?php
+                        for ($i = 0; $i < $sub_category_num; $i++) {
+                          $sub_categoryd = $sub_category->fetch_assoc();
+                        ?>
+                          <option value="<?php echo $sub_categoryd["id"] ?>"><?php echo $sub_categoryd["name"] ?></option>
+                        <?php
+                        }
+                        ?>
+                      </select>
+                      <label>Select your product sub category here</label>
+                    </div>
+                    <!-- Button to trigger modal -->
+                    <button class="btn x rounded-0 mt-2 d-grid col-12" data-bs-toggle="modal" data-bs-target="#exampleModal1">Add New Sub Category</button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add New Sub Category</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="col-12">
+                              <div class="form-floating">
+                                <input id="newsubCategory" type="text" class="form-control rounded-0" placeholder="Title of the product">
+                                <label for="newCategory">Sub Category Name</label>
+                              </div>
+                              <div class="form-floating">
+                                <?php
+                                $p_sg = Databases::Search("SELECT * FROM `category`");
+                                $sp_n = $p_sg->num_rows;
+                                ?>
+                                <select id="nscpid" class="form-select rounded-0" aria-label="Floating label select example">
+                                  <option value="0" selected>Select Product category</option>
+                                  <?php
+                                  for ($i = 0; $i < $sp_n; $i++) {
+                                    $gds = $p_sg->fetch_assoc();
+                                  ?>
+                                    <option value="<?php echo $gds["id"] ?>"><?php echo $gds["name"]; ?></option>
+                                  <?php
+                                  }
+                                  ?>
+                                </select>
+                                <label for="groupid">Select Product Group</label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button onclick="adnewSubCategory();" type="button" class="btn x"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--Add New Category Modal-->
+                  </div>
+                  <!-- sub !-->
+
                   <div class="col-6 mt-4">
                     <div class="form-floating">
                       <?php
@@ -193,7 +261,7 @@ if (isset($_SESSION["a"])) {
                       $status = Databases::Search("SELECT * FROM `status`");
                       $statusnum = $status->num_rows;
                       ?>
-                      <select class="form-select rounded-0" aria-label="Floating label select example">
+                      <select id="Status" class="form-select rounded-0" aria-label="Floating label select example">
                         <?php
                         for ($i = 0; $i < $statusnum; $i++) {
                           $statusD = $status->fetch_assoc();
@@ -259,7 +327,7 @@ if (isset($_SESSION["a"])) {
                   </div>
 
                   <div class="col-12 text-end">
-                    <button class="btn rounded-1 fw-bold x col-md-2"><i class="fa fa-plus-circle" aria-hidden="true"></i> ADD</button>
+                    <button onclick="productADD();" class="btn rounded-1 fw-bold x col-md-2"><i class="fa fa-plus-circle" aria-hidden="true"></i> ADD</button>
                   </div>
                 </div>
               </div>
