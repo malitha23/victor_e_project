@@ -70,9 +70,10 @@ function productADD() {
      let condition = document.getElementById("Condition").value;
      let status = document.getElementById("Status").value;
      let weight = document.getElementById("Weight").value;
-     let description = document.getElementById("desc").value;
+     var description = tinymce.get("desc").getContent();
      let consignmentStock = document.getElementById("flexCheckChecked").checked ? 1 : 0;
-
+     let product_subcategory = document.getElementById("product_subcategory").value;
+     let brand = document.getElementById("brand").value;
      // Image inputs
      let img1 = document.getElementById("img_input_1").files[0];
      let img2 = document.getElementById("img_input_2").files[0];
@@ -80,7 +81,15 @@ function productADD() {
 
      // Validate input fields
      if (!title || productGroup == "0" || category == "0" || condition == "0" || status == "0" || !weight) {
-          alert("Please fill all required fields.");
+          Swal.fire({
+               title: "Response",
+               text: "Please fill all required fields.",
+               icon: "warning",
+               showConfirmButton: false,
+               timer: 3000, 
+               toast: true,
+               position: "top-end" 
+          });
           return;
      }
 
@@ -93,6 +102,8 @@ function productADD() {
      formData.append("weight", weight);
      formData.append("description", description);
      formData.append("consignmentStock", consignmentStock);
+     formData.append("product_subcategory", product_subcategory);
+     formData.append("brand", brand);
 
      if (img1) formData.append("img1", img1);
      if (img2) formData.append("img2", img2);
@@ -102,8 +113,51 @@ function productADD() {
      xhr.open("POST", "product_add_pro.php", true);
      xhr.onload = function () {
           if (this.status == 200) {
-               alert(this.responseText);
+               if (this.responseText == 1) {
+                    Swal.fire({
+                         title: "Response",
+                         text: "success,file not uploaded",
+                         icon: "success",
+                         showConfirmButton: false,
+                         timer: 3000,
+                         toast: true,
+                         position: "top-end" 
+                    });
+               } else if(this.responseText == 2){
+                    Swal.fire({
+                         title: "Response",
+                         text: "success,file uploaded",
+                         icon: "success", 
+                         showConfirmButton: false,
+                         timer: 3000, 
+                         toast: true,
+                         position: "top-end" 
+                    });
+               }else{
+                    Swal.fire({
+                         title: "Response",
+                         text: this.responseText,
+                         icon: "warning",
+                         showConfirmButton: false,
+                         timer: 3000,
+                         toast: true,
+                         position: "top-end" 
+                     });
+               }
           }
      };
      xhr.send(formData);
+}
+function addnewbrand() {
+     var name = document.getElementById("newbrand").value;
+     var form = new FormData();
+     form.append("name", name);
+     let xhr = new XMLHttpRequest();
+     xhr.open("POST", "addbrand.php", true);
+     xhr.onload = function () {
+          if (this.status == 200) {
+               alert(this.responseText);
+          }
+     };
+     xhr.send(form);
 }

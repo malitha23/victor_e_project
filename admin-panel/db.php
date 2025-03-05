@@ -50,8 +50,9 @@ class Databases {
 
             // Execute the query
             if ($stmt->execute()) {
+                $inserted_id = Databases::$connection->insert_id; // Get last inserted ID
                 $stmt->close();
-                return true;
+                return $inserted_id; // Return the ID instead of true
             } else {
                 die("Error executing statement: " . $stmt->error);
             }

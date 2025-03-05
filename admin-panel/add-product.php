@@ -111,7 +111,7 @@ if (isset($_SESSION["a"])) {
                       $category_num = $category->num_rows;
                       ?>
                       <select id="product_category" class="form-select rounded-0" aria-label="Floating label select example">
-                        <option selected>Select product category</option>
+                        <option value="0" selected>Select product category</option>
                         <?php
                         for ($i = 0; $i < $category_num; $i++) {
                           $categoryd = $category->fetch_assoc();
@@ -174,8 +174,8 @@ if (isset($_SESSION["a"])) {
                       $sub_category = Databases::Search("SELECT * FROM `sub_category`");
                       $sub_category_num = $sub_category->num_rows;
                       ?>
-                      <select id="product_category" class="form-select rounded-0" aria-label="Floating label select example">
-                        <option selected>Select product sub category</option>
+                      <select id="product_subcategory" class="form-select rounded-0" aria-label="Floating label select example">
+                        <option value="0" selected>Select product sub category</option>
                         <?php
                         for ($i = 0; $i < $sub_category_num; $i++) {
                           $sub_categoryd = $sub_category->fetch_assoc();
@@ -234,6 +234,56 @@ if (isset($_SESSION["a"])) {
                     <!--Add New Category Modal-->
                   </div>
                   <!-- sub !-->
+
+                  <!-- brand !-->
+                  <div class="col-6 mt-4">
+                    <div class="form-floating">
+                      <?php
+                      $brand = Databases::Search("SELECT * FROM `brand`");
+                      $brand_num = $brand->num_rows;
+                      ?>
+                      <select id="brand" class="form-select rounded-0" aria-label="Floating label select example">
+                        <option value="0" selected>Select product brand</option>
+                        <?php
+                        for ($i = 0; $i < $brand_num; $i++) {
+                          $branddata = $brand->fetch_assoc();
+                        ?>
+                          <option value="<?php echo $branddata["id"] ?>"><?php echo $branddata["name"] ?></option>
+                        <?php
+                        }
+                        ?>
+                      </select>
+                      <label>Select brand here</label>
+                    </div>
+                    <!-- Button to trigger modal -->
+                    <button class="btn x rounded-0 mt-2 d-grid col-12" data-bs-toggle="modal" data-bs-target="#exampleModal2">Add New Brand</button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add New Sub Category</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="col-12">
+                              <div class="form-floating">
+                                <input id="newbrand" type="text" class="form-control rounded-0" placeholder="Title of the product">
+                                <label for="newbrand">brand Name</label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button onclick="addnewbrand();" type="button" class="btn x"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--Add New Category Modal-->
+                  </div>
+                  <!-- brand !-->
 
                   <div class="col-6 mt-4">
                     <div class="form-floating">
@@ -417,6 +467,7 @@ if (isset($_SESSION["a"])) {
       <script src="assets-admin/libs/simplebar/dist/simplebar.js"></script>
       <script src="assets-admin/js/dashboard.js"></script>
       <script src="sahan.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <!-- overlay -->
       <div class="blueOverlay d-none">
         <div class="d-flex justify-content-center align-items-center h-100">
