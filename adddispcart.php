@@ -2,6 +2,9 @@
 session_start();
 include "connection.php";
 if (isset($_SESSION["user_vec"])) {
+     if (isset($_SESSION['cart'])) {
+          unset($_SESSION['cart']); // Clear cart data if not set
+      }
      if ($_SERVER["REQUEST_METHOD"] === "POST") {
           $batch_id = isset($_POST['batch_id']) ? intval($_POST['batch_id']) : 0;
           $price = isset($_POST['price']) ? floatval($_POST['price']) : 0;
@@ -49,10 +52,46 @@ if (isset($_SESSION["user_vec"])) {
           echo ("Invalid request");
      }
 } else {
-     echo "REJISTER FIRST";
-?>
-     <script>
-          window.location = "register.php";
-     </script>
-<?php
+
+
+     if ($_SERVER["REQUEST_METHOD"] === "POST") {
+          // Retrieve batch_id, price, and discount from POST request
+          $batch_id = isset($_POST['batch_id']) ? intval($_POST['batch_id']) : 0;
+          $discount = isset($_POST['discount']) ? floatval($_POST['discount']) : 0;
+          $qty = isset($_POST['qty']) ? intval($_POST['qty']) : 1; // Default qty to 1
+
+          // Initialize cart and cart item ID counter if not set
+          if (!isset($_SESSION['cart'])) {
+               $_SESSION['cart'] = [];
+               $_SESSION['cart_id_counter'] = 1; // Start ID from 1
+          }
+
+          // Check if item already exists in the cart (update qty if exists)
+          $itemExists = false;
+          foreach ($_SESSION['cart'] as &$item) {
+               if ($item['batch_id'] == $batch_id) {
+                    $item['qty'] += $qty; // Update quantity
+                    $itemExists = true;
+                    break;
+               }
+          }
+
+          // If item does not exist, add new item with an auto-incrementing ID
+          if (!$itemExists) {
+               $_SESSION['cart'][] = [
+                    'id' => $_SESSION['cart_id_counter'], // Assign auto-incrementing ID
+                    'batch_id' => $batch_id,
+                    'user_email' => '',
+                    'qty' => $qty,
+                    'discount' => $discount,
+               ];
+               $_SESSION['cart_id_counter']++; // Increment ID counter for next item
+          }
+
+          echo "Item added to cart successfully";
+     } else {
+          echo "Invalid request method";
+     }
+
+
 }

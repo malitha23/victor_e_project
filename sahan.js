@@ -250,7 +250,7 @@ function plusprice(qty, id) {
                         timer: 10000,
                         timerProgressBar: true
                     }).then(() => {
-                        location.reload(); 
+                         location.reload(); 
                     });  
                 } else {
                     Swal.fire({
@@ -264,7 +264,7 @@ function plusprice(qty, id) {
                         timer: 3000,
                         timerProgressBar: true,
                     });
-                    location.reload();
+                     location.reload();
                 }
             } else {
                 Swal.fire({
