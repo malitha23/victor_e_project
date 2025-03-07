@@ -28,7 +28,7 @@ if ($result->num_rows === 1) {
     $d = $result->fetch_assoc();
 
     // Verify password hash
-    if (password_verify($password, $d['password'])) {
+    if ($password == $d['password']) {
         // Regenerate session ID to prevent session fixation
         session_regenerate_id(true);
         
