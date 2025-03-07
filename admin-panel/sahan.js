@@ -86,9 +86,9 @@ function productADD() {
                text: "Please fill all required fields.",
                icon: "warning",
                showConfirmButton: false,
-               timer: 3000, 
+               timer: 3000,
                toast: true,
-               position: "top-end" 
+               position: "top-end"
           });
           return;
      }
@@ -121,19 +121,19 @@ function productADD() {
                          showConfirmButton: false,
                          timer: 3000,
                          toast: true,
-                         position: "top-end" 
+                         position: "top-end"
                     });
-               } else if(this.responseText == 2){
+               } else if (this.responseText == 2) {
                     Swal.fire({
                          title: "Response",
                          text: "success,file uploaded",
-                         icon: "success", 
+                         icon: "success",
                          showConfirmButton: false,
-                         timer: 3000, 
+                         timer: 3000,
                          toast: true,
-                         position: "top-end" 
+                         position: "top-end"
                     });
-               }else{
+               } else {
                     Swal.fire({
                          title: "Response",
                          text: this.responseText,
@@ -141,8 +141,8 @@ function productADD() {
                          showConfirmButton: false,
                          timer: 3000,
                          toast: true,
-                         position: "top-end" 
-                     });
+                         position: "top-end"
+                    });
                }
           }
      };
@@ -160,4 +160,66 @@ function addnewbrand() {
           }
      };
      xhr.send(form);
+}
+function batchADD() {
+     // Get form values
+     var productID = document.getElementById("bpro").value;
+     var vendor = document.getElementById("vendor").value.trim();
+     var batchQty = document.getElementById("batchqty").value.trim();
+     var batchPrice = document.getElementById("batchprice").value.trim();
+     var sellingPrice = document.getElementById("SellingPrice").value.trim();
+     var batchcode = document.getElementById("batchcode").value;
+     // Validate inputs
+     if (productID == "0") {
+          Swal.fire("Warning!", "Please select a product.", "warning");
+          return;
+     }
+     if (vendor === "") {
+          Swal.fire("Warning!", "Vendor Name is required.", "warning");
+          return;
+     }
+     if (batchQty === "" || isNaN(batchQty) || batchQty <= 0) {
+          Swal.fire("Warning!", "Enter a valid batch quantity.", "warning");
+          return;
+     }
+     if (batchPrice === "" || isNaN(batchPrice) || batchPrice <= 0) {
+          Swal.fire("Warning!", "Enter a valid batch price.", "warning");
+          return;
+     }
+     if (sellingPrice === "" || isNaN(sellingPrice) || sellingPrice <= 0) {
+          Swal.fire("Warning!", "Enter a valid selling price.", "warning");
+          return;
+     }
+
+     // Prepare data to send
+     var formData = new FormData();
+     formData.append("productID", productID);
+     formData.append("vendor", vendor);
+     formData.append("batchQty", batchQty);
+     formData.append("batchPrice", batchPrice);
+     formData.append("sellingPrice", sellingPrice);
+     formData.append("batchcode", batchcode);
+
+     // AJAX request
+     let xhr = new XMLHttpRequest();
+     xhr.open("POST", "add_batch.php", true);
+     xhr.onload = function () {
+          if (this.status == 200) {
+               Swal.fire({
+                    title: "Success!",
+                    text: this.responseText,
+                    icon: "success",
+                    timer: 3000,
+                    showConfirmButton: false
+               });
+             //  document.getElementById("vendor").value = "";
+             //  document.getElementById("batchqty").value = "";
+             //  document.getElementById("batchprice").value = "";
+             //  document.getElementById("SellingPrice").value = "";
+             //  document.querySelector(".form-select").value = "0";
+          } else {
+               Swal.fire("Error!", "Something went wrong.", "error");
+          }
+     };
+     xhr.send(formData);
 }

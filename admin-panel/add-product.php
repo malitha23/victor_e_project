@@ -387,8 +387,20 @@ if (isset($_SESSION["a"])) {
 
                   <div class="col-12 mt-4">
                     <div class="form-floating">
-                      <select class="form-select rounded-0" aria-label="Floating label select example">
-                        <option selected>Select Product</option>
+                      <?php 
+                      $product = Databases::Search("SELECT * FROM `product`");
+                      $product_num = $product->num_rows;
+                      ?>
+                      <select id="bpro" class="form-select rounded-0" aria-label="Floating label select example">
+                        <?php
+                        for ($i=0; $i < $product_num; $i++) { 
+                          $product_data = $product->fetch_assoc();
+                          ?>
+                          <option value="<?php echo  $product_data["id"]; ?>" ><?php echo  $product_data["title"]; ?></option>
+                          <?php
+                        }
+                         ?>
+                        <option value="0" selected>Select Product</option>
                       </select>
                       <label>Select your product here</label>
                     </div>
@@ -396,14 +408,21 @@ if (isset($_SESSION["a"])) {
 
                   <div class="col-6 mt-4">
                     <div class="form-floating">
-                      <input type="text" class="form-control rounded-0" placeholder="Vendor Name">
+                      <input id="vendor" type="text" class="form-control rounded-0" placeholder="Vendor Name">
                       <label>Vendor Name</label>
                     </div>
                   </div>
 
                   <div class="col-6 mt-4">
                     <div class="form-floating">
-                      <input type="number" class="form-control rounded-0" placeholder="Product Qty">
+                      <input id="batchcode" type="text" class="form-control rounded-0" placeholder="Vendor Name">
+                      <label>batchcode</label>
+                    </div>
+                  </div>
+
+                  <div class="col-6 mt-4">
+                    <div class="form-floating">
+                      <input id="batchqty" type="number" class="form-control rounded-0" placeholder="Product Qty">
                       <label>Batch Qty</label>
                     </div>
                   </div>
@@ -412,7 +431,7 @@ if (isset($_SESSION["a"])) {
                     <div class="input-group">
                       <span class="input-group-text rounded-0">LKR</span>
                       <div class="form-floating is-invalid">
-                        <input type="text" class="form-control" placeholder="Enter Amount" required>
+                        <input id="batchprice" type="text" class="form-control" placeholder="Enter Amount" required>
                         <label>Batch Price</label>
                       </div>
                       <span class="input-group-text rounded-0">.00</span>
@@ -423,7 +442,7 @@ if (isset($_SESSION["a"])) {
                     <div class="input-group">
                       <span class="input-group-text rounded-0">LKR</span>
                       <div class="form-floating is-invalid">
-                        <input type="text" class="form-control" placeholder="Enter Amount" required>
+                        <input id="SellingPrice" type="text" class="form-control" placeholder="Enter Amount" required>
                         <label>Selling Price</label>
                       </div>
                       <span class="input-group-text rounded-0">.00</span>
@@ -431,7 +450,7 @@ if (isset($_SESSION["a"])) {
                   </div>
 
                   <div class="col-12 text-end mt-4">
-                    <button class="btn rounded-1 fw-bold x col-md-2"><i class="fa fa-plus-circle" aria-hidden="true"></i> ADD</button>
+                    <button onclick="batchADD();" class="btn rounded-1 fw-bold x col-md-2"><i class="fa fa-plus-circle" aria-hidden="true"></i> ADD</button>
                   </div>
                 </div>
               </div>
