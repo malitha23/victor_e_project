@@ -5,7 +5,11 @@ class Databases {
     // Set up the database connection
     public static function SetupConnection() {
         if (!isset(Databases::$connection)) {
+<<<<<<< HEAD
             Databases::$connection = new mysqli("localhost", "root", "", "victore", 3306);
+=======
+            Databases::$connection = new mysqli("localhost", "root", "Sahan2005@mysql", "victore", 3306);
+>>>>>>> ede8e39dafbb86983166d65dad1bed6be7dc8dc7
 
             // Check connection and throw an error if it fails
             if (Databases::$connection->connect_error) {
@@ -50,8 +54,9 @@ class Databases {
 
             // Execute the query
             if ($stmt->execute()) {
+                $inserted_id = Databases::$connection->insert_id; // Get last inserted ID
                 $stmt->close();
-                return true;
+                return $inserted_id; // Return the ID instead of true
             } else {
                 die("Error executing statement: " . $stmt->error);
             }
