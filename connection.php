@@ -25,7 +25,7 @@ class Database
                         list($key, $value) = $parts;
                         $_ENV[$key] = trim($value);
                     } else {
-                   
+
                     }
                 }
             }

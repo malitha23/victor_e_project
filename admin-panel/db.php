@@ -34,7 +34,7 @@ class Databases {
             $password = isset($_ENV['DB_PASSWORD']) ? $_ENV['DB_PASSWORD'] : '';
             $database = isset($_ENV['DB_DATABASE']) ? $_ENV['DB_DATABASE'] : 'victore';
 
-            Database::$connection = new mysqli($host, $username, $password, $database, $port);
+            Databases::$connection = new mysqli($host, $username, $password, $database, $port);
             
             // Databases::$connection = new mysqli("localhost", "root", "", "victore", 3306);
 
