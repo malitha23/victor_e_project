@@ -266,7 +266,7 @@ include_once "connection.php";
                                         $pr =  $pr->fetch_assoc();
                                         ?>
                                         <?php
-                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE `id`='" . $pr["picture_id"] . "' ");
+                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE `id`='" . $pr["id"] . "' ");
                                         $pic_d = $pic->fetch_assoc();
                                         if (empty($pic_d["path"])) {
                                         ?>
@@ -447,7 +447,7 @@ include_once "connection.php";
                                                 <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
                                                     <a href="product-details.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
                                                         <?php
-                                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE `id`='" . $pr["picture_id"] . "' ");
+                                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE  `id`='" . $pr["id"] . "' ");
                                                         $pic_d = $pic->fetch_assoc();
                                                         if (empty($pic_d["path"])) {
                                                         ?>

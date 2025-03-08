@@ -142,7 +142,7 @@ if ($carto > 0) {
                                     <div class="col-12 col-md-2 d-flex align-items-center justify-content-center">
                                         <a class="table-product__thumb flex-center">
                                             <?php
-                                            $pic = Database::Search("SELECT * FROM `picture` WHERE `id`='" . $product_data["picture_id"] . "' ");
+                                            $pic = Database::Search("SELECT * FROM `picture` WHERE `id`='" . $product_data["id"] . "' ");
                                             if ($pic->num_rows > 0) {
                                                 $pic_d = $pic->fetch_assoc();
                                                 echo '<img src="' . $pic_d["path"] . '" alt="">';
