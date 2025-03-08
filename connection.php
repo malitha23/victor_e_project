@@ -52,7 +52,6 @@ class Database {
     public static function InsertID() {
         return self::$connection->insert_id;
     }
-    
 
     // Close the database connection
     public static function CloseConnection() {
