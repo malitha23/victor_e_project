@@ -6,7 +6,37 @@ class Databases {
     public static function SetupConnection() {
         if (!isset(Databases::$connection)) {
 
-            Databases::$connection = new mysqli("localhost", "root", "", "victore", 3306);
+            if (file_exists(__DIR__ . '/.env')) {
+                $lines = file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                foreach ($lines as $line) {
+                    // Skip comments and empty lines
+                    $line = trim($line);
+                    if (empty($line) || strpos($line, '#') === 0) {
+                        continue;
+                    }
+
+                    // Split line into key and value
+                    $parts = explode('=', $line, 2);
+
+                    // Ensure we have both key and value parts
+                    if (count($parts) === 2) {
+                        list($key, $value) = $parts;
+                        $_ENV[$key] = trim($value);
+                    } else {
+                   
+                    }
+                }
+            }
+
+            $host = isset($_ENV['DB_HOST']) ? $_ENV['DB_HOST'] : 'localhost';
+            $port = isset($_ENV['DB_PORT']) ? $_ENV['DB_PORT'] : 3306;
+            $username = isset($_ENV['DB_USERNAME']) ? $_ENV['DB_USERNAME'] : 'root';
+            $password = isset($_ENV['DB_PASSWORD']) ? $_ENV['DB_PASSWORD'] : '';
+            $database = isset($_ENV['DB_DATABASE']) ? $_ENV['DB_DATABASE'] : 'victore';
+
+            Database::$connection = new mysqli($host, $username, $password, $database, $port);
+            
+            // Databases::$connection = new mysqli("localhost", "root", "", "victore", 3306);
 
 
             // Check connection and throw an error if it fails
