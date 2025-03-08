@@ -192,7 +192,6 @@ if ($carto > 0) {
                                         </div>
                                     </div>
                                 </div>
-                          
                                 <?php
                             }
                             ?>
@@ -205,7 +204,6 @@ if ($carto > 0) {
                             </div> -->
                         </div>
 
-
                     </div>
                     <div class="col-xl-3 col-lg-4">
                         <div class="cart-sidebar border border-gray-100 rounded-8 px-24 py-40">
@@ -215,10 +213,6 @@ if ($carto > 0) {
                             if (isset($_SESSION["user_vec"])) {
                                 $u = Database::Search("SELECT * FROM `user` WHERE `email`='" . $user_data["email"] . "' ");
                                 $un = $u->num_rows;
-                            } else {
-                                $un = 0;
-                            }
-                            if ($guesbatch_id == 0) {
                                 if ($un == 1) {
                                     $ud = $u->fetch_assoc();
                                     if (!empty($ud["adress_id"])) {
@@ -291,7 +285,6 @@ if ($carto > 0) {
                                     } else {
                                         $weigdeliveryfee = 0;
                                     }
-
                                 }
                             } else {
                                 $weigdeliveryfee = 0;
@@ -476,7 +469,7 @@ if ($carto > 0) {
 
     </html>
     <?php
-
+    
 }
 
 ?>
