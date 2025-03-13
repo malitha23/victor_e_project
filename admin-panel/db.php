@@ -7,8 +7,6 @@ class Databases {
         if (!isset(Databases::$connection)) {
 
             Databases::$connection = new mysqli("localhost", "root", "Sahan2005@mysql", "victore", 3306);
-
-
             // Check connection and throw an error if it fails
             if (Databases::$connection->connect_error) {
                 die("Database connection failed: " . Databases::$connection->connect_error);

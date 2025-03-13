@@ -1,11 +1,14 @@
 <?php
 session_start();
 include "connection.php";
+
+
 if (isset($_SESSION["user_vec"])) {
      if (isset($_SESSION['cart'])) {
           unset($_SESSION['cart']); // Clear cart data if not set
       }
      if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
           $batch_id = isset($_POST['batch_id']) ? intval($_POST['batch_id']) : 0;
           $price = isset($_POST['price']) ? floatval($_POST['price']) : 0;
           $discount = isset($_POST['discount']) ? floatval($_POST['discount']) : 0;
@@ -92,6 +95,4 @@ if (isset($_SESSION["user_vec"])) {
      } else {
           echo "Invalid request method";
      }
-
-
 }

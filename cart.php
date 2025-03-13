@@ -6,6 +6,7 @@ require_once "connection.php";
 if (isset($_SESSION["user_vec"])) {
     $user_row = Database::Search("SELECT * FROM `user` WHERE `email`='" . $_SESSION["user_vec"]["email"] . "' ");
     $user_data = $user_row->fetch_assoc();
+
 } else {
     $user_data = [];
 }
@@ -60,6 +61,7 @@ if ($carto > 0) {
         <!--==================== Sidebar Overlay End ====================-->
         <div class="side-overlay"></div>
         <!--==================== Sidebar Overlay End ====================-->
+
 
         <!-- ==================== Scroll to Top End Here ==================== -->
         <div class="progress-wrap">
@@ -152,6 +154,7 @@ if ($carto > 0) {
                                     </div>
                                     <div class="col-12 col-md-10 d-flex align-items-center justify-content-center">
                                         <div class="row">
+
                                             <div class="col-12 col-md-4 d-flex flex-column text-center">
                                                 <a class="title text-dark fw-semibold text-line-2" tabindex="0">
                                                     <?php echo $product_data["title"]; ?>
@@ -236,6 +239,7 @@ if ($carto > 0) {
                                 $cartdatafull = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
                                 $cartnum = count($cartdatafull);
                             } else {
+
                                 $cart = Database::Search("SELECT * FROM `cart` WHERE `user_email`='" . $user_data["email"] . "' ");
                                 $cartnum = $cart->num_rows;
                                 // Fetch all database cart items into an array
@@ -321,6 +325,7 @@ if ($carto > 0) {
                                     $finalPricePerItem = $price - $discountAmount;
                                     $price_tot = ($finalPricePerItem * $cartdata["qty"]) + $price_tot;
                                 }
+
                             } else {
                                 $price_tot = 0;
                             }
@@ -372,6 +377,7 @@ if ($carto > 0) {
                             <span
                                 class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i
                                     class="ph-fill ph-car-profile"></i></span>
+
                             <div class="">
                                 <h6 class="mb-0">IslandWild delivery</h6>
                                 <span class="text-sm text-heading">IslandWild delivers right to your doorstep.</span>
@@ -379,11 +385,13 @@ if ($carto > 0) {
                         </div>
                     </div>
                     <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="600">
+
                         <div
                             class="shipping-item flex-align gap-16 rounded-16 bg-main-two-50 hover-bg-main-100 transition-2">
                             <span
                                 class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i
                                     class="ph-fill ph-hand-heart"></i></span>
+
                             <div class="">
                                 <h6 class="mb-0"> 100% Satisfaction</h6>
                                 <span class="text-sm text-heading">100% Satisfaction Guaranteed.</span>
@@ -391,11 +399,13 @@ if ($carto > 0) {
                         </div>
                     </div>
                     <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="800">
+
                         <div
                             class="shipping-item flex-align gap-16 rounded-16 bg-main-two-50 hover-bg-main-100 transition-2">
                             <span
                                 class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i
                                     class="ph-fill ph-credit-card"></i></span>
+
                             <div class="">
                                 <h6 class="mb-0"> Secure Payments</h6>
                                 <span class="text-sm text-heading">Secure Payments with iPay.</span>
@@ -403,11 +413,13 @@ if ($carto > 0) {
                         </div>
                     </div>
                     <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="1000">
+
                         <div
                             class="shipping-item flex-align gap-16 rounded-16 bg-main-two-50 hover-bg-main-100 transition-2">
                             <span
                                 class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i
                                     class="ph-fill ph-chats"></i></span>
+
                             <div class="">
                                 <h6 class="mb-0"> 24/7 Support</h6>
                                 <span class="text-sm text-heading">24/7 service with IslandWild.</span>
@@ -457,6 +469,7 @@ if ($carto > 0) {
 
     </html>
     <?php
+    
 }
 
 ?>
