@@ -59,22 +59,26 @@ function tProductImage(x) {
 }
 
 // update product image change
-function uProductImage(x) {
-    var image = document.getElementById("img_input_" + x);
-    image.click();
 
+function imageget(x, y) {
+    var imgElement = document.getElementById("img_div_" + x + "_" + y);
+    if (imgElement) imgElement.style.display = 'none';
+}
+function uProductImage(x, y) {
+    var image = document.getElementById("img_input_" + x + "_" + y);
+    image.click();
     image.onchange = function () {
         var file_count = image.files.length;
         if (file_count == 1) {
             var file = image.files[0];
             var url = window.URL.createObjectURL(file);
-            var div = document.getElementById("di_" + x);  // Target the div instead of img
+            var div = document.getElementById("di_" + x + "_" + y); // Target the div instead of img
 
             // Set the background image of the div
             div.style.backgroundImage = "url('" + url + "')";
-            div.style.backgroundSize = "contain";  // Optional: to make the image cover the div
-            div.style.backgroundPosition = "center";  // Optional: to center the image
-            div.style.backgroundRepeat = "no-repeat";  // Optional: to prevent image repetition
+            div.style.backgroundSize = "contain"; // Optional: to make the image cover the div
+            div.style.backgroundPosition = "center"; // Optional: to center the image
+            div.style.backgroundRepeat = "no-repeat"; // Optional: to prevent image repetition
 
             // Hide the span element
             document.getElementById("img_span_" + x).className = "d-none";

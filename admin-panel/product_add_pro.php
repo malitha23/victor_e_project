@@ -73,9 +73,9 @@ if (isset($_SESSION["a"])) {
                             return null;
                         }
                         $product_id = $lastid;
-                        $img1 = uploadImage("img1", $targetDir);
-                        $img2 = uploadImage("img2", $targetDir);
-                        $img3 = uploadImage("img3", $targetDir);
+                        $img1 = 'product_image/'.uploadImage("img1", $targetDir);
+                        $img2 = 'product_image/'.uploadImage("img2", $targetDir);
+                        $img3 = 'product_image/'.uploadImage("img3", $targetDir);
 
 
                         if ($img1 === null && $img2 === null && $img3 === null) {
