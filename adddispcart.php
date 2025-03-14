@@ -13,6 +13,10 @@ if (isset($_SESSION["user_vec"])) {
           $price = isset($_POST['price']) ? floatval($_POST['price']) : 0;
           $discount = isset($_POST['discount']) ? floatval($_POST['discount']) : 0;
 
+          $batch_id = isset($_POST['batch_id']) ? intval($_POST['batch_id']) : 0;
+          $discount = isset($_POST['discount']) ? floatval($_POST['discount']) : 0;
+          $qty = isset($_POST['qty']) ? intval($_POST['qty']) : 1; // Default qty to 1
+
           if ($batch_id > 0 && $price > 0) {
                $user_row = Database::Search("SELECT * FROM `user` WHERE `email`='" . $_SESSION["user_vec"]["email"] . "' ");
                $user_num = $user_row->num_rows;

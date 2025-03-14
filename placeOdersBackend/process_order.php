@@ -24,8 +24,6 @@ $city = isset($data["city"]) ? trim($data["city"]) : null;
 $district = isset($data["district"]) ? trim($data["district"]) : null;
 $total_value = isset($data["total_value"]) ? trim($data["total_value"]) : 0;
 
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
-$baseUrl = $protocol . "://" . $_SERVER['HTTP_HOST'];
 
 
 try {
@@ -84,13 +82,6 @@ try {
         // Send the email
         $emailSend->send();
 
-
-        $_SESSION["user_vec"] = array(
-            "email" => $email,
-            "login_time" => date("Y-m-d H:i:s"),
-            "ip_address" => $_SERVER['REMOTE_ADDR'],
-            "user_agent" => $_SERVER['HTTP_USER_AGENT'],
-        );
         finalizeProcess($email);
         exit;
     }
@@ -150,7 +141,7 @@ function finalizeProcess($email)
 {
     $cart_items = [];
     global $total_value;
-    global $baseUrl;
+
     $_SESSION["user_vec"] = array(
         "email" => $email,
         "login_time" => date("Y-m-d H:i:s"),
@@ -216,28 +207,57 @@ function finalizeProcess($email)
     // Process each cart item
     foreach ($cart_items as $item) {
         $batch_id = $item["batch_id"];
+        $weigdeliveryfee = 0;
+        $batch = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $batch_id . "' ");
+        $batch_data = $batch->fetch_assoc();
+        $product = Database::Search("SELECT * FROM `product` WHERE `id`='" . $batch_data["product_id"] . "' ");
+        $product_data = $product->fetch_assoc();
+        if ($product_data["weight"] > 0) {
+            $product_weight = $product_data["weight"];
+            $dw = Database::Search("SELECT * FROM `weight`");
+            $dwn = $dw->num_rows;
+            for ($i = 0; $i < $dwn; $i++) {
+                $dwd = $dw->fetch_assoc();
+                if ($dwd["weight"] == $product_weight) {
+                    $final_product_weight = $dwd["weight"];
+                    $dfw = Database::Search("SELECT * FROM `delivery_fee_for_weight` WHERE `weight_id`='" . $dwd["id"] . "' ");
+                    $dfwn = $dfw->num_rows;
+                    if ($dfwn == 1) {
+                        $dfwd = $dfw->fetch_assoc();
+                        $weigdeliveryfee = $dfwd["fee"];
+                    } else {
+                        $weigdeliveryfee = 0;
+                    }
+                } else {
+                    $weigdeliveryfee = 0;
+                }
+            }
+        } else {
+            $weigdeliveryfee = 0;
+        }
 
+        $total_delivery_fee = $delivery_fee + $weigdeliveryfee; 
         // Fetch batch details from the database
         $batch_query = Database::Search("SELECT `batch_code`, `product_id`, `vendor_name`, `batch_price`, `selling_price`, `batch_qty`, `date`, `id` FROM `batch` WHERE `id` = '$batch_id'");
         $batch_data = ($batch_query->num_rows > 0) ? $batch_query->fetch_assoc() : [];
 
         // Insert into invoice table
-        Database::IUD("INSERT INTO `invoice`(`uni_code`, `product_id`, `price`, `discount`, `delivery_fee`, `user_email`, `qty`) 
+        Database::IUD("INSERT INTO `invoice`(`uni_code`, `product_id`, `batch_id`, `price`, `discount`, `delivery_fee`, `user_email`, `qty`) 
                          VALUES ('$unique_code', 
                                  '" . $batch_data["product_id"] . "', 
+                                 '" . $batch_id . "',
                                  '" . $batch_data["selling_price"] . "', 
                                  '" . $item["discount"] . "', 
-                                 '$delivery_fee', 
+                                 '$total_delivery_fee', 
                                  '" . $item["user_email"] . "', 
                                  '" . $item["qty"] . "')");
 
         $invoice_id = Database::InsertID(); // Get last inserted invoice ID
         $invoice_ids[] = $invoice_id;
-
-        // Insert into order table
-        Database::IUD("INSERT INTO `order`(`id`, `invoice_id`, `user_email`, `Order_status_id`) 
-                         VALUES ('$orderId', '$invoice_id', '$email', 1)");
     }
+    // Insert into order table
+    Database::IUD("INSERT INTO `order`(`id`, `invoice_id`, `user_email`, `Order_status_id`) 
+    VALUES ('$orderId', '$unique_code', '$email', 1)");
 
     if (file_exists(__DIR__ . '/.env')) {
         $lines = file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -250,9 +270,10 @@ function finalizeProcess($email)
     $merchantWebToken = $_ENV['IPAY_MERCHANT_TOKEN'] ?? '';
     $ipayUrl = $_ENV['IPAY_URL'] ?? '';
     $orderDescription = "Orders Payment";
+    $baseUrl = $_ENV['BASE_URL'] ?? getenv('BASE_URL') ?? '';
 
-    $returnUrl = $baseUrl . "/placeOdersBackend/return.php?orderId=" . $orderId;
-    $cancelUrl = $baseUrl . "/placeOdersBackend/cancel.php?orderId=" . $orderId;
+    $returnUrl = $baseUrl . "cart.php?orderId=" . $orderId . "&status=success";
+    $cancelUrl = $baseUrl . "cart.php?orderId=" . $orderId . "&status=failed";
 
 
     $paymentData = [
