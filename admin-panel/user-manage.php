@@ -62,7 +62,7 @@ if (isset($_SESSION["a"])) {
                                 <table class="table mb-0">
                                   <thead>
                                     <tr>
-                                      <th scope="col"></th>
+                                      <th scope="col">#</th>
                                       <th scope="col">FULL NAME</th>
                                       <th scope="col">EMAIL</th>
                                       <th scope="col">DETAILS</th>
@@ -70,24 +70,36 @@ if (isset($_SESSION["a"])) {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <!-- Sample Data -->
-                                    <tr>
-                                      <td>1</td>
-                                      <td>John Doe</td>
-                                      <th scope="row">johndoe@example.com</th>
-                                      <td><a class="tex-b log-link fw-bold" data-bs-toggle="modal" data-bs-target="#detailsModal_1">SHOW</a></td>
-                                      <td><a class="btn ub-btn p-1" data-bs-toggle="modal" data-bs-target="#exampleModal3">BLOCK</a></td>
-                                    </tr>
-
-                                    <tr>
-                                      <td>2</td>
-                                      <td>Jane Smith</td>
-                                      <th scope="row">janesmith@example.com</th>
-                                      <td><a class="tex-b log-link fw-bold" data-bs-toggle="modal" data-bs-target="#detailsModal_2">SHOW</a></td>
-                                      <td><a class="btn ub-btn p-1" data-bs-toggle="modal" data-bs-target="#exampleModal3">BLOCK</a></td>
-                                    </tr>
-
-                                    <!-- Add more rows for other users -->
+                                    <?php
+                                    $user = Databases::Search("SELECT * FROM `user`");
+                                    $usernum = $user->num_rows;
+                                    for ($i = 0; $i < $usernum; $i++) {
+                                      $userdata = $user->fetch_assoc();
+                                    ?>
+                                      <tr>
+                                        <td><?php echo $i + 1; ?></td>
+                                        <td><?php echo $userdata["fname"] . " " . $userdata["lname"]; ?></td>
+                                        <td><?php echo $userdata["email"]; ?></td>
+                                        <td>
+                                          <a class="tex-b log-link fw-bold" data-bs-toggle="modal" onclick="callPHPFunction('<?php echo $userdata["email"]; ?>')">SHOW</a>
+                                        </td>
+                                        <td>
+                                          <?php
+                                          if ($userdata["status"] == 0) {
+                                          ?>
+                                            <a class="btn ub-btn p-1" onclick="confirmUNBlock('<?php echo $userdata['email']; ?>')">UNBLOCK</a>
+                                          <?php
+                                          } else {
+                                          ?>
+                                            <a class="btn ub-btn p-1" onclick="confirmBlock('<?php echo $userdata['email']; ?>')">BLOCK</a>
+                                          <?php
+                                          }
+                                          ?>
+                                        </td>
+                                      </tr>
+                                    <?php
+                                    }
+                                    ?>
                                   </tbody>
                                 </table>
                               </div>
@@ -98,70 +110,15 @@ if (isset($_SESSION["a"])) {
                     </div>
                   </section>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Modal for User Details (Sample Data) -->
-      <div class="modal fade" id="detailsModal_1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="modal-title fs-4 fw-bold" id="exampleModalLabel"><i class="fa fa-users" aria-hidden="true"></i>&nbsp; Consumer Details</div>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body pt-4">
-              <div class="card mb-0">
-                <div class="row pt-3 px-2">
-                  <div class="col-4 col-md-2 d-flex justify-content-center align-items-center">
-                    <img src="assets-admin\images\profile\avatar.svg" class="img-fluid" width="90px" alt="">
-                  </div>
-                  <div class="col-8 col-md-10">
-                    <div class="row">
-                      <div class="col-12 col-md-6 mb-3">
-                        <div class="form-floating">
-                          <input type="text" class="form-control rounded-0" id="floatingInput" placeholder="Full name" value="John Doe" readonly>
-                          <label for="floatingInput">Full Name</label>
-                        </div>
-                      </div>
-                      <div class="col-12 col-md-6 mb-3">
-                        <div class="form-floating">
-                          <input type="text" class="form-control rounded-0" id="floatingInput" placeholder="Mobile" value="9876543210" readonly>
-                          <label for="floatingInput">Mobile</label>
-                        </div>
-                      </div>
-                      <div class="col-12 col-md-6 mb-3">
-                        <div class="input-group">
-                          <div class="form-floating is-invalid">
-                            <input type="date" class="form-control rounded-0" readonly>
-                            <label>Birth Day</label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-md-6 mb-3">
-                        <div class="input-group">
-                          <div class="form-floating is-invalid">
-                            <input type="date" class="form-control rounded-0" readonly>
-                            <label>Joined Date</label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-12 mb-3">
-                        <div class="form-floating">
-                          <input type="text" class="form-control rounded-0" id="floatingInput" placeholder="Address" value="123 Main St, Springfield, IL" readonly>
-                          <label for="floatingInput">Address</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <div class="col-12 mt-3 text-end">
-                <button class="btn fw-bold x" data-bs-dismiss="modal">Close</button>
+                <div id="userDetailsModal"></div>
+                <!-- !-->
+                <script>
+                  
+                </script>
+                <script>
+                  
+                </script>
+                <!-- !-->
               </div>
             </div>
           </div>
@@ -196,8 +153,10 @@ if (isset($_SESSION["a"])) {
       <script src="assets-admin/libs/apexcharts/dist/apexcharts.min.js"></script>
       <script src="assets-admin/libs/simplebar/dist/simplebar.js"></script>
       <script src="assets-admin/js/dashboard.js"></script>
-
+      <!-- Include SweetAlert2 Library -->
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <!-- overlay -->
+      <script src="sahan.js"></script>
       <div class="blueOverlay d-none">
         <div class="d-flex justify-content-center align-items-center h-100">
           <div class="text-center text-white">

@@ -225,15 +225,15 @@ function batchADD() {
 }
 function update_product(product_id, batch_id) {
      // Get the values from the form fields
-     var product_title = document.getElementById("productt"+batch_id).value;
-     var product_category = document.getElementById("pc"+batch_id).value;
-     var product_group = document.getElementById("group"+batch_id).value;
-     var product_subcategory = document.getElementById("subcategory"+batch_id).value;
-     var product_condition = document.getElementById("condition"+batch_id).value;
-     var product_status = document.getElementById("status"+batch_id).value;
-     var product_weight = document.getElementById("weight"+batch_id).value;
+     var product_title = document.getElementById("productt" + batch_id).value;
+     var product_category = document.getElementById("pc" + batch_id).value;
+     var product_group = document.getElementById("group" + batch_id).value;
+     var product_subcategory = document.getElementById("subcategory" + batch_id).value;
+     var product_condition = document.getElementById("condition" + batch_id).value;
+     var product_status = document.getElementById("status" + batch_id).value;
+     var product_weight = document.getElementById("weight" + batch_id).value;
      var product_description = getDescription(batch_id);
-     var brand = document.getElementById("brand"+batch_id).value;
+     var brand = document.getElementById("brand" + batch_id).value;
 
      let img1 = document.getElementById("img_input_" + batch_id + "_" + "1").files[0] || 0;
      let img2 = document.getElementById("img_input_" + batch_id + "_" + "2").files[0] || 0;
@@ -341,91 +341,165 @@ function update_product(product_id, batch_id) {
 }
 
 function getDescription(batch_id) {
-     var description = tinymce.get('desc'+batch_id).getContent();
+     var description = tinymce.get('desc' + batch_id).getContent();
      console.log(description);
      return description;
 }
 function savebatchup(batch_id) {
-  
+
      var batchcode = document.getElementById("bbatch_code" + batch_id).value;
      var vendor = document.getElementById("vendornameb" + batch_id).value;
      var batchqty = document.getElementById("batchqty" + batch_id).value;
      var sellprice = document.getElementById("selling_price" + batch_id).value;
      var batchprice = document.getElementById("Batchprice" + batch_id).value;
- 
+
      if (batchcode === "" || vendor === "" || batchqty === "" || sellprice === "" || batchprice === "") {
-         Swal.fire({
-             icon: 'error',
-             title: 'Oops...',
-             text: 'Please fill in all the required fields!',
-             showClass: {
-                 popup: 'animate__animated animate__shakeX'
-             },
-             hideClass: {
-                 popup: 'animate__animated animate__fadeOut'
-             }
-         });
-         return;
+          Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: 'Please fill in all the required fields!',
+               showClass: {
+                    popup: 'animate__animated animate__shakeX'
+               },
+               hideClass: {
+                    popup: 'animate__animated animate__fadeOut'
+               }
+          });
+          return;
      }
- 
+
      var req = new XMLHttpRequest();
      var form = new FormData();
- 
+
      form.append("batch_id", batch_id);
      form.append("batchcode", batchcode);
      form.append("vendor", vendor);
      form.append("batchqty", batchqty);
      form.append("sellprice", sellprice);
      form.append("batchprice", batchprice);
- 
+
      req.onreadystatechange = function () {
-         if (req.readyState === 4) {
-             if (req.status === 200) { 
-                 if (req.responseText.trim() === "success") {
-                     Swal.fire({
-                         icon: 'success',
-                         title: 'Saved!',
-                         text: 'Batch data saved successfully!',
-                         showClass: {
-                             popup: 'animate__animated animate__zoomIn'
-                         },
-                         hideClass: {
-                             popup: 'animate__animated animate__fadeOut'
-                         }
-                     }).then(() => {
-                         var modal = document.getElementById(`exampleModalb${batch_id}`);
-                         var bootstrapModal = bootstrap.Modal.getInstance(modal);
-                         bootstrapModal.hide();
-                     });
-                 } else {
-                     Swal.fire({
+          if (req.readyState === 4) {
+               if (req.status === 200) {
+                    if (req.responseText.trim() === "success") {
+                         Swal.fire({
+                              icon: 'success',
+                              title: 'Saved!',
+                              text: 'Batch data saved successfully!',
+                              showClass: {
+                                   popup: 'animate__animated animate__zoomIn'
+                              },
+                              hideClass: {
+                                   popup: 'animate__animated animate__fadeOut'
+                              }
+                         }).then(() => {
+                              var modal = document.getElementById(`exampleModalb${batch_id}`);
+                              var bootstrapModal = bootstrap.Modal.getInstance(modal);
+                              bootstrapModal.hide();
+                         });
+                    } else {
+                         Swal.fire({
+                              icon: 'error',
+                              title: 'Error!',
+                              text: 'Error saving data: ' + req.responseText,
+                              showClass: {
+                                   popup: 'animate__animated animate__shakeX'
+                              },
+                              hideClass: {
+                                   popup: 'animate__animated animate__fadeOut'
+                              }
+                         });
+                    }
+               } else {
+                    Swal.fire({
                          icon: 'error',
-                         title: 'Error!',
-                         text: 'Error saving data: ' + req.responseText,
+                         title: 'Server Error!',
+                         text: 'An error occurred while saving the data.',
                          showClass: {
-                             popup: 'animate__animated animate__shakeX'
+                              popup: 'animate__animated animate__shakeX'
                          },
                          hideClass: {
-                             popup: 'animate__animated animate__fadeOut'
+                              popup: 'animate__animated animate__fadeOut'
                          }
-                     });
-                 }
-             } else {
-                 Swal.fire({
-                     icon: 'error',
-                     title: 'Server Error!',
-                     text: 'An error occurred while saving the data.',
-                     showClass: {
-                         popup: 'animate__animated animate__shakeX'
-                     },
-                     hideClass: {
-                         popup: 'animate__animated animate__fadeOut'
-                     }
-                 });
-             }
-         }
+                    });
+               }
+          }
      };
      req.open("POST", "savebatchup.php", true);
      req.send(form);
- }
- 
+}
+function confirmBlock(email) {
+     Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you really want to block this person?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, Block',
+          cancelButtonText: 'Cancel'
+     }).then((result) => {
+          if (result.isConfirmed) {
+               sendBlockRequest(email);
+          }
+     });
+}
+
+function sendBlockRequest(email) {
+     var req = new XMLHttpRequest();
+     var form = new FormData();
+     form.append("email", email);
+
+     req.onreadystatechange = function () {
+          if (req.readyState === 4) {
+               if (req.status === 200) {
+                    if(req.responseText == 1){
+                         Swal.fire('UN-Blocked!','success');
+                         location.reload();
+                    }else if(req.responseText == 0){
+                         Swal.fire('Blocked!','success');
+                         location.reload();
+                    }else{
+                         Swal.fire('user!','error');
+                         location.reload();
+                    }
+               } else {
+                    Swal.fire('Error!', 'Failed to block the user.', 'error');
+               }
+          }
+     };
+
+     req.open("POST", "usermanagepro.php", true); // Sends request to the same file
+     req.send(form);
+}
+function callPHPFunction(email) {
+     var req = new XMLHttpRequest();
+     var form = new FormData();
+     form.append("email", email);
+
+     req.onreadystatechange = function () {
+          if (req.readyState == 4 && req.status == 200) {
+               document.getElementById("userDetailsModal").innerHTML = req.responseText;
+               const modal = new bootstrap.Modal(document.getElementById("detailsModal_1"));
+               modal.show();
+          }
+     }
+     req.open("POST", "user-details-mo.php", true);
+     req.send(form);
+}
+function confirmUNBlock(email){
+     Swal.fire({
+          title: 'Are you sure?',
+          text: "Do you really want to UN-block this person?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, UN-Block',
+          cancelButtonText: 'Cancel'
+     }).then((result) => {
+          if (result.isConfirmed) {
+               sendBlockRequest(email);
+          }
+     });
+}
