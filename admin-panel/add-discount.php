@@ -30,7 +30,7 @@ if (isset($_SESSION["a"])) {
 
       <div class="container mt-5 animate__animated animate__fadeIn">
         <div class="card shadow-lg p-4 rounded-4">
-          <h2 class="text-center mb-4">Product Details Form</h2>
+          <h2 class="text-center mb-4">Product Discount Form</h2>
           <div class="row g-4">
             <!-- Left Column (Form Inputs) -->
             <div class="col-lg-6 col-12">

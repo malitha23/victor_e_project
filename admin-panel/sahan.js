@@ -553,39 +553,90 @@ function submitdiscount() {
 
      xhr.onload = function () {
           if (xhr.status === 200) {
-               if(xhr.responseText == "01"){
+               if (xhr.responseText == "01") {
                     Swal.fire({
                          title: 'Response',
                          text: "Discount successfully added.",
-                         icon: 'success', 
+                         icon: 'success',
                          confirmButtonText: 'OK'
                     });
-               }else if(xhr.responseText == "11"){
+               } else if (xhr.responseText == "11") {
                     Swal.fire({
                          title: 'Response',
                          text: "Discount successfully added,image uploaded..",
-                         icon: 'success', 
+                         icon: 'success',
                          confirmButtonText: 'OK'
                     });
-               }else if(xhr.responseText == "1"){
+               } else if (xhr.responseText == "1") {
                     Swal.fire({
                          title: 'Response',
                          text: "Discount successfully added.",
-                         icon: 'success', 
+                         icon: 'success',
                          confirmButtonText: 'OK'
                     });
-               }else{
+               } else {
                     Swal.fire({
                          title: 'Response',
                          text: xhr.responseText,
-                         icon: 'info', 
+                         icon: 'info',
                          confirmButtonText: 'OK'
-                    });  
+                    });
                }
           } else {
                alert("Error: " + xhr.status);
           }
      };
      xhr.send(formData);
+}
+function updatedis(x) {
+     var form = new FormData();
+     form.append("groupid", x);
+
+     var req = new XMLHttpRequest();
+     req.open("POST", "update_discountm.php", true);
+
+     req.onreadystatechange = function () {
+          if (req.readyState === 4) {
+               document.getElementById("inject-model").innerHTML = req.responseText; 
+               const modal = new bootstrap.Modal(document.getElementById("exampleModal" + x));
+               modal.show();
+         }
+     };
+     req.send(form);
+}
+
+function saveUpdate(x) {
+    var form = new FormData();
+    form.append("groupid", x);
+    form.append("title", document.getElementById("title" + x).value);
+    form.append("description", document.getElementById("description" + x).value);
+    form.append("discountPre", document.getElementById("discountPre" + x).value);
+    form.append("qty", document.getElementById("qty" + x).value);
+    form.append("start_date", document.getElementById("start_date" + x).value);
+    form.append("end_date", document.getElementById("end_date" + x).value);
+    form.append("image",document.getElementById("img_input_"+x).files[0]);
+
+    var req = new XMLHttpRequest();
+    req.open("POST", "update_discountpro.php", true);
+
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+          alert(req.responseText);
+            Swal.fire({
+                icon: 'success',
+                title: 'Updated!',
+                text: 'Discount details updated successfully.'
+            }).then(() => {
+                location.reload();
+            });
+        } else if (req.readyState === 4) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Failed to update discount details.'
+            });
+        }
+    };
+    req.send(form);
 }
 

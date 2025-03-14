@@ -79,7 +79,15 @@
                 <span>
                 <i class="fa fa-money" aria-hidden="true"></i>
                 </span>
-                <span class="hide-menu">Discount</span>
+                <span class="hide-menu">Add Discount</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="Manage-discount.php" aria-expanded="false">
+                <span>
+                <i class="fa fa-money" aria-hidden="true"></i>
+                </span>
+                <span class="hide-menu">Manage discounts</span>
               </a>
             </li>
             <li class="sidebar-item">
