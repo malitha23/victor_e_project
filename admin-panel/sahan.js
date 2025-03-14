@@ -453,14 +453,14 @@ function sendBlockRequest(email) {
      req.onreadystatechange = function () {
           if (req.readyState === 4) {
                if (req.status === 200) {
-                    if(req.responseText == 1){
-                         Swal.fire('UN-Blocked!','success');
+                    if (req.responseText == 1) {
+                         Swal.fire('UN-Blocked!', 'success');
                          location.reload();
-                    }else if(req.responseText == 0){
-                         Swal.fire('Blocked!','success');
+                    } else if (req.responseText == 0) {
+                         Swal.fire('Blocked!', 'success');
                          location.reload();
-                    }else{
-                         Swal.fire('user!','error');
+                    } else {
+                         Swal.fire('user!', 'error');
                          location.reload();
                     }
                } else {
@@ -487,7 +487,7 @@ function callPHPFunction(email) {
      req.open("POST", "user-details-mo.php", true);
      req.send(form);
 }
-function confirmUNBlock(email){
+function confirmUNBlock(email) {
      Swal.fire({
           title: 'Are you sure?',
           text: "Do you really want to UN-block this person?",
@@ -502,4 +502,29 @@ function confirmUNBlock(email){
                sendBlockRequest(email);
           }
      });
+}
+function SearchUser() {
+     var ukey = document.getElementById("ukey").value.trim(); // Trim whitespace
+     if (!ukey) {
+          alert("Please enter a search key.");
+          return;
+     }
+     var form = new FormData();
+     form.append("key", ukey);
+     var req = new XMLHttpRequest();
+     req.onreadystatechange = function () {
+          if (req.readyState === 4) {
+               if (req.status === 200) {
+                    if (req.responseText == 0) {
+                         alert("not found");
+                    } else {
+                         document.getElementById("userarea").innerHTML = req.responseText;
+                    }
+               } else {
+                    alert("Error: Unable to fetch data. Please try again.");
+               }
+          }
+     }
+     req.open("POST", "searchuser.php", true);
+     req.send(form);
 }
