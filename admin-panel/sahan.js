@@ -528,3 +528,64 @@ function SearchUser() {
      req.open("POST", "searchuser.php", true);
      req.send(form);
 }
+function submitdiscount() {
+     var title = document.getElementById("title").value;
+     var desc = document.getElementById("description").value;
+     var image = document.getElementById("image").files[0] || null;
+     var batch = document.getElementById("batch").value;
+     var qty = document.getElementById("qty").value;
+     var discount = document.getElementById("discount").value;
+     var start_date = document.getElementById("start_date").value;
+     var end_date = document.getElementById("end_date").value;
+
+     var formData = new FormData();
+     formData.append("title", title);
+     formData.append("description", desc);
+     formData.append("image", image);
+     formData.append("batch", batch);
+     formData.append("qty", qty);
+     formData.append("discount", discount);
+     formData.append("start_date", start_date);
+     formData.append("end_date", end_date);
+
+     var xhr = new XMLHttpRequest();
+     xhr.open("POST", "adddispro.php", true);
+
+     xhr.onload = function () {
+          if (xhr.status === 200) {
+               if(xhr.responseText == "01"){
+                    Swal.fire({
+                         title: 'Response',
+                         text: "Discount successfully added.",
+                         icon: 'success', 
+                         confirmButtonText: 'OK'
+                    });
+               }else if(xhr.responseText == "11"){
+                    Swal.fire({
+                         title: 'Response',
+                         text: "Discount successfully added,image uploaded..",
+                         icon: 'success', 
+                         confirmButtonText: 'OK'
+                    });
+               }else if(xhr.responseText == "1"){
+                    Swal.fire({
+                         title: 'Response',
+                         text: "Discount successfully added.",
+                         icon: 'success', 
+                         confirmButtonText: 'OK'
+                    });
+               }else{
+                    Swal.fire({
+                         title: 'Response',
+                         text: xhr.responseText,
+                         icon: 'info', 
+                         confirmButtonText: 'OK'
+                    });  
+               }
+          } else {
+               alert("Error: " + xhr.status);
+          }
+     };
+     xhr.send(formData);
+}
+
