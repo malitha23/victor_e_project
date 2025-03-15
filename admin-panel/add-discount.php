@@ -75,9 +75,6 @@ if (isset($_SESSION["a"])) {
                   <?php
                   }
                   ?>
-                  <option value="product">Product</option>
-                  <option value="discount_percentage">Discount Percentage</option>
-                  <option value="qty">Quantity</option>
                 </select>
               </div>
 
