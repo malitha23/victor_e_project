@@ -703,4 +703,33 @@ function savecities() {
           alert("type city name..press the add button");
      }
 }
-
+function update_dprice(){
+     var tocity = document.getElementById("c_id2").value;
+     var d_price = document.getElementById("d_price").value;
+     
+     var form = new FormData();
+     form.append("tocity", tocity);
+     form.append("d_price", d_price);
+ 
+     var req = new XMLHttpRequest();
+     req.open("POST", "process/addeliveryfee.php", true);
+     
+     req.onreadystatechange = function() {
+         if (req.readyState === 4 && req.status === 200) {
+             Swal.fire({
+                 title: 'Delivery fee Added status',
+                 text: req.responseText,
+                 icon: 'success',
+                 showClass: {
+                     popup: 'animate__animated animate__fadeInDown'
+                 },
+                 hideClass: {
+                     popup: 'animate__animated animate__fadeOutUp'
+                 }
+             });
+         }
+     };
+     
+     req.send(form);
+ }
+ 

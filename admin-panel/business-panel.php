@@ -121,15 +121,15 @@ if (isset($_SESSION["a"])) {
                                 <div class="row d-flex flex-row justify-content-center align-items-center h-100">
                                     <div class="col-12 shadow p-3 py-4">
                                         <div class="row">
-                                            <div class="col-6 col-md-4">
+                                            <div hidden class="col-6 col-md-4">
                                                 <div class="form-floating mb-3">
                                                     <select class="form-select rounded-0" id="c_id" onchange="list_dprice();" aria-label="Floating label select example">
-                                                        <option selected value="0" selected>Select a district</option>
+                                                        <option selected value="0" selected>Select a city</option>
                                                         <?php
-                                                        $district_q = DatabaseS::search("SELECT * FROM `distric` ");
+                                                        $district_q = DatabaseS::search("SELECT * FROM `city` ");
                                                         while ($district = $district_q->fetch_assoc()) {
                                                         ?>
-                                                            <option value="<?php echo $district['distric_id'] ?>">
+                                                            <option value="<?php echo $district['city_id'] ?>">
                                                                 <?php echo $district['name'] ?>
                                                             </option>
                                                         <?php
@@ -144,10 +144,10 @@ if (isset($_SESSION["a"])) {
                                                     <select class="form-select rounded-0" id="c_id2" onchange="list_dprice();" aria-label="Floating label select example">
                                                         <option selected value="0" selected>Select a district</option>
                                                         <?php
-                                                        $district_q = Databases::search("SELECT * FROM `distric`");
+                                                        $district_q = Databases::search("SELECT * FROM `city`");
                                                         while ($district = $district_q->fetch_assoc()) {
                                                         ?>
-                                                            <option value="<?php echo $district['distric_id'] ?>">
+                                                            <option value="<?php echo $district['city_id'] ?>">
                                                                 <?php echo $district['name'] ?>
                                                             </option>
                                                         <?php
