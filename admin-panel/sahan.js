@@ -597,46 +597,110 @@ function updatedis(x) {
 
      req.onreadystatechange = function () {
           if (req.readyState === 4) {
-               document.getElementById("inject-model").innerHTML = req.responseText; 
+               document.getElementById("inject-model").innerHTML = req.responseText;
                const modal = new bootstrap.Modal(document.getElementById("exampleModal" + x));
                modal.show();
-         }
+          }
      };
      req.send(form);
 }
 
 function saveUpdate(x) {
-    var form = new FormData();
-    form.append("groupid", x);
-    form.append("title", document.getElementById("title" + x).value);
-    form.append("description", document.getElementById("description" + x).value);
-    form.append("discountPre", document.getElementById("discountPre" + x).value);
-    form.append("qty", document.getElementById("qty" + x).value);
-    form.append("start_date", document.getElementById("start_date" + x).value);
-    form.append("end_date", document.getElementById("end_date" + x).value);
-    form.append("image",document.getElementById("img_input_"+x).files[0]);
+     var form = new FormData();
+     form.append("groupid", x);
+     form.append("title", document.getElementById("title" + x).value);
+     form.append("description", document.getElementById("description" + x).value);
+     form.append("discountPre", document.getElementById("discountPre" + x).value);
+     form.append("qty", document.getElementById("qty" + x).value);
+     form.append("start_date", document.getElementById("start_date" + x).value);
+     form.append("end_date", document.getElementById("end_date" + x).value);
+     form.append("image", document.getElementById("img_input_" + x).files[0]);
 
-    var req = new XMLHttpRequest();
-    req.open("POST", "update_discountpro.php", true);
+     var req = new XMLHttpRequest();
+     req.open("POST", "update_discountpro.php", true);
 
-    req.onreadystatechange = function () {
-        if (req.readyState === 4 && req.status === 200) {
-          alert(req.responseText);
-            Swal.fire({
-                icon: 'success',
-                title: 'Updated!',
-                text: 'Discount details updated successfully.'
-            }).then(() => {
-                location.reload();
-            });
-        } else if (req.readyState === 4) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'Failed to update discount details.'
-            });
-        }
-    };
-    req.send(form);
+     req.onreadystatechange = function () {
+          if (req.readyState === 4 && req.status === 200) {
+               Swal.fire({
+                    icon: 'success',
+                    title: 'Updated!',
+                    text: 'Discount details updated successfully.'
+               }).then(() => {
+                    location.reload();
+               });
+          } else if (req.readyState === 4) {
+               Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to update discount details.'
+               });
+          }
+     };
+     req.send(form);
+}
+
+function savecities() {
+     var distric = document.getElementById("ad_id").value;
+     var count = document.getElementById("num").value;
+     if (count > 0) {
+
+
+          var cities = [];
+          x = 0;
+          y = 0;
+          for (let index = 0; index < count; index++) {
+               x = x + 1;
+               var tcValue = document.getElementById("tc_" + x).value;
+               cities[y] = tcValue;
+               y = y + 1;
+          }
+          var length = cities.length;
+          var req = new XMLHttpRequest();
+          var form = new FormData;
+          form.append("length", length);
+          form.append("distric", distric);
+          m = 1;
+          z = 0;
+          for (let index = 0; index < length; index++) {
+               form.append("city" + m, cities[z]);
+               m = m + 1;
+               z = z + 1;
+          }
+          req.onreadystatechange = function () {
+               if (req.readyState === 4 && req.status === 200) {
+                    if (req.responseText == 1) {
+                         Swal.fire({
+                              title: 'City Added',
+                              text: "City Added success",
+                              icon: 'success',
+                              showClass: {
+                                   popup: 'animate__animated animate__fadeInDown'
+                              },
+                              hideClass: {
+                                   popup: 'animate__animated animate__fadeOutUp'
+                              }
+                         });
+
+                    } else {
+                         Swal.fire({
+                              title: 'City Added',
+                              text: req.responseText,
+                              icon: 'error',
+                              showClass: {
+                                   popup: 'animate__animated animate__fadeInDown'
+                              },
+                              hideClass: {
+                                   popup: 'animate__animated animate__fadeOutUp'
+                              }
+                         });
+
+                    }
+               }
+          }
+          req.open("POST", "process/Savecity.php", true);
+          req.send(form);
+     } else {
+          alert("type city name..press the add button");
+     }
 }
 

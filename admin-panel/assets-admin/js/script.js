@@ -125,6 +125,7 @@ function add_town_col() {
             "<label for=''>Town " + town_col_count + " name</label>" +
             "</div>" +
             "</div>";
+            document.getElementById("num").value = town_col_count;
     } else {
         alert("A maximum of six towns can be added at a time.");
     }
