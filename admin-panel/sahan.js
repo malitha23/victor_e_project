@@ -732,4 +732,33 @@ function update_dprice(){
      
      req.send(form);
  }
+ function change_emailN(){
+     var email = document.getElementById("contact_email").value;
+     var mobile = document.getElementById("contact_mobile").value;
+ 
+     var form = new FormData();
+     form.append("email", email);
+     form.append("mobile", mobile);
+ 
+     var req = new XMLHttpRequest();
+     req.open("POST", "process/change_emailN.php", true);
+     
+     req.onreadystatechange = function() {
+         if (req.readyState === 4 && req.status === 200) {
+             Swal.fire({
+                 title: 'Contact Information Updated',
+                 text: req.responseText,
+                 icon: 'success',
+                 showClass: {
+                     popup: 'animate__animated animate__fadeInDown'
+                 },
+                 hideClass: {
+                     popup: 'animate__animated animate__fadeOutUp'
+                 }
+             });
+         }
+     };
+     
+     req.send(form);
+ }
  

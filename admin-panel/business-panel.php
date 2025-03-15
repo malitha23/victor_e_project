@@ -192,15 +192,15 @@ if (isset($_SESSION["a"])) {
                                     <div class="col-12 shadow p-3 py-4">
                                         <div class="row">
                                             <div class="form-floating mb-3">
-                                                <input type="email" class="form-control rounded-0" id="contact_email" value="name@example.com" placeholder="name@example.com">
+                                                <input type="email" class="form-control rounded-0" id="contact_email"  placeholder="name@example.com">
                                                 <label for="floatingInput">Email address</label>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input type="email" class="form-control rounded-0" id="contact_email" value="+947785412" placeholder="name@example.com">
+                                                <input type="text" class="form-control rounded-0" id="contact_mobile"  placeholder="..+94.">
                                                 <label for="floatingInput">Mobile Number</label>
                                             </div>
                                             <div class="col-12 text-end">
-                                                <button class="btn rounded-0-5 fw-bold x" data-bs-toggle="modal" onclick="change_email();" data-bs-target="#exampleModal"><i class="fa fa-check"></i>
+                                                <button class="btn rounded-0-5 fw-bold x" data-bs-toggle="modal" onclick="change_emailN();" data-bs-target="#exampleModal"><i class="fa fa-check"></i>
                                                     SAVE</button>
                                             </div>
                                         </div>
