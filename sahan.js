@@ -332,6 +332,9 @@ function minprice(qty, id) {
     req.send(form);
 }
 function adtocart(sprice, discountPercentage, batchId) {
+    alert(discountPercentage);
+    console.log(sprice);
+    console.log(discountPercentage);
 
     let discountedPrice = sprice - (sprice * (discountPercentage / 100));
     var req = new XMLHttpRequest();

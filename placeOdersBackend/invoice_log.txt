@@ -1,0 +1,4 @@
+Error: Table 'victore.users' doesn't exist
+Invoice generated and email sent successfully.
+Invoice generated and email sent successfully.
+Invoice generated and email sent successfully.

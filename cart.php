@@ -3,6 +3,9 @@ session_start();
 include "connection.php";
 
 require_once "connection.php";
+require_once "./placeOdersBackend/order_status.php";
+
+
 if (isset($_SESSION["user_vec"])) {
     $user_row = Database::Search("SELECT * FROM `user` WHERE `email`='" . $_SESSION["user_vec"]["email"] . "' ");
     $user_data = $user_row->fetch_assoc();
@@ -28,6 +31,7 @@ if ($carto > 0) {
         <link rel="shortcut icon" href="assets/images/logo/favicon.png">
         <!-- Include SweetAlert2 CSS and JS -->
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- Bootstrap -->
@@ -44,10 +48,11 @@ if ($carto > 0) {
         <link rel="stylesheet" href="assets/css/aos.css">
         <!-- Main css -->
         <link rel="stylesheet" href="assets/css/main.css">
+       
     </head>
 
     <body>
-
+   
         <!--==================== Preloader Start ====================-->
         <div class="preloader">
             <img src="assets/images/icon/preloader.gif" alt="">
@@ -463,13 +468,11 @@ if ($carto > 0) {
         <!-- main js -->
         <script src="assets/js/main.js"></script>
 
-
-
     </body>
 
     </html>
     <?php
-    
+
 }
 
 ?>
