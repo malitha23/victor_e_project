@@ -78,7 +78,7 @@ if (isset($_SESSION["a"])) {
 
                       $f = $f + $invoice_data["qty"];
 
-                      $d = $invoice_data["date"];
+                      $d = $invoice_data["date_time"];
                       $splitDate = explode(" ", $d); //separate date from time
                       $pdate = $splitDate[0]; //sold date
 
