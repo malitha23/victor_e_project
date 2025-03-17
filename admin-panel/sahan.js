@@ -703,62 +703,91 @@ function savecities() {
           alert("type city name..press the add button");
      }
 }
-function update_dprice(){
+function update_dprice() {
      var tocity = document.getElementById("c_id2").value;
      var d_price = document.getElementById("d_price").value;
-     
+
      var form = new FormData();
      form.append("tocity", tocity);
      form.append("d_price", d_price);
- 
+
      var req = new XMLHttpRequest();
      req.open("POST", "process/addeliveryfee.php", true);
-     
-     req.onreadystatechange = function() {
-         if (req.readyState === 4 && req.status === 200) {
-             Swal.fire({
-                 title: 'Delivery fee Added status',
-                 text: req.responseText,
-                 icon: 'success',
-                 showClass: {
-                     popup: 'animate__animated animate__fadeInDown'
-                 },
-                 hideClass: {
-                     popup: 'animate__animated animate__fadeOutUp'
-                 }
-             });
-         }
+
+     req.onreadystatechange = function () {
+          if (req.readyState === 4 && req.status === 200) {
+               Swal.fire({
+                    title: 'Delivery fee Added status',
+                    text: req.responseText,
+                    icon: 'success',
+                    showClass: {
+                         popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                         popup: 'animate__animated animate__fadeOutUp'
+                    }
+               });
+          }
      };
-     
+
      req.send(form);
- }
- function change_emailN(){
+}
+function change_emailN() {
      var email = document.getElementById("contact_email").value;
      var mobile = document.getElementById("contact_mobile").value;
- 
+
      var form = new FormData();
      form.append("email", email);
      form.append("mobile", mobile);
- 
+
      var req = new XMLHttpRequest();
      req.open("POST", "process/change_emailN.php", true);
-     
-     req.onreadystatechange = function() {
-         if (req.readyState === 4 && req.status === 200) {
-             Swal.fire({
-                 title: 'Contact Information Updated',
-                 text: req.responseText,
-                 icon: 'success',
-                 showClass: {
-                     popup: 'animate__animated animate__fadeInDown'
-                 },
-                 hideClass: {
-                     popup: 'animate__animated animate__fadeOutUp'
-                 }
-             });
-         }
+
+     req.onreadystatechange = function () {
+          if (req.readyState === 4 && req.status === 200) {
+               Swal.fire({
+                    title: 'Contact Information Updated',
+                    text: req.responseText,
+                    icon: 'success',
+                    showClass: {
+                         popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                         popup: 'animate__animated animate__fadeOutUp'
+                    }
+               });
+               location.reload();
+          }
      };
-     
+
      req.send(form);
- }
- 
+}
+function OrderStatusSave(x) {
+     var status = document.getElementById("statusChangeProduct1" + x).value;
+
+     var form = new FormData();
+     form.append("status", status);
+     form.append("orderId", x);
+
+     var req = new XMLHttpRequest();
+     req.open("POST", "process/OrderStatusSave.php", true);
+
+     req.onreadystatechange = function () {
+          if (req.readyState === 4 && req.status === 200) {
+               Swal.fire({
+                    title: 'Order Status Updated',
+                    text: req.responseText,
+                    icon: 'success',
+                    showClass: {
+                         popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                         popup: 'animate__animated animate__fadeOutUp'
+                    }
+               });
+               location.reload();
+          }
+     };
+
+     req.send(form);
+}
