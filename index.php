@@ -266,7 +266,7 @@ include_once "connection.php";
                                         $pr =  $pr->fetch_assoc();
                                         ?>
                                         <?php
-                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE `id`='" . $pr["id"] . "' ");
+                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
                                         $pic_d = $pic->fetch_assoc();
                                         if (empty($pic_d["path"])) {
                                         ?>
@@ -274,7 +274,7 @@ include_once "connection.php";
                                         <?php
                                         } else {
                                         ?>
-                                            <img src="<?php echo $pic_d["path"]; ?>" alt="" class="w-auto max-w-unset">
+                                            <img src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="w-auto max-w-unset">
                                         <?php
                                         }
                                         ?> </a>
@@ -430,58 +430,52 @@ include_once "connection.php";
 
                         <div class="row gy-4 featured-product-slider">
                             <?php
-                            for ($i = 0; $i < 1; $i++) {
+                            $bach = Database::Search("SELECT * FROM `batch`");
+                            $bach_n = $bach->num_rows;
+                            for ($i = 0; $i < $bach_n; $i++) {
+                                $bach_d = $bach->fetch_assoc();
+                                $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bach_d["product_id"] . "' ");
+                                $pr =  $pr->fetch_assoc();
                             ?>
                                 <div class="col-xxl-6">
                                     <div class="featured-products__sliders">
-
-                                        <?php
-                                        $bach = Database::Search("SELECT * FROM `batch`");
-                                        $bach_n = $bach->num_rows;
-                                        for ($j = 0; $j < $bach_n; $j++) {
-                                            $bach_d = $bach->fetch_assoc();
-                                            $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bach_d["product_id"] . "' ");
-                                            $pr =  $pr->fetch_assoc();
-                                        ?>
-                                            <div class="" data-aos="fade-up" data-aos-duration="800">
-                                                <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                                    <a href="product-details.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
-                                                        <?php
-                                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE  `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
-                                                        $pic_d = $pic->fetch_assoc();
-                                                        if (empty($pic_d["path"])) {
-                                                        ?>
-                                                            <img src="assets/images/thumbs/product-two-img2.png" alt="" class="w-auto max-w-unset">
-                                                        <?php
-                                                        } else {
-                                                        ?>
-                                                            <img src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="w-auto max-w-unset">
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </a>
-                                                    <div class="product-card__content my-20 flex-grow-1">
-                                                        <h6 class="title text-lg fw-semibold mb-12">
-                                                            <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"] ?></a>
-                                                        </h6>
-                                                        <div class="product-card__price my-20">
-                                                            <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $bach_d["selling_price"] + 20 ?></span>
-                                                            <span class="text-heading text-md fw-semibold ">Rs <?php echo $bach_d["selling_price"] ?><span class="text-gray-500 fw-normal">/Qty</span><?php echo $bach_d["batch_qty"] ?></span>
-                                                        </div>
-                                                        <?php
-                                                        $sprice = $bach_d["selling_price"];
-                                                        $discountpercentage = 0;
-                                                        $batch_id = $bach_d["id"];
-                                                        ?>
-                                                        <a onclick="adtocart(<?= $sprice ?>, <?= $discountpercentage ?>, <?= $batch_id ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
-                                                            Add To Cart <i class="ph ph-shopping-cart"></i>
-                                                        </a>
+                                        <div class="" data-aos="fade-up" data-aos-duration="800">
+                                            <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+                                                <a href="product-details.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
+                                                    <?php
+                                                    $pic = Database::Search("SELECT * FROM `picture`  WHERE  `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
+                                                    $pic_d = $pic->fetch_assoc();
+                                                    if (empty($pic_d["path"])) {
+                                                    ?>
+                                                        <img src="assets/images/thumbs/product-two-img2.png" alt="" class="w-auto max-w-unset">
+                                                    <?php
+                                                    } else {
+                                                    ?>
+                                                        <img src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="w-auto max-w-unset">
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </a>
+                                                <div class="product-card__content my-20 flex-grow-1">
+                                                    <h6 class="title text-lg fw-semibold mb-12">
+                                                        <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"] ?></a>
+                                                    </h6>
+                                                    <div class="product-card__price my-20">
+                                                        <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $bach_d["selling_price"] + 20 ?></span>
+                                                        <span class="text-heading text-md fw-semibold ">Rs <?php echo $bach_d["selling_price"] ?><span class="text-gray-500 fw-normal">/Qty</span><?php echo $bach_d["batch_qty"] ?></span>
                                                     </div>
+                                                    <?php
+                                                    $sprice = $bach_d["selling_price"];
+                                                    $discountpercentage = 0;
+                                                    $batch_id = $bach_d["id"];
+                                                    ?>
+                                                    <a onclick="adtocart(<?= $sprice ?>, <?= $discountpercentage ?>, <?= $batch_id ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
+                                                        Add To Cart <i class="ph ph-shopping-cart"></i>
+                                                    </a>
                                                 </div>
                                             </div>
-                                        <?php
-                                        }
-                                        ?>
+                                        </div>
+
 
                                     </div>
                                 </div>
