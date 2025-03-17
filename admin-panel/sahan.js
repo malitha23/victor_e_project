@@ -791,3 +791,54 @@ function OrderStatusSave(x) {
 
      req.send(form);
 }
+function handleCheckbox(checkbox) {
+     const id = checkbox.getAttribute('data-id');
+     const state = checkbox.checked ? 'true' : 'false';
+
+     console.log('Checkbox ID:', id);
+     console.log('Checkbox State:', state);
+}
+function submitdisdetails(x) {
+     const title = document.getElementById('titleInput').value;
+     const description = tinymce.get('descriptionInput').getContent();
+     var start_date = document.getElementById("start_date").value;
+     var end_date = document.getElementById("end_date").value;
+     var Discount = document.getElementById("Discount").value;
+     var img = document.getElementById("imageUpload").files[0];
+     var batches = [];
+     var y = 0;
+     for (let index = 0; index < x; index++) {
+          const status = document.getElementById("dcheck" + index).checked;
+          if (status == true) {
+               const id = document.getElementById("dcheck" + index).getAttribute('data-id');
+               const qty = document.getElementById("qtyInput").value;
+               batches[y] = [id, qty];
+               y = y + 1;
+          }
+     }
+     var length = batches.length;
+     var form = new FormData;
+     form.append("length", length);
+     form.append("title", title);
+     form.append("desc", description);
+     form.append("start_date", start_date);
+     form.append("end_date", end_date);
+     form.append("Discount", Discount);
+     for (let index = 0; index < length; index++) {
+          form.append("batch" + index, batches[index][0]);
+          form.append("qty" + index, batches[index][1]);
+     }
+     var req = new XMLHttpRequest();
+     req.onreadystatechange = function () {
+          if (req.readyState === 4 && req.status === 200) {
+               alert(req.responseText);
+          }
+     }
+     req.open("POST", "process/savediscount.php", true);
+     req.send(form);
+}
+function ADdiscount(x) {
+     const modal = new bootstrap.Modal(document.getElementById('customModal'));
+     modal.show();
+     submitdiscount(x);
+}
