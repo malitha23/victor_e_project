@@ -430,7 +430,7 @@ include_once "connection.php";
 
                         <div class="row gy-4 featured-product-slider">
                             <?php
-                            for ($i = 0; $i < 3; $i++) {
+                            for ($i = 0; $i < 1; $i++) {
                             ?>
                                 <div class="col-xxl-6">
                                     <div class="featured-products__sliders">
@@ -447,7 +447,7 @@ include_once "connection.php";
                                                 <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
                                                     <a href="product-details.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
                                                         <?php
-                                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE  `id`='" . $pr["id"] . "' ");
+                                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE  `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
                                                         $pic_d = $pic->fetch_assoc();
                                                         if (empty($pic_d["path"])) {
                                                         ?>
@@ -455,7 +455,7 @@ include_once "connection.php";
                                                         <?php
                                                         } else {
                                                         ?>
-                                                            <img src="<?php echo $pic_d["path"]; ?>" alt="" class="w-auto max-w-unset">
+                                                            <img src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="w-auto max-w-unset">
                                                         <?php
                                                         }
                                                         ?>

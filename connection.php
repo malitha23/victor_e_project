@@ -33,7 +33,7 @@ class Database
             $host = isset($_ENV['DB_HOST']) ? $_ENV['DB_HOST'] : 'localhost';
             $port = isset($_ENV['DB_PORT']) ? $_ENV['DB_PORT'] : 3306;
             $username = isset($_ENV['DB_USERNAME']) ? $_ENV['DB_USERNAME'] : 'root';
-            $password = isset($_ENV['DB_PASSWORD']) ? $_ENV['DB_PASSWORD'] : '';
+            $password = isset($_ENV['DB_PASSWORD']) ? $_ENV['DB_PASSWORD'] : 'Sahan2005@mysql';
             $database = isset($_ENV['DB_DATABASE']) ? $_ENV['DB_DATABASE'] : 'victore';
 
             // Establish the database connection
