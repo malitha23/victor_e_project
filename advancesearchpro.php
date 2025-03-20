@@ -98,7 +98,7 @@ if (count($conditionsid) > 0) {
 if (count($brandforquery) > 0) {
      $query .= (count($conditions) > 0 || count($conditionsid) > 0 ? " AND " : " WHERE ") . implode(" OR ", $brandforquery);
 }
-if ($sort != "sort") {
+
      switch ($sort) {
           case 'Latest':
                $query .= " ORDER BY `date` DESC";
@@ -145,7 +145,7 @@ if ($sort != "sort") {
                }
                break;
      }
-}
+
 
 $query .= " LIMIT $itemsPerPage OFFSET $start";
 $product_rs = Database::search($query);
