@@ -1,3 +1,4 @@
+<?php require_once "connection.php"; ?>
 <!DOCTYPE html>
 <html lang="en" class="color-two font-exo">
 
@@ -61,7 +62,9 @@
         </div>
     </div>
     <!-- ========================= Breadcrumb End =============================== -->
-
+    <input type="number" value="0" readonly hidden id="groupset" />
+    <input type="number" value="0" readonly hidden id="catgoryset" />
+    <input type="number" value="0" readonly hidden id="subcatagoryset" />
     <!-- =============================== Shop Section Start ======================================== -->
     <section class="shop py-80">
         <div class="container container-lg">
@@ -73,30 +76,142 @@
                         <button type="button" class="shop-sidebar__close d-lg-none d-flex w-32 h-32 flex-center border border-gray-100 rounded-circle hover-bg-main-600 position-absolute inset-inline-end-0 me-10 mt-8 hover-text-white hover-border-main-600">
                             <i class="ph ph-x"></i>
                         </button>
-                        <div class="shop-sidebar__box border border-gray-100 rounded-8 p-32 mb-32">
-                            <h6 class="text-xl border-bottom border-gray-100 pb-24 mb-24">Product Category</h6>
-                            <ul class="max-h-540 overflow-y-auto scroll-sm">
+
+                        <!-- Brand List Container -->
+                        <div class="shop-sidebar__box border border-gray-100 rounded-8 p-3 mb-4">
+                            <h6 class="text-xl border-bottom border-gray-100 pb-2 mb-3">Product Brands</h6>
+                            <ul class="list-unstyled max-h-540 overflow-y-auto scroll-sm" id="brandList">
                                 <?php
-                                for ($i = 0; $i < 10; $i++) {
+                                $brand = Database::Search("SELECT * FROM `brand` LIMIT 6");
+                                $brandnum = $brand->num_rows;
+
+                                for ($i = 0; $i < $brandnum; $i++) {
+                                    $branddata = $brand->fetch_assoc();
                                 ?>
-                                    <li class="mb-24">
-                                        <a href="product-details.php" class="text-gray-900 hover-text-main-600">Mobile & Accessories (12)</a>
+                                    <li class="mb-2">
+                                        <input onclick="advancesearch();" type="checkbox" id="brand<?php echo $branddata["id"]; ?>" value="<?php echo $branddata["id"]; ?>" />
+                                        <button class="text-gray-900 hover-text-main-600">
+                                            <?php echo $branddata["name"]; ?>
+                                        </button>
                                     </li>
                                 <?php
                                 }
                                 ?>
                             </ul>
+                            <b id="mgb"></b>
+                            <!-- See More Button -->
+                            <div class="text-center mt-3">
+                                <button class="btn btn-primary" id="seeMoreBtn" data-offset="6">See More</button>
+                            </div>
+                        </div>
+
+                        <!-- Include jQuery -->
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+                        <!-- AJAX Script to Load More Brands -->
+                        <script>
+                            $(document).ready(function() {
+                                $('#seeMoreBtn').click(function() {
+                                    var offset = $(this).data('offset');
+
+                                    $.ajax({
+                                        url: 'load_brands.php',
+                                        type: 'POST',
+                                        data: {
+                                            offset: offset
+                                        },
+                                        success: function(response) {
+                                            if (response == '<div class="text-center text-muted">No more brands available.</div>') {
+                                                document.getElementById("mgb").innerHTML = response;
+                                            } else {
+                                                $('#brandList').append(response);
+                                                $('#seeMoreBtn').data('offset', offset + 6);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        </script>
+
+                        <!-- Condition Filter Section -->
+                        <div class="border border-gray-100 rounded-8 p-4 mb-4 shadow-sm">
+                            <h6 class="text-xl mb-3">Product Conditions</h6>
+                            <?php
+                            $condition = Database::Search("SELECT * FROM `condition`");
+                            $conditionnum = $condition->num_rows;
+
+                            for ($i = 0; $i < $conditionnum; $i++) {
+                                $conditiondata = $condition->fetch_assoc();
+                            ?>
+                                <div class="form-check mb-2 fade-in" style="animation: fadeIn 0.5s;">
+                                    <input onclick="advancesearch();" class="form-check-input" type="checkbox" value="<?php echo $conditiondata["id"]; ?>" id="condition_<?php echo $conditiondata["id"]; ?>" data-id="<?php echo $conditiondata["id"]; ?>" name="condition[]">
+                                    <label class="form-check-label" for="condition_<?php echo $conditiondata["id"]; ?>">
+                                        <?php echo $conditiondata["name"]; ?>
+                                    </label>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                            <button onclick="check();">check condition</button>
+                        </div>
+                        <script>
+
+                        </script>
+                        <!-- Include Bootstrap CSS (Optional if already included) -->
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+                        <!-- Animation CSS -->
+                        <style>
+                            @keyframes fadeIn {
+                                0% {
+                                    opacity: 0;
+                                    transform: translateY(-10px);
+                                }
+
+                                100% {
+                                    opacity: 1;
+                                    transform: translateY(0);
+                                }
+                            }
+
+                            .fade-in {
+                                animation: fadeIn 0.5s ease-in-out;
+                            }
+
+                            .form-check-input:checked {
+                                background-color: #0d6efd;
+                                /* Bootstrap Primary Color */
+                                border-color: #0d6efd;
+                            }
+
+                            .form-check-label {
+                                transition: color 0.3s;
+                            }
+
+                            .form-check-input:checked+.form-check-label {
+                                color: #0d6efd;
+                            }
+                        </style>
+
+                        <div class="border border-gray-100 rounded-8 p-4 mb-4 shadow-sm">
+                            <h6 class="text-xl mb-3">Product Discount</h6>
+                            <div class="form-check mb-2 fade-in" style="animation: fadeIn 0.5s;">
+                                <input class="form-check-input" type="checkbox" id="discount" />
+                                <label class="form-check-label" for="discount">
+                                    Only show discounted products
+                                </label>
+                            </div>
                         </div>
                         <div class="border border-gray-100 rounded-8 p-32 mb-32">
                             <h6 class="text-xl border-bottom border-gray-100 pb-24 mb-24">Filter by Price</h6>
                             <div class="row">
                                 <div class="flex-align gap-16" style="margin-top: 10px !important;">
-                                    <input type="number" class="common-input" placeholder="From" value="">
-                                    <input type="number" class="common-input" placeholder="To" value="">
+                                    <input oninput="advancesearch();" type="number" id="minprice" class="common-input" placeholder="From" value="">
+                                    <input oninput="advancesearch();" type="number" id="maxprice" class="common-input" placeholder="To" value="">
                                 </div>
                             </div>
                             <div class="row justify-content-center" style="margin-top: 15px;">
-                            <button type="button" class="btn btn-main h-40 flex-align col-auto">Filter </button>
+                                <button type="button" class="btn btn-main h-40 flex-align col-auto">Filter </button>
                             </div>
                         </div>
 
@@ -123,12 +238,13 @@
                                 </button>
                             </div>
                             <div class="position-relative text-gray-500 flex-align gap-4 text-14">
-                                <label for="sorting" class="text-inherit flex-shrink-0">Sort by: </label>
-                                <select class="form-control common-input px-14 py-14 text-inherit rounded-6 w-auto" id="sorting">
-                                    <option value="1" selected>Popular</option>
-                                    <option value="1">Latest</option>
-                                    <option value="1">Trending</option>
-                                    <option value="1">Matches</option>
+                                <label for="sorting" class="text-inherit flex-shrink-0">Sort by:</label>
+                                <select onchange="advancesearch();" class="form-control common-input px-14 py-14 text-inherit rounded-6 w-auto" id="sorting">
+                                    <option value="sort" selected>Sort by</option>
+                                    <option value="Popular">Popular</option>
+                                    <option value="Latest">Latest</option>
+                                    <option value="Trending">Trending</option>
+                                    <option value="Matches">Matches</option>
                                 </select>
                             </div>
                             <button type="button" class="w-44 h-44 d-lg-none d-flex flex-center border border-gray-100 rounded-6 text-2xl sidebar-btn"><i class="ph-bold ph-funnel"></i></button>
@@ -136,34 +252,72 @@
                     </div>
                     <!-- Top End -->
 
-                    <div class="list-grid-wrapper">
-
+                    <div class="list-grid-wrapper" id="shopveiw">
                         <div class="row">
                             <?php
-                            for ($i = 0; $i < 3; $i++) {
+                            // Define items per page
+                            $itemsPerPage = 20;
+
+                            // Get the current page from URL (default to 1 if not set)
+                            $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+                            // Calculate the starting point
+                            $start = ($currentPage - 1) * $itemsPerPage;
+
+                            // Get total number of products
+                            $totalBatch = Database::Search("SELECT COUNT(*) as total FROM `batch`");
+                            $totalBatchCount = $totalBatch->fetch_assoc()["total"];
+
+                            // Calculate total pages
+                            $totalPages = ceil($totalBatchCount / $itemsPerPage);
+
+                            // Fetch limited product data for current page
+                            $batch = Database::Search("SELECT * FROM `batch` LIMIT $start, $itemsPerPage");
+                            $batchnum = $batch->num_rows;
+
+                            for ($i = 0; $i <  $batchnum; $i++) {
+                                $batchdata = $batch->fetch_assoc();
+                                $product = Database::Search("SELECT * FROM `product` WHERE `id`='" . $batchdata["product_id"] . "' ");
+                                $productdata = $product->fetch_assoc();
+                                $picture = Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $productdata["id"] . "' AND `name`='Image 1'");
+                                $picturenum = $picture->num_rows;
+
+                                if ($picturenum == 1) {
+                                    $picturedata = $picture->fetch_assoc();
+                                    $picturepath = $picturedata["path"];
+                                } else {
+                                    $picturepath = 'assets/images/thumbs/product-two-img2.png';
+                                }
                             ?>
                                 <div class="col-6 col-md-4">
                                     <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
                                         <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
-                                            <img src="assets/images/thumbs/product-two-img2.png" alt="" class="w-auto max-w-unset">
+                                            <img src="admin-panel/<?php echo $picturepath; ?>" alt="" class="w-auto max-w-unset">
                                         </a>
                                         <div class="product-card__content mt-16">
                                             <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                                <a href="product-details.php" class="link text-line-2" tabindex="0">Taylor Farms Broccoli Florets Vegetables</a>
+                                                <a href="product-details.php" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
                                             </h6>
                                             <div class="mt-8">
-                                                <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-label="Basic example" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
                                                     <div class="progress-bar bg-main-two-600 rounded-pill" style="width: 35%"></div>
                                                 </div>
-                                                <span class="text-gray-900 text-xs fw-medium mt-8">Sold: 18/35</span>
+                                                <?php
+                                                $invoice = Database::Search("SELECT * FROM `invoice` WHERE `product_id`='" . $productdata["id"] . "'");
+                                                $invoicenum = $invoice->num_rows;
+                                                ?>
+                                                <span class="text-gray-900 text-xs fw-medium mt-8">Sold: <?php echo $invoicenum; ?></span>
                                             </div>
 
-                                            <div class="product-card__price my-20">
-                                                <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs 28.99</span>
-                                                <span class="text-heading text-md fw-semibold ">Rs 14.99 <span class="text-gray-500 fw-normal">/Qty</span> </span>
+                                            <div class="product-card__price mt-3 mb-4 d-flex flex-column gap-1">
+                                                <span class="text-secondary text-decoration-line-through fw-semibold fs-6">Rs <?php echo $batchdata["selling_price"] + 10; ?></span>
+                                                <span class="text-dark fw-bold fs-5">
+                                                    Rs <?php echo $batchdata["selling_price"]; ?>
+                                                    <span class="text-muted fw-normal fs-6 ms-1">Quantity / <?php echo $batchdata["batch_qty"]; ?> Available</span>
+                                                </span>
                                             </div>
 
-                                            <a href="cart.html" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
+                                            <a href="cart.html" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium">
                                                 Add To Cart <i class="ph ph-shopping-cart"></i>
                                             </a>
                                         </div>
@@ -173,33 +327,41 @@
                             }
                             ?>
                         </div>
-
                     </div>
 
-
                     <!-- Pagination Start -->
-                    <ul class="pagination flex-center flex-wrap gap-16">
-                        <li class="page-item">
-                            <a class="page-link h-64 w-64 flex-center text-xxl rounded-8 fw-medium text-neutral-600 border border-gray-100" href="#">
-                                <i class="ph-bold ph-arrow-left"></i>
-                            </a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link h-64 w-64 flex-center text-md rounded-8 fw-medium text-neutral-600 border border-gray-100" href="#">01</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link h-64 w-64 flex-center text-md rounded-8 fw-medium text-neutral-600 border border-gray-100" href="#">02</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link h-64 w-64 flex-center text-md rounded-8 fw-medium text-neutral-600 border border-gray-100" href="#">03</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link h-64 w-64 flex-center text-xxl rounded-8 fw-medium text-neutral-600 border border-gray-100" href="#">
-                                <i class="ph-bold ph-arrow-right"></i>
-                            </a>
-                        </li>
+                    <ul class="pagination flex-center flex-wrap gap-16 mt-4">
+                        <!-- Previous Page Link -->
+                        <?php if ($currentPage > 1) { ?>
+                            <li class="page-item">
+                                <a class="page-link h-64 w-64 flex-center text-xxl rounded-8 fw-medium text-neutral-600 border border-gray-100" href="?page=<?php echo $currentPage - 1; ?>">
+                                    <i class="ph-bold ph-arrow-left"></i>
+                                </a>
+                            </li>
+                        <?php } ?>
+
+                        <!-- Page Numbers -->
+                        <?php for ($i = 1; $i <= $totalPages; $i++) { ?>
+                            <li class="page-item <?php if ($i == $currentPage) echo 'active'; ?>">
+                                <a class="page-link h-64 w-64 flex-center text-md rounded-8 fw-medium text-neutral-600 border border-gray-100" href="?page=<?php echo $i; ?>">
+                                    <?php echo sprintf('%02d', $i); ?>
+                                </a>
+                            </li>
+                        <?php } ?>
+
+                        <!-- Next Page Link -->
+                        <?php if ($currentPage < $totalPages) { ?>
+                            <li class="page-item">
+                                <a class="page-link h-64 w-64 flex-center text-xxl rounded-8 fw-medium text-neutral-600 border border-gray-100" href="?page=<?php echo $currentPage + 1; ?>">
+                                    <i class="ph-bold ph-arrow-right"></i>
+                                </a>
+                            </li>
+                        <?php } ?>
                     </ul>
                     <!-- Pagination End -->
+
+                    <!-- Pagination End -->
+
                 </div>
                 <!-- Content End -->
 
@@ -285,7 +447,7 @@
     <!-- main js -->
     <script src="assets/js/main.js"></script>
 
-
+    <script src='sahan.js'></script>
 
 </body>
 

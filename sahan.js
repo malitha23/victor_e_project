@@ -250,8 +250,8 @@ function plusprice(qty, id) {
                         timer: 10000,
                         timerProgressBar: true
                     }).then(() => {
-                         location.reload(); 
-                    });  
+                        location.reload();
+                    });
                 } else {
                     Swal.fire({
                         title: 'quantity updated',
@@ -264,7 +264,7 @@ function plusprice(qty, id) {
                         timer: 3000,
                         timerProgressBar: true,
                     });
-                     location.reload();
+                    location.reload();
                 }
             } else {
                 Swal.fire({
@@ -301,8 +301,8 @@ function minprice(qty, id) {
                         timer: 10000,
                         timerProgressBar: true
                     }).then(() => {
-                        location.reload(); 
-                    });                    
+                        location.reload();
+                    });
                 } else {
                     Swal.fire({
                         title: 'quantity updated',
@@ -383,5 +383,81 @@ function adtocart(sprice, discountPercentage, batchId) {
         }
     };
     req.send(form);
+}
+function conditioncheck() {
+    const checkboxes = document.querySelectorAll('input[name="condition[]"]');
+    let result = [];
+
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            result.push(`${checkbox.value}`);
+        }
+    });
+
+    if (result.length < 2) {
+        return (result.join('\n'));
+    } else {
+        return (0);
+    }
+}
+function getCheckedBrands() {
+    const checkboxes = document.querySelectorAll('#brandList input[type="checkbox"]');
+    let brandid = [];
+    let m = 0;
+
+    for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            brandid[m] = checkboxes[i].value;
+            m++;
+        }
+    }
+
+    if (brandid.length > 0) {
+        return brandid;
+    } else {
+        return brandid;
+    }
+}
+function gcs(groupid, catagoryid, subcatagoryid) {
+    document.getElementById('groupset').value = groupid;
+    document.getElementById('catgoryset').value = catagoryid;
+    document.getElementById('subcatagoryset').value = subcatagoryid;
+    advancesearch();
+}
+function advancesearch() {
+    var searchtext = document.getElementById('searchtext').value || 0;
+    var minprice = document.getElementById('minprice').value || 0;
+    var maxprice = document.getElementById('maxprice').value || 0;
+    var condition = conditioncheck();
+    var brandid = getCheckedBrands();
+    var groupid = document.getElementById('groupset').value || 0;
+    var catagoryid = document.getElementById('catgoryset').value || 0;
+    var subcatagoryid = document.getElementById('subcatagoryset').value || 0;
+    var sort = document.getElementById('sorting').value || 0;
+    var discountstatus = document.getElementById('discount').checked ? 1 : 0;
+    var formData = new FormData();
+    formData.append('searchtext', searchtext);
+    formData.append('minprice', minprice);
+    formData.append('maxprice', maxprice);
+    formData.append('condition', condition);
+    for (let index = 0; index < brandid.length; index++) {
+        formData.append('brand' + index, brandid[index]);
+    }
+    formData.append("brandidlength", brandid.length);
+    formData.append('groupid', groupid);
+    formData.append('catagoryid', catagoryid);
+    formData.append('subcatagoryid', subcatagoryid);
+    formData.append('sort', sort);
+    formData.append('discount', discountstatus);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'advancesearchpro.php', true);
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            document.getElementById("shopveiw").innerHTML = xhr.responseText;
+        } else {
+            console.error('An error occurred during the request.');
+        }
+    };
+    xhr.send(formData);
 }
 

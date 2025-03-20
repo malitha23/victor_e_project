@@ -100,10 +100,50 @@ if (isset($_SESSION["a"])) {
                                             <div class="d-flex justify-content-end mt-2">
                                                 <button class="btn tex-g p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $batchdata["id"]; ?>">UPDATE</button>
                                                 <button class="btn tex-b p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModalb<?php echo $batchdata["id"]; ?>">BATCH</button>
-                                                <button class="btn tex-r p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModalx">DELETE</button>
+                                                <button class="btn tex-r p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModalx<?php echo $batchdata["id"]; ?>">DELETE</button>
                                             </div>
                                         </div>
 
+                                        <!-- Modal for delete confirmation -->
+                                        <!-- Bootstrap Modal -->
+                                        <div class="modal fade" id="exampleModalx<?php echo $batchdata["id"]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content border-0 shadow-lg rounded-3">
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header bg-danger text-white">
+                                                        <h5 class="modal-title fw-bold d-flex align-items-center" id="exampleModalLabel">
+                                                            <i class="fa fa-exclamation-circle me-2"></i> Warning
+                                                        </h5>
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+
+                                                    <!-- Modal Body -->
+                                                    <div class="modal-body">
+                                                        <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+                                                            <i class="fa fa-exclamation-triangle me-2"></i>
+                                                            Do you really want to delete <strong><?php echo $productdata["title"]; ?></strong>?
+                                                        </div>
+
+                                                        <hr class="my-3" />
+
+                                                        <div class="text-center">
+                                                            <h5 class="fw-bold mb-3">Batch Code: <span class="text-primary"><?php echo $batchdata["batch_code"]; ?></span></h5>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Modal Footer -->
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-outline-danger fw-bold" onclick="deleteproduct('<?php echo $productdata["id"]; ?>');">
+                                                            <i class="fa fa-trash"></i> Delete Product
+                                                        </button>
+
+                                                        <button type="button" class="btn btn-outline-dark fw-bold" onclick="deletebatch('<?php echo $batchdata["id"]; ?>');">
+                                                            <i class="fa fa-times"></i> Delete Batch
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <!-- Modal for updating batch -->
                                         <div class="modal fade" id="exampleModalb<?php echo $batchdata["id"]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -459,24 +499,7 @@ if (isset($_SESSION["a"])) {
 
 
 
-                            <!-- Modal for delete confirmation -->
-                            <div class="modal fade" id="exampleModalx" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <div class="modal-title fs-4 fw-bold" id="exampleModalLabel">Warning&nbsp;&nbsp;<i class="fa fa-exclamation" aria-hidden="true"></i>
-                                            </div>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <span>Do you really want to delete <b>Example Product Title</b>?</span>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn ub-btn">Delete</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
 
                         </div>
 
