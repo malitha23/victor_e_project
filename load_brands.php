@@ -12,7 +12,7 @@ if (isset($_POST['offset'])) {
             echo
 
             ' <li class="mb-2">
-                                        <input type="checkbox" id="brand" value="' .  $branddata["id"] . '"/>
+                                        <input onclick="advancesearch();" type="checkbox" id="brand" value="' .  $branddata["id"] . '"/>
                                         <button class="text-gray-900 hover-text-main-600">
                                         ' . $branddata["name"] . '
                                         </button>
