@@ -193,15 +193,91 @@
                             }
                         </style>
 
-                        <div class="border border-gray-100 rounded-8 p-4 mb-4 shadow-sm">
-                            <h6 class="text-xl mb-3">Product Discount</h6>
+                        <div class="dis border border-gray-100 rounded-8 p-4 mb-4 shadow-sm">
+                            <h6 class="dis-h text-xl mb-3">Product Discount</h6>
                             <div class="form-check mb-2 fade-in" style="animation: fadeIn 0.5s;">
-                                <input class="form-check-input" type="checkbox" id="discount" />
-                                <label class="form-check-label" for="discount">
+                                <input onclick="advancesearch();" class="dis-check form-check-input" type="checkbox" id="discount" />
+                                <label class="dis-label form-check-label" for="discount">
                                     Only show discounted products
                                 </label>
                             </div>
                         </div>
+                        <style>
+                            /* Animation Keyframes */
+                            @keyframes disColorChange {
+                                0% {
+                                    color: #00b894;
+                                    text-shadow: 0 0 8px #ff7675;
+                                }
+
+                                33% {
+                                    color: navy;
+                                    text-shadow: 0 0 8px #0984e3;
+                                }
+
+                                66% {
+                                    color: #00b894;
+                                    text-shadow: 0 0 8px #00cec9;
+                                }
+
+                                100% {
+                                    color: #e17055;
+                                    text-shadow: 0 0 8px #d63031;
+                                }
+                            }
+
+                            @keyframes disFadeIn {
+                                0% {
+                                    opacity: 0;
+                                    transform: translateY(-20px);
+                                }
+
+                                100% {
+                                    opacity: 1;
+                                    transform: translateY(0);
+                                }
+                            }
+
+                            /* Applying Animations */
+                            .dis {
+                                animation: disFadeIn 0.7s ease-out;
+                                border-color: #e0e0e0;
+                                background: linear-gradient(145deg, #ffffff, #f0f0f0);
+                                border-radius: 12px;
+                                padding: 20px;
+                                transition: all 0.4s ease;
+                                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                            }
+
+                            .dis:hover {
+                                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                                transform: translateY(-4px);
+                            }
+
+                            .dis-h {
+                                animation: disColorChange 4s infinite alternate;
+                                font-weight: 600;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                            }
+
+                            .dis-check {
+                                transition: all 0.3s;
+                                cursor: pointer;
+                            }
+
+                            .dis-label {
+                                transition: color 0.3s, text-shadow 0.3s;
+                                cursor: pointer;
+                            }
+
+                            .dis-check:checked+.dis-label {
+                                color: #0d6efd;
+                                font-weight: bold;
+                                text-shadow: 0 0 5px #00b894, 0 0 8px #0984e3;
+                            }
+                        </style>
+
                         <div class="border border-gray-100 rounded-8 p-32 mb-32">
                             <h6 class="text-xl border-bottom border-gray-100 pb-24 mb-24">Filter by Price</h6>
                             <div class="row">
