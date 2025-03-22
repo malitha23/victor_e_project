@@ -85,7 +85,7 @@ class check extends main {
                             "ip_address" => $_SERVER['REMOTE_ADDR'], 
                             "user_agent" => $_SERVER['HTTP_USER_AGENT'], 
                         );                    
-                        return $user['fname'] . " login success!";
+                        return 1;
 
                         if ($this->remember == "true") {
                             setcookie("email", $this->email, time() + (60 * 60 * 24 * 365), '/', '', true, true); 

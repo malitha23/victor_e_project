@@ -3,13 +3,17 @@ function login() {
     let password = document.getElementById("password").value.trim();
     var remember = document.getElementById("remember").checked;
 
+    // Check if email or password is empty
     if (email === "" || password === "") {
-        alert("Please enter both email and password.");
+        Swal.fire({
+            icon: 'warning',
+            title: 'Missing Information',
+            text: 'Please enter both email and password.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f39c12', // Orange color for warning
+        });
         return;
     }
-
-    alert(email);
-    alert(password);
 
     let formData = new FormData();
     formData.append("email", email);
@@ -22,9 +26,47 @@ function login() {
     })
         .then(response => response.text())
         .then(data => {
-            alert(data);
+            if (data == 1) {
+                Swal.fire({
+                    title: '<span style="color: white; font-size: 24px;">Login Successful!</span>',
+                    html: '<span style="color: white; font-size: 18px;">Welcome back! You have successfully logged in.</span>',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    position: 'center',
+                    background: 'rgba(0, 0, 0, 0.8)',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    }
+                });
+
+            } else {
+                Swal.fire({
+                    title: 'Login Failed!',
+                    text: data,
+                    icon: 'error',
+                    confirmButtonText: 'Try Again',
+                    backdrop: `
+                    rgba(255,0,0,0.4)
+                    url("https://media.giphy.com/media/5t9IcFhUEk2PzxHcYK/giphy.gif")
+                    right top
+                    no-repeat
+                `
+                });
+            }
         })
-        .catch(error => console.error("Error:", error));
+        .catch(error => {
+            Swal.fire({
+                title: 'Network Error!',
+                text: 'Something went wrong. Please try again later.',
+                icon: 'error',
+                confirmButtonText: 'Okay'
+            });
+        });
+
 }
 function forgotpassword() {
     let email = document.getElementById("email").value.trim();
@@ -113,33 +155,75 @@ function Register() {
     const email = document.getElementById("emailTwo").value.trim();
     const password = document.getElementById("enter-password").value.trim();
 
+    // Validate mobile number
     if (!mobile) {
-        alert("Please enter your mobile number.");
+        Swal.fire({
+            icon: 'warning',
+            title: 'Mobile Number Missing',
+            text: 'Please enter your mobile number.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f39c12', // Orange color for warning
+        });
         return;
     }
 
+    // Validate mobile number length
     if (!/^[0-9]{10}$/.test(mobile)) {
-        alert("Mobile number must be 10 digits.");
+        Swal.fire({
+            icon: 'warning',
+            title: 'Invalid Mobile Number',
+            text: 'Mobile number must be 10 digits.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f39c12',
+        });
         return;
     }
 
+    // Validate email address
     if (!email) {
-        alert("Please enter your email address.");
+        Swal.fire({
+            icon: 'warning',
+            title: 'Email Address Missing',
+            text: 'Please enter your email address.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f39c12',
+        });
         return;
     }
 
+    // Validate email format
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert("Please enter a valid email address.");
+        Swal.fire({
+            icon: 'warning',
+            title: 'Invalid Email Address',
+            text: 'Please enter a valid email address.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f39c12',
+        });
         return;
     }
 
+    // Validate password
     if (!password) {
-        alert("Please enter your password.");
+        Swal.fire({
+            icon: 'warning',
+            title: 'Password Missing',
+            text: 'Please enter your password.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f39c12',
+        });
         return;
     }
 
+    // Validate password length
     if (password.length < 6) {
-        alert("Password must be at least 6 characters long.");
+        Swal.fire({
+            icon: 'warning',
+            title: 'Weak Password',
+            text: 'Password must be at least 6 characters long.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f39c12',
+        });
         return;
     }
 
@@ -154,10 +238,49 @@ function Register() {
         if (req.readyState === 4) {
             if (req.status === 200) {
                 var x = req.responseText;
-                alert(x);
-                window.location.href = "/index.html";
+                if (x == 1) {
+                    Swal.fire({
+                        title: '<span style="color: white; font-size: 24px;">Success!</span>',
+                        html: '<span style="color: white; font-size: 18px;">Registered successfully.</span>',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        background: 'rgba(0, 0, 0, 0.8)',
+                        showClass: {
+                            popup: 'animate__animated animate__zoomIn'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__zoomOut'
+                        }
+                    });
+
+                    // Automatically fill the email and password fields
+                    document.getElementById("email").value = email;
+                    document.getElementById("password").value = password;
+
+                    // Call the login function after the alert
+                    setTimeout(() => { login(); }, 2000);
+                } else {
+                    Swal.fire({
+                        title: 'Oops!',
+                        text: x,
+                        icon: 'error',
+                        confirmButtonText: 'Try Again',
+                        backdrop: `
+                            rgba(255,0,0,0.4)
+                            url("https://media.giphy.com/media/5t9IcFhUEk2PzxHcYK/giphy.gif")
+                            center left
+                            no-repeat
+                        `
+                    });
+                }
             } else {
-                alert("Error: " + req.status);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Error: ' + req.status,
+                    icon: 'error',
+                    confirmButtonText: 'Okay'
+                });
             }
         }
     };

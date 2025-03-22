@@ -93,9 +93,9 @@ class DataInsert
                $date = $d->format("Y-m-d H:i:s");
                $mailToken = bin2hex(random_bytes(4));
 
-               Database::IUD("INSERT INTO `user` (`email`, `mail`, `mobile`, `password`, `date`) 
-            VALUES ('" . $user_data["email"] . "', '" . $mailToken . "','" . $user_data["mobile"] . "','" . $user_data["password"] . "','" . $date . "')");
-               return "User inserted successfully.";
+               Database::IUD("INSERT INTO `user` (`email`, `mail`, `mobile`, `password`, `date`,`status`) 
+            VALUES ('" . $user_data["email"] . "', '" . $mailToken . "','" . $user_data["mobile"] . "','" . $user_data["password"] . "','" . $date . "','1')");
+               return 1;
           } else {
                return "This email is already registered.";
           }
