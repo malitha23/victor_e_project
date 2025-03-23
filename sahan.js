@@ -32,7 +32,7 @@ function login() {
                     html: '<span style="color: white; font-size: 18px;">Welcome back! You have successfully logged in.</span>',
                     icon: 'success',
                     showConfirmButton: false,
-                    timer: 3000,
+                    timer: 3000,  // Alert will disappear after 3 seconds
                     position: 'center',
                     background: 'rgba(0, 0, 0, 0.8)',
                     showClass: {
@@ -41,8 +41,10 @@ function login() {
                     hideClass: {
                         popup: 'animate__animated animate__fadeOutUp'
                     }
+                }).then(() => {
+                    // After alert closes, redirect to the homepage
+                    window.location = "index.php";
                 });
-
             } else {
                 Swal.fire({
                     title: 'Login Failed!',
@@ -311,13 +313,13 @@ function updatepro() {
     form.append("address1", address1);
     form.append("address2", address2);
     form.append("email", email);
-
     var req = new XMLHttpRequest();
     req.open("POST", "updateProfilepro.php", true);
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
             const responseText = req.responseText;
-            if (responseText == "profile update") {
+            alert(responseText);
+            if (responseText == "plrofile update") {
                 Swal.fire({
                     title: 'profile update successfully',
                     text: responseText,
