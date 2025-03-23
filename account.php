@@ -310,7 +310,7 @@ if (isset($_SESSION["user_vec"])) {
                                 <div class="mb-24">
                                     <label for="password" class="text-neutral-900 text-lg mb-8 fw-medium">Password <span class="text-danger">*</span></label>
                                     <div class="position-relative">
-                                        <input type="password" class="common-input" id="password" placeholder="Enter Password" value="<?php echo $user_data["password"] ?>">
+                                        <input readonly type="password" class="common-input" id="password" placeholder="Enter Password" value="<?php echo $user_data["password"] ?>">
                                         <span class="toggle-password position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y cursor-pointer ph ph-eye-slash" onclick="togglePasswordVisibility('password')"></span>
                                     </div>
                                 </div>

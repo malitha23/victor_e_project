@@ -318,17 +318,30 @@ function updatepro() {
     req.onreadystatechange = function () {
         if (req.readyState === 4 && req.status === 200) {
             const responseText = req.responseText;
-            alert(responseText);
-            if (responseText == "plrofile update") {
+            if (responseText == "profile update") {
                 Swal.fire({
-                    title: 'profile update successfully',
-                    text: responseText,
+                    title: '<span style="font-size: 22px; font-weight: bold; color: #333;">Profile Updated Successfully</span>',
+                    html: '<p style="font-size: 16px; color: #555;">' + responseText + '</p>',
                     icon: 'success',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#3085d6',
-                    background: '#f9f9f9',
+                    iconColor: '#28a745',
+                    confirmButtonText: 'Continue',
+                    confirmButtonColor: '#ff6600',
+                    background: '#ffffff',
                     color: '#333',
-                });
+                    width: '400px',
+                    padding: '20px',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    },
+                    didOpen: () => {
+                        document.querySelector('.swal2-confirm').style.borderRadius = '10px';
+                    }
+                }).then(() => {
+                    location.reload();  // Corrected `window.reload()` to `location.reload()`
+                });                
             } else {
                 Swal.fire({
                     title: 'Alert',

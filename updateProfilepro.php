@@ -100,13 +100,13 @@ class sql
                          $adress = $this->addressceck($userdata["email"]);
                          if ($adress == 0) {
                               Database::IUD("INSERT INTO 
-                         `victore`.`address` (`line_1`, `city_city_id`, `distric_distric_id`) 
-                         VALUES ('" . $userdata["address1"] . "', '" . $userdata["city"] . "', '" . $userdata["district"] . "')");
+                         `victore`.`address` (`line_1`,`line_2`, `city_city_id`, `distric_distric_id`) 
+                         VALUES ('" . $userdata["address1"] . "','', '" . $userdata["city"] . "', '" . $userdata["district"] . "')");
                               $lastInsertIdQuery = Database::$connection->insert_id;
                               return $this->mainuserin($userdata, $lastInsertIdQuery);
                          } else {
                               Database::IUD("UPDATE `address` 
-                              SET `line_1` = '" . $userdata["address1"] . "', `city_city_id` = '" . $userdata["city"] . "', `distric_distric_id` = '" . $userdata["district"] . "'
+                              SET `line_1` = '" . $userdata["address1"] . "',`line_2`='', `city_city_id` = '" . $userdata["city"] . "', `distric_distric_id` = '" . $userdata["district"] . "'
                                WHERE (`address_id` = '" . $adress . "');");
                                $lastInsertIdQuery = $adress;
                                return $this->mainuserin($userdata, $lastInsertIdQuery);
