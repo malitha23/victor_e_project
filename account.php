@@ -80,7 +80,7 @@ if (isset($_SESSION["user_vec"])) {
                                         <img src="assets/images/thumbs/vendors-two-icon1.png" alt="">
                                     </span>
                                     <div class="d-flex flex-column gap-24">
-                                        <button type="button" class="text-uppercase group border border-white px-16 py-8 rounded-pill text-white text-sm hover-bg-main-two-600 hover-text-white hover-border-main-two-600 transition-2 flex-center gap-8 w-100">
+                                        <button onclick="signout();" type="button" class="text-uppercase group border border-white px-16 py-8 rounded-pill text-white text-sm hover-bg-main-two-600 hover-text-white hover-border-main-two-600 transition-2 flex-center gap-8 w-100">
                                             Sign Out
                                             <span class="text-xl d-flex text-main-two-600 group-item-white transition-2"> <i class="ph ph-sign-out"></i></span>
                                         </button>
@@ -113,36 +113,59 @@ if (isset($_SESSION["user_vec"])) {
 
 
                             <?php
-                            for ($i = 0; $i < 3; $i++) {
+                            $order = Database::Search("SELECT * FROM `order` WHERE `user_email`='" . $user_data["email"] . "' ");
+                            $ordernum = $order->num_rows;
+                            for ($i = 0; $i < $ordernum; $i++) {
+                                $orderdata = $order->fetch_assoc();
                             ?>
                                 <div class="row border rounded-16 p-3 mt-10 hover-border-main-600 transition-1">
                                     <div class="col-12">
                                         <div class="row mt-10">
                                             <!-- Left Side: Product Details -->
                                             <div class="col-8 text-sm">
-                                                <p class="mb-0"><strong>Order ID : </strong>Rghjs564.99</p>
-                                                <p class="mb-0"><strong>Price : </strong>Rs 99.99 + Rs 45.25 Delivery</p>
-                                                <p class="mb-0"><strong>Total Price : </strong>Rs 99.99</p>
-                                                <p class="mb-0"><strong>Date : </strong>12, June, 2025</p>
+                                                <p class="mb-0"><strong>Order ID : </strong><?php echo $orderdata["id"] ?></p>
+                                                <p class="mb-0"><strong>Date : </strong><?php echo $orderdata["date_time"] ?></p>
                                             </div>
-
-                                            <!-- Right Side: Delivery Status Button -->
-                                            <div class="col-4 text-end">
-                                                <button class="btn p-18 btn-main">Delivered</button>
-                                            </div>
+                                            <?php
+                                            $ostatus = Database::Search("SELECT * FROM `order_status` WHERE `id`='" . $orderdata["Order_status_id"] . "' ");
+                                            $ostatusnum = $ostatus->num_rows;
+                                            for ($i = 0; $i < $ostatusnum; $i++) {
+                                                $osdata = $ostatus->fetch_assoc();
+                                            ?>
+                                                <!-- Right Side: Delivery Status Button -->
+                                                <div class="col-4 text-end">
+                                                    <button class="btn p-18 btn-main"><?php echo  $osdata["status"] ?></button>
+                                                </div>
+                                            <?php
+                                            }
+                                            ?>
                                         </div>
                                         <div class="row px-10">
                                             <?php
-                                            for ($x = 0; $x < 3; $x++) {
+                                             $invoice  = Database::Search("SELECT * FROM `invoice` WHERE `id`='" . $orderdata["invoice_id"] . "' ");
+                                             $invoicenum = $invoice->num_rows;
+                                            for ($x = 0; $x < $invoicenum; $x++) {
+                                                $invoicedata = $invoice->fetch_assoc();
+                                                $product = Database::Search("SELECT * FROM `product` WHERE `id`='" . $invoicedata["product_id"] . "' ");
+                                                $productdata = $product->fetch_assoc();
                                             ?>
                                                 <!-- Order Item Start -->
                                                 <div class="col-12 d-flex align-items-center p-10 border-bottom">
-                                                    <img src="assets/images/thumbs/vendors-two-icon1.png" alt="Product Image" class="rounded me-10 img-fluid" width="80">
+                                                    <?php
+                                                     $pic = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $productdata["id"] . "' AND `name`='Image 1' ");
+                                                     $pic_d = $pic->fetch_assoc();
+                                                     if(empty($pic_d["path"])){
+                                                        $pth = "assets/images/thumbs/vendors-two-icon1.png";
+                                                     }else{
+                                                        $pth = "admin-panel/".$pic_d["path"];
+                                                     }
+                                                     ?>
+                                                    <img src="<?php echo $pth ?>" alt="Product Image" class="rounded me-10 img-fluid" width="80">
                                                     <div class="flex-grow-1">
-                                                        <p class="mb-1 text-gray-500">Gaming Chair - Ergonomic Design</p>
+                                                        <p class="mb-1 text-gray-500"><?php echo $productdata["title"]; ?></p>
                                                         <p class="mb-1 text-gray-500 text-sm">
-                                                            <span class="text-main me-10">Rs 45,500</span>
-                                                            <span class="text-success">2 Items</span>
+                                                            <span class="text-main me-10">Rs <?php echo $invoicedata["price"]; ?></span>
+                                                            <span class="text-success"><?php echo $invoicedata["qty"]; ?></span>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -244,15 +267,15 @@ if (isset($_SESSION["user_vec"])) {
                                         </select>
                                     </div>
                                     <?php
-                                     $mn = Database::Search("SELECT * FROM `address` WHERE `address_id` ='" . $user_data["adress_id"] . "' ");
-                                     $mmn = $mn->fetch_assoc();
-                                     $city = Database::Search("SELECT * FROM `city` WHERE `city_id`='" . $mmn["city_city_id"] . "' ");
-                                     $city_a = $city->fetch_assoc();
-                                      ?>
+                                    $mn = Database::Search("SELECT * FROM `address` WHERE `address_id` ='" . $user_data["adress_id"] . "' ");
+                                    $mmn = $mn->fetch_assoc();
+                                    $city = Database::Search("SELECT * FROM `city` WHERE `city_id`='" . $mmn["city_city_id"] . "' ");
+                                    $city_a = $city->fetch_assoc();
+                                    ?>
                                     <div class="col-12 col-lg-6 mb-24">
                                         <label for="city" class="text-neutral-900 text-lg mb-8 fw-medium">City <span class="text-danger">*</span></label>
                                         <select id="city" class="common-input">
-                                            <option value="<?php echo $city_a["city_id"]  ?>" selected ><?php echo $city_a["name"]  ?></option>
+                                            <option value="<?php echo $city_a["city_id"]  ?>" selected><?php echo $city_a["name"]  ?></option>
                                             <?php
                                             $dis = Database::Search("SELECT * FROM `city` ");
                                             $dis_num  = $dis->num_rows;

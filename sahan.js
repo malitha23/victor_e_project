@@ -598,4 +598,40 @@ function advancesearch() {
     };
     xhr.send(formData);
 }
+function signout() {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out of your account.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, Logout",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch("signout.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "logout" })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    Swal.fire({
+                        title: "Logged Out",
+                        text: "You have been successfully logged out.",
+                        icon: "success",
+                        confirmButtonColor: "#ff6600",
+                    }).then(() => {
+                        window.location.href = "index.php"; // Redirect to home or login page
+                    });
+                } else {
+                    Swal.fire("Error", "Logout failed. Try again!", "error");
+                }
+            })
+            .catch(error => Swal.fire("Error", "Something went wrong!", "error"));
+        }
+    });
+}
 
