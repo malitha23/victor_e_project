@@ -191,7 +191,7 @@ if ($carto > 0) {
                                                     <?php echo $calprice; ?></span>
                                             </div>
                                             <div class="col-1 d-flex flex-row align-items-center justify-content-end">
-                                                <i class="ph ph-x-circle text-2xl d-flex hover"
+                                                <i onclick="cartdelete('<?php echo $cartdata["id"]; ?>');"  class="ph ph-x-circle text-2xl d-flex hover"
                                                     style="position: absolute; top: 0; right: 0; cursor: pointer; margin: 8px;"></i>
                                             </div>
                                         </div>

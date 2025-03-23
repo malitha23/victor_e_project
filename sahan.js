@@ -634,4 +634,56 @@ function signout() {
         }
     });
 }
+function cartdelete(cartid) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to remove this item from your cart.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, Delete",
+        cancelButtonText: "Cancel",
+        input: "text",
+        inputPlaceholder: "Type 'DELETE' to confirm",
+        inputValidator: (value) => {
+            return value !== "DELETE" ? "You must type 'DELETE' to confirm!" : null;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Deleting...",
+                text: "Please wait...",
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
+
+            let formData = new FormData();
+            formData.append("cartid", cartid);
+
+            fetch("cartdelete.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                Swal.close(); // Close loading alert
+
+                if (data.includes("successfully")) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "The item has been removed from your cart.",
+                        icon: "success",
+                        confirmButtonColor: "#ff6600"
+                    }).then(() => {
+                        location.reload(); // Refresh the cart page
+                    });
+                } else {
+                    Swal.fire("Error", data, "error");
+                }
+            })
+            .catch(error => Swal.fire("Error", "Something went wrong!", "error"));
+        }
+    });
+}
 
