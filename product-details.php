@@ -359,6 +359,25 @@ if ($batch_id > 0) {
                     <div class="col-xl-3">
                         <?php
                         if (isset($_SESSION["user_vec"])) {
+                            $user_row = Database::Search("SELECT * FROM `user` WHERE `email`='" . $_SESSION["user_vec"]["email"] . "' ");
+                            $un = $user_row->num_rows;
+                            if ($un == 1) {
+                                $ud = $user_row->fetch_assoc();
+                                if (!empty($ud["adress_id"])) {
+                                    $ad = Database::Search("SELECT * FROM `address` WHERE `address_id` ='" . $ud["adress_id"] . "'");
+                                    $add = $ad->fetch_assoc();
+                                    $df = Database::Search("SELECT * FROM `delivery_fee` WHERE `city_city_id`='" . $add["city_city_id"] . "' ");
+                                    $dfn = $df->num_rows;
+                                    if ($dfn == 1) {
+                                        $dfd = $df->fetch_assoc();
+                                        $deliveryfee = $dfd["fee"];
+                                    } else {
+                                        $deliveryfee = 00.00;
+                                    }
+                                } else {
+                                    $deliveryfee = 00.00;
+                                }
+                            }
                         ?>
                             <div class="product-details__sidebar py-40 px-32 border border-gray-100 rounded-16">
                                 <div class="mb-32">
@@ -367,11 +386,11 @@ if ($batch_id > 0) {
                                         <span class="text-xl d-flex text-main-600">
                                             <i class="ph ph-map-pin"></i>
                                         </span>
-                                        <div class="border-0 px-8 rounded-4 py-10 text-dark">fisrt last name</div>
+                                        <div class="border-0 px-8 rounded-4 py-10 text-dark"><?php echo  $user_data["fname"] . " " . $user_data["lname"] ?></div>
                                     </div>
                                 </div>
                                 <div class="mb-32">
-                                    <label for="stock" class="text-lg mb-8 text-heading fw-semibold d-block">Total Stock: 21</label>
+                                    <label for="stock" class="text-lg mb-8 text-heading fw-semibold d-block">Total Stock: <?php echo $batchdata["qty"]; ?></label>
                                     <span class="text-xl d-flex">
                                         <i class="ph ph-location"></i>
                                     </span>
@@ -379,24 +398,68 @@ if ($batch_id > 0) {
                                         <button type="button" class="quantity__minus flex-shrink-0 h-48 w-48 text-neutral-600 bg-gray-50 flex-center hover-bg-main-600 hover-text-white">
                                             <i class="ph ph-minus"></i>
                                         </button>
-                                        <input type="number" class="quantity__input flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-16" id="stock" value="1" min="1">
+                                        <input type="number" class="quantity__input flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-16" max="<?php echo $batchdata["qty"]; ?>" id="stock" value="1" min="1">
                                         <button type="button" class="quantity__plus flex-shrink-0 h-48 w-48 text-neutral-600 bg-gray-50 flex-center hover-bg-main-600 hover-text-white">
                                             <i class="ph ph-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="mb-32">
+                                    <?php
+
+                                    if ($productdata["weight"] > 0) {
+                                        $product_weight = $productdata["weight"];
+                                        $dw = Database::Search("SELECT * FROM `weight`");
+                                        $dwn = $dw->num_rows;
+                                        for ($i = 0; $i < $dwn; $i++) {
+                                            $dwd = $dw->fetch_assoc();
+                                            if ($dwd["weight"] == $product_weight) {
+                                                $final_product_weight = $dwd["weight"];
+                                                $dfw = Database::Search("SELECT * FROM `delivery_fee_for_weight` WHERE `weight_id`='" . $dwd["id"] . "' ");
+                                                $dfwn = $dfw->num_rows;
+                                                if ($dfwn == 1) {
+                                                    $dfwd = $dfw->fetch_assoc();
+                                                    $weigdeliveryfee = $dfwd["fee"];
+                                                } else {
+                                                    $weigdeliveryfee = 0;
+                                                }
+                                            } else {
+                                                $weigdeliveryfee = 0;
+                                            }
+                                        }
+                                    } else {
+                                        $weigdeliveryfee = 0;
+                                    }
+
+
+                                    $price = $batchdata["selling_price"];
+                                    $discountpre = $discount_data["discount"];
+                                    $discountAmount = ($price * $discountpre) / 100;
+                                    $finalPricePerItem = $price - $discountAmount;
+                                    ?>
                                     <div class="flex-between flex-wrap gap-8 border-bottom border-gray-100 pb-16 mb-16">
                                         <span class="text-gray-500">Price</span>
-                                        <h6 class="text-lg mb-0">$150.00</h6>
+                                        <h6 class="text-lg mb-0"><?php echo $price; ?></h6>
                                     </div>
                                     <div class="flex-between flex-wrap gap-8">
                                         <span class="text-gray-500">Shipping</span>
-                                        <h6 class="text-lg mb-0">From $10.00</h6>
+                                        <h6 class="text-lg mb-0">From <?php echo $deliveryfee; ?></h6>
+                                    </div>
+                                    <div class="flex-between flex-wrap gap-8">
+                                        <span class="text-gray-500">Additional Shipping cost for waght</span>
+                                        <h6 class="text-lg mb-0">From <?php echo $weigdeliveryfee; ?></h6>
+                                    </div>
+                                    <div class="flex-between flex-wrap gap-8">
+                                        <span class="text-gray-500">Discount</span>
+                                        <h6 class="text-lg mb-0">RS.<?php echo $discountAmount; ?></h6>
+                                    </div>
+                                    <div class="flex-between flex-wrap gap-8">
+                                        <span class="text-gray-500">Final price</span>
+                                        <h6 class="text-lg mb-0">From <?php echo $finalPricePerItem + $deliveryfee + $weigdeliveryfee; ?></h6>
                                     </div>
                                 </div>
 
-                                <a href="#" class="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-48">
+                                <a onclick="adtocart(<?= $price ?>, <?= $discount_percentage ?>, <?= $batch_id ?>);" class="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-48">
                                     <i class="ph ph-shopping-cart-simple text-lg"></i>
                                     Add To Cart
                                 </a>
@@ -452,7 +515,7 @@ if ($batch_id > 0) {
                             </div>
 
                             <a href="register.php" class="best-button flex-center">
-                            Register now
+                                Register now
                             </a>
 
                             <style>
@@ -690,7 +753,7 @@ if ($batch_id > 0) {
         <?php require_once "footer.php"; ?>
 
 
-
+        <script src="sahan.js"></script>
         <!-- Jquery js -->
         <script src="assets/js/jquery-3.7.1.min.js"></script>
         <!-- Bootstrap Bundle Js -->
