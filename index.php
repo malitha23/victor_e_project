@@ -255,11 +255,12 @@ include_once "connection.php";
                             $dpro_data = $dpro->fetch_assoc();
                             $BA = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $dpro_data["batch_id"] . "' ");
                             $bad = $BA->fetch_assoc();
+                            $discountid = $dpro_data["id"];
                         ?>
                             <!-- product card start -->
                             <div data-aos="fade-up" data-aos-duration="200">
                                 <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                    <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
+                                    <a href="product-details.php?batch_id=<?php echo $dpro_data['batch_id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
                                         <span class="product-card__badge bg-main-600 px-8 py-4 text-sm text-white position-absolute inset-inline-start-0 inset-block-start-0"><?php echo  $dpro_data["discount_pre"]; ?> % Off </span>
                                         <?php
                                         $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bad["product_id"] . "' ");
@@ -559,12 +560,13 @@ include_once "connection.php";
                                 $bach_d = $bach->fetch_assoc();
                                 $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bach_d["product_id"] . "' ");
                                 $pr =  $pr->fetch_assoc();
+                                $discountid = 0;
                             ?>
                                 <div class="col-xxl-6">
                                     <div class="featured-products__sliders">
                                         <div class="" data-aos="fade-up" data-aos-duration="800">
                                             <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                                <a href="product-details.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
+                                                <a href="product-details.php?batch_id=<?php echo $bach_d['id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
                                                     <?php
                                                     $pic = Database::Search("SELECT * FROM `picture`  WHERE  `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
                                                     $pic_d = $pic->fetch_assoc();
