@@ -12,7 +12,7 @@ include_once "connection.php";
     <title>replace_title</title>
     <!-- Favicon -->
     <link rel="shortcut icon" href="assets/images/logo/favicon.png">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <!-- select 2 -->
@@ -343,46 +343,169 @@ include_once "connection.php";
                 </div>
                 <div class="row g-12">
                     <div class="col-md-4" data-aos="zoom-in" data-aos-duration="800">
-                        <div class="position-relative rounded-16 overflow-hidden p-28 z-1 text-center">
-                            <img src="assets/images/bg/deal-bg.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100">
+                        <div class="position-relative rounded-16 overflow-hidden p-28 z-1 text-center bg-white shadow-lg">
+
+                            <?php
+                            // Get the highest sold quantity and batch ID
+                            $tss = Database::Search("SELECT batch_id, qty FROM `invoice` ORDER BY qty DESC LIMIT 1");
+                            if ($tss->num_rows > 0) {
+                                $tssd = $tss->fetch_assoc();
+                                $max_qty = $tssd["qty"];
+                                echo "<h6 class='fw-bold text-danger'>🔥 Maximum Sold Quantity: $max_qty</h6>";
+
+                                // Fetch products with the same highest quantity
+                                $in = Database::Search("SELECT batch_id FROM `invoice` WHERE `qty`='$max_qty'");
+                                $inn = $in->num_rows;
+
+                                if ($inn > 0) {
+                            ?>
+                                    <!-- Bootstrap Carousel -->
+                                    <div id="topSellingCarousel" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            <div class="carousel-item active">
+                                                <span class="fw-bold text-primary">🚀 Best-Selling Products</span>
+                                            </div>
+
+                                            <?php
+                                            while ($ind = $in->fetch_assoc()) {
+                                                $batch_id = $ind["batch_id"];
+                                                $bach = Database::Search("SELECT * FROM `batch` WHERE id='$batch_id'");
+
+                                                if ($bach->num_rows > 0) {
+                                                    $batchdata = $bach->fetch_assoc();
+                                                    $product = Database::Search("SELECT * FROM `product` WHERE `id`='" . $batchdata["product_id"] . "'");
+                                                    $productdata = $product->fetch_assoc();
+                                            ?>
+                                                    <!-- Product Slide -->
+                                                    <div class="carousel-item">
+                                                        <div class="carousel-content text-center">
+                                                            <?php
+                                                            $pic = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" .  $productdata["id"] . "' AND `name`='Image 1' ");
+                                                            $pic_d = $pic->fetch_assoc();
+                                                            if (empty($pic_d["path"])) {
+                                                                $pp = "assets/images/thumbs/deal-img.png";
+                                                            } else {
+                                                                $pp = "admin-panel/" . $pic_d["path"];
+                                                            }
+                                                            ?>
+                                                            <img src="<?php echo $pp ?>" alt="Product Image" class="carousel-image">
+                                                            <p class="carousel-text"><strong><?php echo $productdata["title"]; ?></strong> is a top-selling item! ✅</p>
+                                                        </div>
+                                                    </div>
+                                            <?php
+                                                }
+                                            }
+                                            ?>
+                                        </div>
+
+                                        <!-- Carousel Controls -->
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#topSellingCarousel" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#topSellingCarousel" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    </div>
+                            <?php
+                                }
+                            } else {
+                                echo "<h6 class='text-muted'>No sales data available.</h6>";
+                            }
+                            ?>
+
+                            <!-- Background & CTA Section -->
+                            <img src="assets/images/bg/deal-bg.png" alt="Background Image" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100">
                             <div class="py-xl-4">
                                 <h6 class="mb-4 fw-semibold">Polaroid Now+ Gen 2 - White</h6>
                                 <h5 class="mb-40 fw-semibold">Fresh Vegetables</h5>
-                                <a href="cart.php" class="btn text-heading border-neutral-600 hover-bg-neutral-600 hover-text-white py-16 px-24 flex-center d-inline-flex rounded-pill gap-8 fw-medium" tabindex="0">
+                                <p class="text-muted">Shop top-quality products from trusted sellers. Explore unbeatable deals on electronics, fresh produce, and more—all in one place!</p>
+                                <a href="cart.php" class="btn text-heading border-neutral-600 hover-bg-neutral-600 hover-text-white py-16 px-24 d-inline-flex align-items-center rounded-pill gap-8 fw-medium">
                                     Shop Now <i class="ph ph-shopping-cart text-xl d-flex"></i>
                                 </a>
                             </div>
+
+                            <!-- Promotional Image -->
                             <div class="d-md-block d-none mt-36">
-                                <img src="assets/images/thumbs/deal-img.png" alt="">
+                                <img src="assets/images/thumbs/deal-img.png" alt="Promotion">
                             </div>
                         </div>
                     </div>
+
+                    <!-- CSS Styling -->
+                    <style>
+                        .carousel-content {
+                            text-align: center;
+                            padding: 15px;
+                            background: rgba(0, 0, 0, 0.6);
+                            color: white;
+                            border-radius: 10px;
+                        }
+
+                        .carousel-text {
+                            font-size: 18px;
+                            font-weight: bold;
+                            margin-top: 10px;
+                        }
+
+                        .carousel-image {
+                            max-width: 100px;
+                            height: auto;
+                            border-radius: 10px;
+                            margin-bottom: 10px;
+                        }
+
+                        .carousel-control-prev-icon,
+                        .carousel-control-next-icon {
+                            background-color: black;
+                            border-radius: 50%;
+                            padding: 10px;
+                        }
+                    </style>
+
+
                     <div class="col-md-8">
                         <div class="top-selling-product-slider arrow-style-two">
-
                             <?php
-                            for ($i = 0; $i < 5; $i++) {
+
+
+                            $tsi = Database::Search("
+            SELECT i.*, b.*, p.*, pic.path AS image_path 
+            FROM `invoice` i
+            JOIN `batch` b ON i.batch_id = b.id
+            JOIN `product` p ON b.product_id = p.id
+            LEFT JOIN `picture` pic ON p.id = pic.product_id AND pic.name = 'Image 1'
+        ");
+
+                            while ($id = $tsi->fetch_assoc()) {
+                                $pat = !empty($id["image_path"]) ? "admin-panel/" . $id["image_path"] : "assets/images/thumbs/product-two-img7.png";
+
+                                // Fetch total sold quantity for the batch
+                                $tsic = Database::Search("SELECT SUM(qty) as total_sold FROM `invoice` WHERE `batch_id`='" . $id["batch_id"] . "'");
+                                $tsicd = $tsic->fetch_assoc();
+                                $tsqty = $tsicd["total_sold"] ?? 0;
                             ?>
-                                <!-- product card start -->
+                                <!-- Product Card Start -->
                                 <div data-aos="fade-up" data-aos-duration="200">
                                     <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
                                         <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
-                                            <img src="assets/images/thumbs/product-two-img7.png" alt="" class="w-auto max-w-unset">
+                                            <img src="<?php echo $pat; ?>" alt="Product Image" class="w-auto max-w-unset">
                                         </a>
                                         <div class="product-card__content mt-16">
                                             <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                                <a href="product-details.php" class="link text-line-2" tabindex="0">Taylor Farms Broccoli Florets Vegetables</a>
+                                                <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo htmlspecialchars($id["title"]); ?></a>
                                             </h6>
                                             <div class="mt-8">
-                                                <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-label="Basic example" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
-                                                    <div class="progress-bar bg-tertiary-600 rounded-pill" style="width: 35%"></div>
+                                                <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar bg-tertiary-600 rounded-pill" style="width: <?php echo ($tsqty / $id["batch_qty"]) * 100; ?>%"></div>
                                                 </div>
-                                                <span class="text-gray-900 text-xs fw-medium mt-8">Sold: 18/35</span>
+                                                <span class="text-gray-900 text-xs fw-medium mt-8">Sold: <?php echo $tsqty; ?>/<?php echo $id["batch_qty"]; ?></span>
                                             </div>
 
                                             <div class="product-card__price my-20">
-                                                <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs 28.99</span>
-                                                <span class="text-heading text-md fw-semibold ">Rs 14.99 <span class="text-gray-500 fw-normal">/Qty</span> </span>
+                                                <span class="text-gray-400 text-md fw-semibold text-decoration-line-through">Rs 28.99</span>
+                                                <span class="text-heading text-md fw-semibold">Rs <?php echo $id["price"]; ?> <span class="text-gray-500 fw-normal">/Qty</span></span>
                                             </div>
 
                                             <a href="cart.php" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
@@ -391,13 +514,13 @@ include_once "connection.php";
                                         </div>
                                     </div>
                                 </div>
-                                <!-- product card end -->
+                                <!-- Product Card End -->
                             <?php
                             }
                             ?>
-
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -593,47 +716,37 @@ include_once "connection.php";
 
                 <div class="row gy-4 vendor-card-wrapper">
                     <?php
-                    for ($i = 0; $i < 3; $i++) {
+                    $g = Database::Search("SELECT * FROM `group`");
+                    $gn = $g->num_rows;
+                    for ($i = 0; $i < $gn; $i++) {
+                        $gd = $g->fetch_assoc();
                     ?>
                         <div class="col-xxl-3 col-lg-4 col-sm-6 wow bounceIn">
                             <div class="vendor-card text-center px-16 pb-24">
                                 <div class="">
                                     <img src="assets/images/thumbs/vendor-logo1.png" alt="" class="vendor-card__logo m-12">
-                                    <h6 class="title mt-32 text-lg">Organic Market</h6>
+                                    <h6 class="title mt-32 text-lg"><?php echo $gd["group_name"]; ?></h6>
                                 </div>
                                 <div class="position-relative slick-arrows-style-three">
 
                                     <div class="vendor-card__list style-two mt-22">
-                                        <div class="">
-                                            <div class="vendor-card__item bg-white rounded-circle flex-center">
-                                                <img src="assets/images/thumbs/vendor-two-img1.png" alt="">
+                                        <?php
+                                        $c = database::search("SELECT * FROM `category` WHERE `group_id`='" . $gd["id"] . "' ");
+                                        $cn = $c->num_rows;
+                                        for ($ic = 0; $ic <  $cn; $ic++) {
+                                            $cd = $c->fetch_assoc();
+                                        ?>
+                                            <div class="">
+                                                <div class="vendor-card__item bg-white rounded-circle flex-center">
+                                                    <img src="assets/images/thumbs/vendor-two-img1.png" alt="">
+                                                </div>
+                                                <div>
+                                                    <span><?php echo $cd["name"] ?></span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="">
-                                            <div class="vendor-card__item bg-white rounded-circle flex-center">
-                                                <img src="assets/images/thumbs/vendor-two-img2.png" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="">
-                                            <div class="vendor-card__item bg-white rounded-circle flex-center">
-                                                <img src="assets/images/thumbs/vendor-two-img3.png" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="">
-                                            <div class="vendor-card__item bg-white rounded-circle flex-center">
-                                                <img src="assets/images/thumbs/vendor-two-img4.png" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="">
-                                            <div class="vendor-card__item bg-white rounded-circle flex-center">
-                                                <img src="assets/images/thumbs/vendor-two-img5.png" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="">
-                                            <div class="vendor-card__item bg-white rounded-circle flex-center">
-                                                <img src="assets/images/thumbs/vendor-two-img6.png" alt="">
-                                            </div>
-                                        </div>
+                                        <?php
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </div>
@@ -686,18 +799,63 @@ include_once "connection.php";
 
             <div class="top-brand__slider">
                 <?php
-                for ($i = 0; $i < 10; $i++) {
+                $brand = database::Search("SELECT * FROM `brand`");
+                $brandnum = $brand->num_rows;
+                for ($i = 0; $i < $brandnum; $i++) {
+                    $branddata = $brand->fetch_assoc();
+                    $bimgpath = empty($branddata["img_path"]) ? "assets/images/thumbs/top-brand-img1.png" : "admin-panel/" . $branddata["img_path"];
                 ?>
-                    <div class="wow bounceIn">
+                    <div class="top-brand__wrapper" data-aos="fade-up" data-aos-delay="<?php echo $i * 100; ?>">
                         <div class="top-brand__item flex-center rounded-8 transition-1 px-8">
-                            <img src="assets/images/thumbs/top-brand-img1.png" alt="">
+                            <img src="<?php echo $bimgpath; ?>" alt="<?php echo $branddata["name"]; ?>">
                         </div>
+                        <span class="brand-name"><?php echo $branddata["name"]; ?></span>
                     </div>
                 <?php
                 }
                 ?>
             </div>
+            <style>
+                .top-brand__slider {
+                    display: flex;
+                    overflow-x: auto;
+                    scroll-behavior: smooth;
+                    padding: 20px 0;
+                    gap: 20px;
+                }
 
+                .top-brand__wrapper {
+                    text-align: center;
+                    transition: transform 0.3s ease-in-out;
+                }
+
+                .top-brand__wrapper:hover {
+                    transform: scale(1.1);
+                }
+
+                .top-brand__item {
+                    width: 100px;
+                    height: 100px;
+                    background: white;
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    transition: all 0.3s ease-in-out;
+                }
+
+                .top-brand__item:hover {
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                }
+
+                .brand-name {
+                    display: block;
+                    margin-top: 10px;
+                    font-weight: bold;
+                    font-size: 14px;
+                }
+            </style>
         </div>
     </div>
     </div>
@@ -749,6 +907,16 @@ include_once "connection.php";
     <!-- ========================== Shipping Section End ============================ -->
 
     <?php require_once "footer.php"; ?>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: "ease-in-out",
+            once: true,
+        });
+    </script>
+
 
 
     <script src="sahan.js"></script>
