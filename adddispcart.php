@@ -29,11 +29,11 @@ if (isset($_SESSION["user_vec"])) {
                          $cn = $c->num_rows;
                          if ($cn == 1) {
                               $cd = $c->fetch_assoc();
-                              $qty = $cd["qty"] + 1;
-                              Database::IUD("UPDATE `victore`.`cart` SET `qty` = '" . $qty . "' WHERE (`id` = '" . $cd["id"] . "');");
+                              $qty = $cd["qty"];
+                              Database::IUD("UPDATE `cart` SET `qty` = '" . $qty . "' WHERE (`id` = '" . $cd["id"] . "');");
                               echo "cart is update";
                          } else {
-                              Database::IUD("INSERT INTO `victore`.`cart` (`qty`, `user_email`, `batch_id`, `discount`) 
+                              Database::IUD("INSERT INTO `cart` (`qty`, `user_email`, `batch_id`, `discount`) 
                               VALUES ('1', '" . $user_email . "', '" . $batch_id . "', '" . $discount . "');");
                               echo "cart is update";
                          }
@@ -42,11 +42,11 @@ if (isset($_SESSION["user_vec"])) {
                          $cn = $c->num_rows;
                          if ($cn == 1) {
                               $cd = $c->fetch_assoc();
-                              $qty = $cd["qty"] + 1;
-                              Database::IUD("UPDATE `victore`.`cart` SET `qty` = '" . $qty . "',`discount`='" . $discount . "' WHERE (`id` = '" . $cd["id"] . "');");
+                              $qty = $cd["qty"];
+                              Database::IUD("UPDATE `cart` SET `qty` = '" . $qty . "',`discount`='" . $discount . "' WHERE (`id` = '" . $cd["id"] . "');");
                               echo "cart is update";
                          } else {
-                              Database::IUD("INSERT INTO `victore`.`cart` (`qty`, `user_email`, `batch_id`, `discount`) 
+                              Database::IUD("INSERT INTO `cart` (`qty`, `user_email`, `batch_id`, `discount`) 
                               VALUES ('1', '" . $user_email . "', '" . $batch_id . "', '" . $discount . "');");
                               echo "cart is update";
                          }

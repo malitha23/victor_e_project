@@ -386,23 +386,44 @@ if ($batch_id > 0) {
                                         <span class="text-xl d-flex text-main-600">
                                             <i class="ph ph-map-pin"></i>
                                         </span>
-                                        <div class="border-0 px-8 rounded-4 py-10 text-dark"><?php echo  $user_data["fname"] . " " . $user_data["lname"] ?></div>
+                                        <div class="border-0 px-8 rounded-4 py-10 text-dark"><?php echo  $ud["fname"] . " " . $ud["lname"] ?></div>
                                     </div>
                                 </div>
                                 <div class="mb-32">
-                                    <label for="stock" class="text-lg mb-8 text-heading fw-semibold d-block">Total Stock: <?php echo $batchdata["qty"]; ?></label>
+                                    <label for="stock" class="text-lg mb-8 text-heading fw-semibold d-block">Total Stock: <?php echo $batchdata["batch_qty"]; ?></label>
                                     <span class="text-xl d-flex">
                                         <i class="ph ph-location"></i>
                                     </span>
                                     <div class="d-flex rounded-4 overflow-hidden">
-                                        <button type="button" class="quantity__minus flex-shrink-0 h-48 w-48 text-neutral-600 bg-gray-50 flex-center hover-bg-main-600 hover-text-white">
+                                        <button type="button" class="quantity__minus flex-shrink-0 h-48 w-48 text-neutral-600 bg-gray-50 flex-center hover-bg-main-600 hover-text-white" onclick="decreaseQty()">
                                             <i class="ph ph-minus"></i>
                                         </button>
-                                        <input type="number" class="quantity__input flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-16" max="<?php echo $batchdata["qty"]; ?>" id="stock" value="1" min="1">
-                                        <button type="button" class="quantity__plus flex-shrink-0 h-48 w-48 text-neutral-600 bg-gray-50 flex-center hover-bg-main-600 hover-text-white">
+
+                                        <input type="number" class="quantity__input flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-16" max="<?php echo $batchdata['batch_qty']; ?>" id="stock" value="1" min="1">
+
+                                        <button type="button" class="quantity__plus flex-shrink-0 h-48 w-48 text-neutral-600 bg-gray-50 flex-center hover-bg-main-600 hover-text-white" onclick="increaseQty()">
                                             <i class="ph ph-plus"></i>
                                         </button>
                                     </div>
+
+                                    <script>
+                                        // Decrease the quantity
+                                        function decreaseQty() {
+                                            let stock = document.getElementById("stock");
+                                            if (stock.value > 1) {
+                                                stock.value--;
+                                            }
+                                        }
+
+                                        // Increase the quantity
+                                        function increaseQty() {
+                                            let stock = document.getElementById("stock");
+                                            if (stock.value < stock.max) {
+                                                stock.value++;
+                                            }
+                                        }
+                                    </script>
+
                                 </div>
                                 <div class="mb-32">
                                     <?php
@@ -433,7 +454,7 @@ if ($batch_id > 0) {
 
 
                                     $price = $batchdata["selling_price"];
-                                    $discountpre = $discount_data["discount"];
+                                    $discountpre = $discount_data["discount_pre"];
                                     $discountAmount = ($price * $discountpre) / 100;
                                     $finalPricePerItem = $price - $discountAmount;
                                     ?>
@@ -455,7 +476,7 @@ if ($batch_id > 0) {
                                     </div>
                                     <div class="flex-between flex-wrap gap-8">
                                         <span class="text-gray-500">Final price</span>
-                                        <h6 class="text-lg mb-0">From <?php echo $finalPricePerItem + $deliveryfee + $weigdeliveryfee; ?></h6>
+                                        <h6 class="text-lg mb-0">RS <?php echo $finalPricePerItem + $deliveryfee + $weigdeliveryfee; ?></h6>
                                     </div>
                                 </div>
 
@@ -781,6 +802,11 @@ if ($batch_id > 0) {
         <!-- main js -->
         <script src="assets/js/main.js"></script>
 
+        <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+
+        <!-- SweetAlert2 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
 
 
     </body>
