@@ -678,48 +678,62 @@ if ($batch_id > 0) {
                 </div>
 
                 <div class="new-arrival__slider arrow-style-two">
-                    <div>
-                        <div class="product-card h-100 p-8 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                            <a href="product-details.php" class="product-card__thumb flex-center">
-                                <img src="assets/images/thumbs/product-img7.png" alt="">
-                            </a>
-                            <div class="product-card__content p-sm-2 w-100 mt-0">
-                                <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                    <a href="product-details.php" class="link text-line-2">C-500 Antioxidant Protect Dietary Supplement</a>
-                                </h6>
-                                <div class="product-card__content mt-12">
-                                    <div class="product-card__price mb-8">
-                                        <span class="text-heading text-md fw-semibold ">Rs 14.99 <span class="text-gray-500 fw-normal">/Qty</span> </span>
-                                        <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs 28.99</span>
-                                    </div>
-                                    <a href="cart.php" class="product-card__cart btn bg-main-50 text-main-600 hover-bg-main-600 hover-text-white py-11 px-24 rounded-pill flex-align gap-8 mt-24 w-100 justify-content-center">
-                                        Add To Cart <i class="ph ph-shopping-cart"></i>
+
+
+
+                    <?php
+                    // Get the brand and sub-category ID from the product data
+                    $brandid = $productdata["brand_id"];
+                    $subcatid = $productdata["sub_category_id"];
+
+                    // Query to get products matching the brand and sub-category
+                    $p1 = Database::Search("SELECT * FROM `product` WHERE `sub_category_id`='" . $subcatid . "' AND `brand_id`='" . $brandid . "' ");
+                    $p1num = $p1->num_rows;
+
+                    // Display the number of matching products
+                    echo "Number of matching products: " . $p1num;
+
+                    // Loop through the products
+                    for ($io = 0; $io < $p1num; $io++) {
+                        $p1d = $p1->fetch_assoc();
+
+                        // Query to get batches for the current product
+                        $b1 = Database::Search("SELECT * FROM `batch` WHERE `product_id`='" . $p1d["id"] . "' ");
+                        $b1num = $b1->num_rows;
+
+                        // Loop through the batches (you can add logic here to process batches)
+                        for ($i = 0; $i < $b1num; $i++) {
+                            $b1d = $b1->fetch_assoc();
+                            $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $b1d ["product_id"] . "' ");
+                            $pr =  $pr->fetch_assoc();
+                            $discountid = 0;
+                    ?>
+                            <div>
+                                <div class="product-card h-100 p-8 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+                                    <a href="product-details.php" class="product-card__thumb flex-center">
+                                        <img src="assets/images/thumbs/product-img7.png" alt="">
                                     </a>
+                                    <div class="product-card__content p-sm-2 w-100 mt-0">
+                                        <h6 class="title text-lg fw-semibold mt-12 mb-8">
+                                            <a href="product-details.php" class="link text-line-2"><?php echo $pr["title"] ?></a>
+                                        </h6>
+                                        <div class="product-card__content mt-12">
+                                            <div class="product-card__price mb-8">
+                                                <span class="text-heading text-md fw-semibold ">Rs 14.99 <span class="text-gray-500 fw-normal">/Qty</span> </span>
+                                                <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs 28.99</span>
+                                            </div>
+                                            <a href="cart.php" class="product-card__cart btn bg-main-50 text-main-600 hover-bg-main-600 hover-text-white py-11 px-24 rounded-pill flex-align gap-8 mt-24 w-100 justify-content-center">
+                                                Add To Cart <i class="ph ph-shopping-cart"></i>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="product-card h-100 p-8 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                            <a href="product-details.php" class="product-card__thumb flex-center">
-                                <img src="assets/images/thumbs/product-img7.png" alt="">
-                            </a>
-                            <div class="product-card__content p-sm-2 w-100 mt-0">
-                                <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                    <a href="product-details.php" class="link text-line-2">C-500 Antioxidant Protect Dietary Supplement</a>
-                                </h6>
-                                <div class="product-card__content mt-12">
-                                    <div class="product-card__price mb-8">
-                                        <span class="text-heading text-md fw-semibold ">Rs 14.99 <span class="text-gray-500 fw-normal">/Qty</span> </span>
-                                        <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs 28.99</span>
-                                    </div>
-                                    <a href="cart.php" class="product-card__cart btn bg-main-50 text-main-600 hover-bg-main-600 hover-text-white py-11 px-24 rounded-pill flex-align gap-8 mt-24 w-100 justify-content-center">
-                                        Add To Cart <i class="ph ph-shopping-cart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                        }
+                    }
+                    ?>
+
 
                 </div>
             </div>
