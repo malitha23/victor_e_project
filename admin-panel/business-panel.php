@@ -173,6 +173,116 @@ if (isset($_SESSION["a"])) {
                             </div>
                         </div>
 
+                        <!-- !-->
+                        <div class="container">
+                            <div class="row">
+                                <!-- !-->
+                                    <script>
+                                        function calculatePrice() {
+                                            let thisWeight = document.getElementById('thisWeight').value;
+                                            let thisPrice = document.getElementById('thisPrice').value;
+                                            let forWeight = document.getElementById('forWeight').value;
+
+                                            if (thisWeight > 0 && thisPrice > 0 && forWeight > 0) {
+                                                let xhr = new XMLHttpRequest();
+                                                xhr.open("POST", "process/calculate_price.php", true);
+                                                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                                xhr.onreadystatechange = function() {
+                                                    if (xhr.readyState === 4 && xhr.status === 200) {
+                                                        document.getElementById('priceResult').innerHTML = "For price: RS: " + xhr.responseText;
+                                                    }
+                                                };
+                                                xhr.send("thisWeight=" + thisWeight + "&thisPrice=" + thisPrice + "&forWeight=" + forWeight);
+                                            } else {
+                                                alert("Please enter valid values.");
+                                            }
+                                        }
+                                    </script>
+                                    <div class="container mt-5">
+                                        <div class="row">
+                                            <div class="col-md-6 offset-md-3">
+                                                <div class="card shadow p-4">
+                                                    <h4 class="fw-semibold text-center">Calculate Your Excess Weight Price</h4>
+                                                    <p class="text-muted text-center">If X is for this weight, what is the price for Y?</p>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">This Weight (kg)</label>
+                                                        <input type="number" id="thisWeight" class="form-control" placeholder="Enter weight (e.g., 100)">
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">This Price (RS)</label>
+                                                        <input type="number" id="thisPrice" class="form-control" placeholder="Enter price (e.g., 20)">
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">For Weight (kg)</label>
+                                                        <input type="number" oninput="calculatePrice()" id="forWeight" class="form-control" placeholder="Enter weight (e.g., 320)">
+                                                    </div>
+
+                                                    <div class="text-center">
+                                                        <button class="btn btn-primary w-100==" onclick="calculatePrice()">Calculate</button>
+                                                    </div>
+                                                    <div class="mt-3 text-center">
+                                                        <h4 id="priceResult" class="fw-bold text-danger">For price: RS: </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <!-- !-->
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 text-center mb-3">
+                                    <h4 class="fw-semibold mb-1">Additional Delivery Fee for Weight <i class="fa"></i></h4>
+
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center">
+                                <div class="col-md-4 text-center mb-3 mb-md-0">
+                                    <img src="../admin-panel/assets-admin/images/contact/email_i.svg" class="img-fluid" width="250px">
+                                </div>
+
+                                <div class="col-md-8">
+                                    <div class="shadow p-4 rounded">
+                                        <div class="mb-3">
+                                            <label for="wprice" class="form-label">Additional Fee for Delivery</label>
+                                            <input type="text" class="form-control rounded-0" id="wprice" placeholder="Enter additional fee">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="wid" class="form-label">Select Weight</label>
+                                            <select id="wid" class="form-select rounded-0">
+                                                <?php
+                                                $we = Databases::Search("SELECT * FROM `weight`");
+                                                $wenum = $we->num_rows;
+                                                for ($i = 0; $i < $wenum; $i++) {
+                                                    $wed = $we->fetch_assoc();
+                                                    $dffw = Databases::Search("SELECT * FROM `delivery_fee_for_weight` WHERE `weight_id`='" . $wed["id"] . "' ");
+                                                    $dffwnum = $dffw->num_rows;
+                                                    if ($dffwnum != 1) {
+                                                ?>
+                                                        <option value="<?php echo $wed["id"]; ?>"><?php echo $wed["weight"]; ?></option>
+                                                <?php
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="text-end">
+                                            <button class="btn btn-primary fw-bold px-4 py-2" data-bs-toggle="modal" onclick="saveWeight();" data-bs-target="#exampleModal">
+                                                <i class="fa fa-check"></i> SAVE
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- !-->
                         <!-- contact us -->
                         <div class="row">
                             <div class="col-12 text-center mb-0">
@@ -192,11 +302,11 @@ if (isset($_SESSION["a"])) {
                                     <div class="col-12 shadow p-3 py-4">
                                         <div class="row">
                                             <div class="form-floating mb-3">
-                                                <input type="email" class="form-control rounded-0" id="contact_email"  placeholder="name@example.com">
+                                                <input type="email" class="form-control rounded-0" id="contact_email" placeholder="name@example.com">
                                                 <label for="floatingInput">Email address</label>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input type="text" class="form-control rounded-0" id="contact_mobile"  placeholder="..+94.">
+                                                <input type="text" class="form-control rounded-0" id="contact_mobile" placeholder="..+94.">
                                                 <label for="floatingInput">Mobile Number</label>
                                             </div>
                                             <div class="col-12 text-end">
