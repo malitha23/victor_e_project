@@ -177,59 +177,59 @@ if (isset($_SESSION["a"])) {
                         <div class="container">
                             <div class="row">
                                 <!-- !-->
-                                    <script>
-                                        function calculatePrice() {
-                                            let thisWeight = document.getElementById('thisWeight').value;
-                                            let thisPrice = document.getElementById('thisPrice').value;
-                                            let forWeight = document.getElementById('forWeight').value;
+                                <script>
+                                    function calculatePrice() {
+                                        let thisWeight = document.getElementById('thisWeight').value;
+                                        let thisPrice = document.getElementById('thisPrice').value;
+                                        let forWeight = document.getElementById('forWeight').value;
 
-                                            if (thisWeight > 0 && thisPrice > 0 && forWeight > 0) {
-                                                let xhr = new XMLHttpRequest();
-                                                xhr.open("POST", "process/calculate_price.php", true);
-                                                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                                                xhr.onreadystatechange = function() {
-                                                    if (xhr.readyState === 4 && xhr.status === 200) {
-                                                        document.getElementById('priceResult').innerHTML = "For price: RS: " + xhr.responseText;
-                                                    }
-                                                };
-                                                xhr.send("thisWeight=" + thisWeight + "&thisPrice=" + thisPrice + "&forWeight=" + forWeight);
-                                            } else {
-                                                alert("Please enter valid values.");
-                                            }
+                                        if (thisWeight > 0 && thisPrice > 0 && forWeight > 0) {
+                                            let xhr = new XMLHttpRequest();
+                                            xhr.open("POST", "process/calculate_price.php", true);
+                                            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                            xhr.onreadystatechange = function() {
+                                                if (xhr.readyState === 4 && xhr.status === 200) {
+                                                    document.getElementById('priceResult').innerHTML = "For price: RS: " + xhr.responseText;
+                                                }
+                                            };
+                                            xhr.send("thisWeight=" + thisWeight + "&thisPrice=" + thisPrice + "&forWeight=" + forWeight);
+                                        } else {
+                                            alert("Please enter valid values.");
                                         }
-                                    </script>
-                                    <div class="container mt-5">
-                                        <div class="row">
-                                            <div class="col-md-6 offset-md-3">
-                                                <div class="card shadow p-4">
-                                                    <h4 class="fw-semibold text-center">Calculate Your Excess Weight Price</h4>
-                                                    <p class="text-muted text-center">If X is for this weight, what is the price for Y?</p>
+                                    }
+                                </script>
+                                <div class="container mt-5">
+                                    <div class="row">
+                                        <div class="col-md-6 offset-md-3">
+                                            <div class="card shadow p-4">
+                                                <h4 class="fw-semibold text-center">Calculate Your Excess Weight Price</h4>
+                                                <p class="text-muted text-center">If X is for this weight, what is the price for Y?</p>
 
-                                                    <div class="mb-3">
-                                                        <label class="form-label">This Weight (kg)</label>
-                                                        <input type="number" id="thisWeight" class="form-control" placeholder="Enter weight (e.g., 100)">
-                                                    </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">This Weight (kg)</label>
+                                                    <input type="number" id="thisWeight" class="form-control" placeholder="Enter weight (e.g., 100)">
+                                                </div>
 
-                                                    <div class="mb-3">
-                                                        <label class="form-label">This Price (RS)</label>
-                                                        <input type="number" id="thisPrice" class="form-control" placeholder="Enter price (e.g., 20)">
-                                                    </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">This Price (RS)</label>
+                                                    <input type="number" id="thisPrice" class="form-control" placeholder="Enter price (e.g., 20)">
+                                                </div>
 
-                                                    <div class="mb-3">
-                                                        <label class="form-label">For Weight (kg)</label>
-                                                        <input type="number" oninput="calculatePrice()" id="forWeight" class="form-control" placeholder="Enter weight (e.g., 320)">
-                                                    </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">For Weight (kg)</label>
+                                                    <input type="number" oninput="calculatePrice()" id="forWeight" class="form-control" placeholder="Enter weight (e.g., 320)">
+                                                </div>
 
-                                                    <div class="text-center">
-                                                        <button class="btn btn-primary w-100==" onclick="calculatePrice()">Calculate</button>
-                                                    </div>
-                                                    <div class="mt-3 text-center">
-                                                        <h4 id="priceResult" class="fw-bold text-danger">For price: RS: </h4>
-                                                    </div>
+                                                <div class="text-center">
+                                                    <button class="btn btn-primary w-100==" onclick="calculatePrice()">Calculate</button>
+                                                </div>
+                                                <div class="mt-3 text-center">
+                                                    <h4 id="priceResult" class="fw-bold text-danger">For price: RS: </h4>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                                 <!-- !-->
                             </div>
 
@@ -277,6 +277,56 @@ if (isset($_SESSION["a"])) {
                                                 <i class="fa fa-check"></i> SAVE
                                             </button>
                                         </div>
+
+                                        <div class="mb-3">
+                                            <label for="wid" class="form-label fw-semibold">Delete Weight</label>
+                                            <div class="input-group">
+                                                <select id="wid2" class="form-select rounded-0">
+                                                    <?php
+                                                    $dfw = Databases::Search("SELECT * FROM `delivery_fee_for_weight` ");
+                                                    $dfwnum = $dfw->num_rows;
+                                                    for ($i = 0; $i < $dfwnum; $i++) {
+                                                        $dfdata = $dfw->fetch_assoc();
+                                                        $w = Databases::Search("SELECT * FROM `weight` WHERE `id`='" . $dfdata["weight_id"] . "' ");
+                                                        $ww = $w->fetch_assoc();
+                                                    ?>
+                                                        <option value="<?php echo $dfdata["id"]; ?>">
+                                                            <?php echo $ww["weight"] . " kg - RS " . $dfdata["fee"]; ?>
+                                                        </option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <button class="btn btn-danger rounded-0" onclick="deleteWeight();">
+                                                    <i class="fa fa-trash"></i> DELETE
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                            function deleteWeight() {
+                                                let selectedWeightId = document.getElementById("wid2").value;
+                                                alert(selectedWeightId);
+                                                if (selectedWeightId) {
+                                                    if (confirm("Are you sure you want to delete this weight entry?")) {
+                                                        let xhr = new XMLHttpRequest();
+                                                        xhr.open("POST", "process/delete_weight.php", true);
+                                                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                                        xhr.onreadystatechange = function() {
+                                                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                                                alert(xhr.responseText);
+                                                                location.reload(); // Reload to update the list
+                                                            }
+                                                        };
+                                                        xhr.send("weightId=" + selectedWeightId);
+                                                    }
+                                                } else {
+                                                    alert("Please select a weight to delete.");
+                                                }
+                                            }
+                                        </script>
+
+
                                     </div>
                                 </div>
                             </div>
