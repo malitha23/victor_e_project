@@ -274,24 +274,29 @@ if ($batch_id > 0) {
 
                                         <?php
                                         // Default delivery fee
-                                        $deliveryfee = 0.00;
                                         if (isset($_SESSION["user_vec"])) {
-                                            $u = Database::Search("SELECT * FROM `user` WHERE `email`='" . $_SESSION["user_vec"]["email"] . "' ");
-                                            $un = $u->fetch_assoc();
-                                            if ($un) {
-                                                $ud = $u->fetch_assoc();
+                                            $user_row = Database::Search("SELECT * FROM `user` WHERE `email`='" . $_SESSION["user_vec"]["email"] . "' ");
+                                            $un = $user_row->num_rows;
+                                            if ($un == 1) {
+                                                $ud = $user_row->fetch_assoc();
                                                 if (!empty($ud["adress_id"])) {
                                                     $ad = Database::Search("SELECT * FROM `address` WHERE `address_id` ='" . $ud["adress_id"] . "'");
                                                     $add = $ad->fetch_assoc();
                                                     $df = Database::Search("SELECT * FROM `delivery_fee` WHERE `city_city_id`='" . $add["city_city_id"] . "' ");
-                                                    if ($df->num_rows == 1) {
+                                                    $dfn = $df->num_rows;
+                                                    if ($dfn == 1) {
                                                         $dfd = $df->fetch_assoc();
                                                         $deliveryfee = $dfd["fee"];
+                                                    } else {
+                                                        $deliveryfee = 00.00;
                                                     }
+                                                } else {
+                                                    $deliveryfee = 00.00;
                                                 }
                                             }
+                                        } else {
+                                            $deliveryfee = 00.00;
                                         }
-
                                         // Default weight delivery fee
                                         $weigdeliveryfee = 0;
                                         if ($productdata["weight"] > 0) {
@@ -714,7 +719,7 @@ if ($batch_id > 0) {
                             if (empty($pic_d["path"])) {
                                 $path = "assets/images/thumbs/product-img7.png";
                             } else {
-                                $path = 'admin-panel/'.$pic_d["path"];
+                                $path = 'admin-panel/' . $pic_d["path"];
                             }
                             ?>
                             <div>
