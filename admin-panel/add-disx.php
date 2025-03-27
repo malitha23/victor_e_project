@@ -165,8 +165,6 @@ if (isset($_SESSION["a"])) {
                               </div>
                               <div class="modal-footer">
                                    <button type="button" class="btn btn-success" onclick="submitdisdetails('<?php echo $batch_num;  ?>');">Submit</button>
-                                   <button type="button" class="btn btn-warning">Discount</button>
-                                   <button type="button" class="btn btn-info">Details</button>
                               </div>
                          </div>
                     </div>

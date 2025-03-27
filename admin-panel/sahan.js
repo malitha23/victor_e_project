@@ -805,6 +805,10 @@ function submitdisdetails(x) {
      var end_date = document.getElementById("end_date").value;
      var Discount = document.getElementById("Discount").value;
      var img = document.getElementById("imageUpload").files[0];
+      if (!img) {
+        alert("Please select an image file.");
+        return;
+    }
      var batches = [];
      var y = 0;
      for (let index = 0; index < x; index++) {
@@ -818,6 +822,7 @@ function submitdisdetails(x) {
      }
      var length = batches.length;
      var form = new FormData;
+     form.append("image",img);
      form.append("length", length);
      form.append("title", title);
      form.append("desc", description);

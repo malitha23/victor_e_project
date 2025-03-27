@@ -29,8 +29,7 @@ if (isset($_SESSION["a"])) {
                     echo "Please enter a description";
                } elseif (strlen($desc) > 45) {
                     echo "Description length is over, only 30 characters allowed";
-               }
-               elseif (empty($discount)) {
+               } elseif (empty($discount)) {
                     echo "Please enter discount percentage";
                } elseif (!is_numeric($discount) || $discount < 0 || $discount > 100) {
                     echo "Discount percentage must be between 0 and 100";
@@ -43,24 +42,48 @@ if (isset($_SESSION["a"])) {
                }
                // Validation Passed
                else {
-                    $drlid = Databases::IUD("INSERT INTO `discount_date_range` (`start_date`, `end_date`)
-                     VALUES ('" . $start_date . "', '" . $end_date . "');");
-                    $idg = Databases::IUD("INSERT INTO `discount_group`
-                               (`title`, `description`, `status`) 
-                              VALUES ('" . $title . "', '" . $desc . "', '1');");
-                    for ($i = 0; $i < $lenth; $i++) {
-                         $batch = $_POST["batch" . $i];
-                         $qty  = $_POST["qty" . $i];
-                         if (empty($qty)) {
-                              echo "Please enter quantity";
-                         } elseif (!is_numeric($qty) || $qty <= 0) {
-                              echo "Quantity must be a positive number";
-                         } else {
-                              Databases::IUD("INSERT INTO `discount_date_range_has_product`
-                               (`discount_date_range_id`, `discount_pre`, `discount_group_id`, `qty`, `batch_id`) 
-                              VALUES ('" . $drlid . "', '" . $discount . "', '".$idg."', '" . $qty . "', '" . $batch . "');");
+                    //
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
+                         $uploadDir = "uploads/";
+                         $file = $_FILES['image'];
+                         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                         if (!in_array($file['type'], $allowedTypes)) {
+                              echo json_encode("Invalid file type. Only JPG, PNG, GIF, and WEBP are allowed.");
+                              exit;
                          }
+                         $fileName = uniqid() . "_" . basename($file['name']);
+                         $targetFilePath = $uploadDir . $fileName;
+                         if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
+                              //
+                              $drlid = Databases::IUD("INSERT INTO `discount_date_range` (`start_date`, `end_date`)
+                              VALUES ('" . $start_date . "', '" . $end_date . "');");
+                              $idg = Databases::IUD("INSERT INTO `discount_group`
+                                        (`title`, `description`, `status`,`image_path`) 
+                                       VALUES ('" . $title . "', '" . $desc . "', '1','" . $targetFilePath . "');");
+                              for ($i = 0; $i < $lenth; $i++) {
+                                   $batch = $_POST["batch" . $i];
+                                   $qty  = $_POST["qty" . $i];
+                                   if (empty($qty)) {
+                                        echo "Please enter quantity";
+                                   } elseif (!is_numeric($qty) || $qty <= 0) {
+                                        echo "Quantity must be a positive number";
+                                   } else {
+                                        Databases::IUD("INSERT INTO `discount_date_range_has_product`
+                                        (`discount_date_range_id`, `discount_pre`, `discount_group_id`, `qty`, `batch_id`) 
+                                       VALUES ('" . $drlid . "', '" . $discount . "', '" . $idg . "', '" . $qty . "', '" . $batch . "');");
+                                   }
+                              }
+                              //
+                              echo ("Image uploaded successfully!");
+                              echo ("discount Add successfully!");
+                         } else {
+                              echo ("Failed to upload the image.");
+                         }
+                    } else {
+                         echo ("No file uploaded.");
+                         exit();
                     }
+                    //
                }
                //
           }
