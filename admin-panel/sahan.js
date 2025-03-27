@@ -960,7 +960,7 @@ function updatedis(discountGroupId) {
                }).then(() => {
                     // Optionally close the modal after the update
                     $('#disdetilModal' + discountGroupId).modal('hide');
-                    location.reload(); 
+                    location.reload();
                     // Optionally, update the UI with new values (e.g., update title/description on the page)
                });
           } else {
@@ -978,3 +978,147 @@ function updatedis(discountGroupId) {
      // Send the form data to the server
      xhr.send(formData);
 }
+
+// Disable Discount function with "Are you sure?" confirmation
+function disablediscoun(disgroupId) {
+     // Show confirmation dialog using SweetAlert
+     Swal.fire({
+          title: 'Are you sure?',
+          text: "You are about to disable this discount!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, Disable it!',
+          cancelButtonText: 'Cancel'
+     }).then((result) => {
+          if (result.isConfirmed) {
+               // Create a new XMLHttpRequest object
+               var xhr = new XMLHttpRequest();
+
+               // Define the URL and method (POST)
+               xhr.open("POST", "process/disableDiscount.php", true);
+
+               // Set the Content-Type header for sending form data
+               xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+               // Define what happens when the request is completed
+               xhr.onload = function () {
+                    if (xhr.status === 200) {
+                         var response = xhr.responseText.trim();  // Get the response text from the server
+                         if (response === 'success') {
+                              // Inform the user about the successful operation
+                              Swal.fire({
+                                   title: 'Success!',
+                                   text: 'Discount has been disabled.',
+                                   icon: 'success',
+                                   confirmButtonText: 'Ok'
+                              }).then(function () {
+                                   // Reload the page or update UI accordingly
+                                   location.reload();
+                              });
+                         } else {
+                              Swal.fire({
+                                   title: 'Error!',
+                                   text: 'Something went wrong.',
+                                   icon: 'error',
+                                   confirmButtonText: 'Try Again'
+                              });
+                         }
+                    } else {
+                         Swal.fire({
+                              title: 'Error!',
+                              text: 'Server error occurred.',
+                              icon: 'error',
+                              confirmButtonText: 'Try Again'
+                         });
+                    }
+               };
+
+               // Define what happens if there's an error
+               xhr.onerror = function () {
+                    Swal.fire({
+                         title: 'Error!',
+                         text: 'Network error occurred.',
+                         icon: 'error',
+                         confirmButtonText: 'Try Again'
+                    });
+               };
+
+               // Send the request with the data
+               var data = "discount_group_id=" + encodeURIComponent(disgroupId);
+               xhr.send(data);  // Send the POST data
+          }
+     });
+}
+
+// Delete Discount function with "Are you sure?" confirmation
+function deletdiscoun(disgroupId) {
+     // Show confirmation dialog using SweetAlert
+     Swal.fire({
+          title: 'Are you sure?',
+          text: "This discount will be permanently deleted!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, Delete it!',
+          cancelButtonText: 'Cancel'
+     }).then((result) => {
+          if (result.isConfirmed) {
+               // Create a new XMLHttpRequest object
+               var xhr = new XMLHttpRequest();
+
+               // Define the URL and method (POST)
+               xhr.open("POST", "process/deleteDiscount.php", true);
+
+               // Set the Content-Type header for sending form data
+               xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+               // Define what happens when the request is completed
+               xhr.onload = function () {
+                    if (xhr.status === 200) {
+                         var response = xhr.responseText;  // Get the response text from the server
+                         alert(response);  // Alert the raw response from PHP
+
+                         if (response.trim() === 'success') {
+                              Swal.fire({
+                                   title: 'Deleted!',
+                                   text: 'The discount has been deleted.',
+                                   icon: 'success',
+                                   confirmButtonText: 'Ok'
+                              }).then(function () {
+                                   // Reload the page or update UI accordingly
+                                   location.reload();
+                              });
+                         } else {
+                              Swal.fire({
+                                   title: 'Error!',
+                                   text: 'Something went wrong.',
+                                   icon: 'error',
+                                   confirmButtonText: 'Try Again'
+                              });
+                         }
+                    } else {
+                         Swal.fire({
+                              title: 'Error!',
+                              text: 'Server error occurred.',
+                              icon: 'error',
+                              confirmButtonText: 'Try Again'
+                         });
+                    }
+               };
+
+               // Define what happens if there's an error
+               xhr.onerror = function () {
+                    Swal.fire({
+                         title: 'Error!',
+                         text: 'Network error occurred.',
+                         icon: 'error',
+                         confirmButtonText: 'Try Again'
+                    });
+               };
+
+               // Send the request with the data
+               var data = "discount_group_id=" + encodeURIComponent(disgroupId);
+               xhr.send(data);  // Send the POST data
+          }
+     });
+}
+

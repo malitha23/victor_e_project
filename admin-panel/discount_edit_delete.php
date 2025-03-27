@@ -41,6 +41,28 @@ if (isset($_SESSION["a"])) {
                                                        <img src="<?php echo 'process/' . $disgdata['image_path']; ?>" class="img-fluid rounded mb-3" alt="Product Image">
                                                        <button class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#batchModal<?php echo $disgdata['id']; ?>">View Batches & Remove and edite</button>
                                                        <button class="btn btn-danger w-100 m-1" data-bs-toggle="modal" data-bs-target="#disdetilModal<?php echo $disgdata['id']; ?>">View and Edit Details</button>
+                                                       <!-- Disable Button -->
+                                                       <?php
+                                                       if ($disgdata["status"] == 1) {
+                                                       ?>
+                                                            <button class="btn btn-warning mt-2 w-100" onclick="disablediscoun(<?php echo $disgdata['id']; ?>);">
+                                                                 Disable
+                                                            </button>
+                                                       <?php
+                                                       } else {
+                                                       ?>
+                                                            <button class="btn btn-warning mt-2 w-100" onclick="disablediscoun(<?php echo $disgdata['id']; ?>);">
+                                                            Enable
+                                                            </button>
+                                                       <?php
+                                                       }
+                                                       ?>
+
+                                                       <!-- Delete Button -->
+                                                       <button class="btn btn-danger mt-2 w-100" onclick="deletdiscoun(<?php echo $disgdata['id']; ?>);">
+                                                            Delete
+                                                       </button>
+
                                                   </div>
                                              </div>
                                         </div>
