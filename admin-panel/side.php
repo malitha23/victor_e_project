@@ -83,7 +83,7 @@
           </a>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" href="add-disx.php" aria-expanded="false">
+          <a class="sidebar-link" href="discount_edit_delete.php" aria-expanded="false">
             <span>
               <i class="fa fa-money" aria-hidden="true"></i>
             </span>
