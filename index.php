@@ -99,30 +99,28 @@ include_once "connection.php";
                 <div class="banner-item-two-wrapper rounded-24 overflow-hidden position-relative arrow-center flex-grow-1 mb-0">
                     <img src="assets/images/bg/banner-two-bg.png" alt="" class="banner-img position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 z-n1 object-fit-cover rounded-24">
                     <div class="banner-item-two__slider">
-                        <div class="banner-item-two">
-                            <div class="banner-item-two__content">
-                                <span class="text-white mb-8 h6 wow bounceInDown">Starting at only $250</span>
-                                <h2 class="banner-item-two__title bounce text-white wow bounceInLeft">Get The Sound You Love For Less</h2>
-                                <a href="shop.php" class="btn btn-outline-white d-inline-flex align-items-center rounded-pill gap-8 mt-48 wow bounceInUp">
-                                    Shop Now<span class="icon text-xl d-flex"><i class="ph ph-shopping-cart-simple"></i> </span>
-                                </a>
+                        <?php
+                        $slider = Database::Search("SELECT * FROM `main_slider`");
+                        $slidernum = $slider->num_rows;
+                        for ($mains = 0; $mains < $slidernum; $mains++) {
+                            $sliderd = $slider->fetch_assoc();
+                            $fg = "assets/images/thumbs/banner-two-img.png";
+                        ?>
+                            <div class="banner-item-two">
+                                <div class="banner-item-two__content">
+                                    <span class="text-white mb-8 h6 wow bounceInDown"><?php echo $sliderd["title"]; ?></span>
+                                    <h2 class="banner-item-two__title bounce text-white wow bounceInLeft"><?php echo $sliderd["description"]; ?></h2>
+                                    <a href="shop.php" class="btn btn-outline-white d-inline-flex align-items-center rounded-pill gap-8 mt-48 wow bounceInUp">
+                                        Shop Now<span class="icon text-xl d-flex"><i class="ph ph-shopping-cart-simple"></i> </span>
+                                    </a>
+                                </div>
+                                <div class="banner-item-two__thumb position-absolute bottom-0 wow bounceInUp" data-wow-duration="1s" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-scale="1.06">
+                                    <img src="<?php echo "admin-panel/process/" . $sliderd["sub_path"]; ?>" alt="">
+                                </div>
                             </div>
-                            <div class="banner-item-two__thumb position-absolute bottom-0 wow bounceInUp" data-wow-duration="1s" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-scale="1.06">
-                                <img src="assets/images/thumbs/banner-two-img.png" alt="">
-                            </div>
-                        </div>
-                        <div class="banner-item-two">
-                            <div class="banner-item-two__content">
-                                <span class="text-white mb-8 h6 wow bounceInDown">Starting at only $250</span>
-                                <h2 class="banner-item-two__title bounce text-white wow bounceInLeft">Get The Sound You Love For Less</h2>
-                                <a href="shop.php" class="btn btn-outline-white d-inline-flex align-items-center rounded-pill gap-8 mt-48 wow bounceInUp">
-                                    Shop Now<span class="icon text-xl d-flex"><i class="ph ph-shopping-cart-simple"></i> </span>
-                                </a>
-                            </div>
-                            <div class="banner-item-two__thumb position-absolute bottom-0 wow bounceInUp" data-wow-duration="1s" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-scale="1.06">
-                                <img src="assets/images/thumbs/banner-two-img2.png" alt="">
-                            </div>
-                        </div>
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -134,60 +132,45 @@ include_once "connection.php";
     <section class="promotional-banner mt-32">
         <div class="container container-lg">
             <div class="row gy-4">
-                <div class="col-lg-4 col-sm-6" data-aos="fade-up" data-aos-duration="600">
-                    <div class="position-relative rounded-16 overflow-hidden z-1 p-32">
-                        <img src="assets/images/bg/promo-bg-img1.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 object-fit-cover z-n1">
-                        <div class="flex-between flex-wrap gap-16">
-                            <div class="">
-                                <span class="text-heading text-sm mb-8">Latest Deal</span>
-                                <h6 class="mb-0">iPhone 15 Pro Max</h6>
-                                <a href="shop.php" class="d-inline-flex align-items-center gap-8 mt-16 text-heading text-md fw-medium border border-top-0 border-end-0 border-start-0 border-gray-900 hover-text-main-two-600 hover-border-main-two-600">
-                                    Shop Now
-                                    <span class="icon text-md d-flex"><i class="ph ph-plus"></i></span>
-                                </a>
-                            </div>
-                            <div class="pe-xxl-4">
-                                <img src="assets/images/thumbs/promo-img1.png" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6" data-aos="fade-up" data-aos-duration="800">
-                    <div class="position-relative rounded-16 overflow-hidden z-1 p-32">
-                        <img src="assets/images/bg/promo-bg-img2.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 object-fit-cover z-n1">
-                        <div class="flex-between flex-wrap gap-16">
-                            <div class="">
-                                <span class="text-heading text-sm mb-8">Get 60% Off</span>
-                                <h6 class="mb-0">Instax Mini 11 Camera</h6>
-                                <a href="shop.php" class="d-inline-flex align-items-center gap-8 mt-16 text-heading text-md fw-medium border border-top-0 border-end-0 border-start-0 border-gray-900 hover-text-main-two-600 hover-border-main-two-600">
-                                    Shop Now
-                                    <span class="icon text-md d-flex"><i class="ph ph-plus"></i></span>
-                                </a>
-                            </div>
-                            <div class="pe-xxl-4">
-                                <img src="assets/images/thumbs/promo-img2.png" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6" data-aos="fade-up" data-aos-duration="1000">
-                    <div class="position-relative rounded-16 overflow-hidden z-1 p-32">
-                        <img src="assets/images/bg/promo-bg-img3.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 object-fit-cover z-n1">
-                        <div class="flex-between flex-wrap gap-16">
-                            <div class="">
-                                <span class="text-heading text-sm mb-8">Start From $250</span>
-                                <h6 class="mb-0">Airpod Headphone</h6>
-                                <a href="shop.php" class="d-inline-flex align-items-center gap-8 mt-16 text-heading text-md fw-medium border border-top-0 border-end-0 border-start-0 border-gray-900 hover-text-main-two-600 hover-border-main-two-600">
-                                    Shop Now
-                                    <span class="icon text-md d-flex"><i class="ph ph-plus"></i></span>
-                                </a>
-                            </div>
-                            <div class="pe-xxl-4">
-                                <img src="assets/images/thumbs/promo-img3.png" alt="">
+                <?php
+                $adver = Database::Search("SELECT * FROM `advertisment`");
+                $advernum = $adver->num_rows;
+                for ($ia = 0; $ia < $advernum; $ia++) {
+                    $adverdata = $adver->fetch_assoc();
+                    if ($adverdata["add_p"] == 0) {
+                        $bimgA = "assets/images/bg/promo-bg-img1.png";
+                    } elseif ($adverdata["add_p"] == 1) {
+                        $bimgA = "assets/images/bg/promo-bg-img2.png";
+                    } else {
+                        $bimgA = "assets/images/bg/promo-bg-img3.png";
+                    }
+                    if (empty($adverdata["path"])) {
+                        $adimgpath = "assets/images/thumbs/promo-img1.png";
+                    } else {
+                        $adimgpath = "admin-panel/process/" . $adverdata["path"];
+                    }
+                ?>
+                    <div class="col-lg-4 col-sm-6" data-aos="fade-up" data-aos-duration="600">
+                        <div class="position-relative rounded-16 overflow-hidden z-1 p-32">
+                            <img src="<?php echo $bimgA ?>" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 object-fit-cover z-n1">
+                            <div class="flex-between flex-wrap gap-16">
+                                <div class="">
+                                    <span class="text-heading text-sm mb-8"><?php echo $adverdata["title"] ?></span>
+                                    <h6 class="mb-0"><?php echo $adverdata["description"] ?></h6>
+                                    <a href="shop.php" class="d-inline-flex align-items-center gap-8 mt-16 text-heading text-md fw-medium border border-top-0 border-end-0 border-start-0 border-gray-900 hover-text-main-two-600 hover-border-main-two-600">
+                                        Shop Now
+                                        <span class="icon text-md d-flex"><i class="ph ph-plus"></i></span>
+                                    </a>
+                                </div>
+                                <div class="pe-xxl-4">
+                                    <img src="<?php echo $adimgpath ?>" alt="">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                <?php
+                }
+                ?>
             </div>
         </div>
     </section>
