@@ -22,6 +22,8 @@ if (isset($_SESSION["a"])) {
             <link rel="stylesheet" href="assets-admin/css/style.css" />
             <link rel="stylesheet" href="assets-admin/css/styles.min.css" />
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+            <script src="https://cdn.tiny.cloud/1/v6ya2mxbd70fn22v774qp5fw78t114ccnejem2vy8oriyj04/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
         </head>
 
         <body onload="change_branch()">
@@ -41,6 +43,70 @@ if (isset($_SESSION["a"])) {
 
                     <div class="container-fluid px-md-5">
 
+                        <!-- !-->
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <h2 class="mb-4">Add Privacy Policy</h2>
+                                </div>
+                                <div class="col-12">
+                                    <textarea id="privacy" class="form-control" rows="10" placeholder="Enter your privacy policy"></textarea>
+                                </div>
+                                <div class="col-12 text-center mt-3">
+                                    <button onclick="savePrivacy()" class="btn btn-primary btn-lg">Save Privacy</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center mt-5">
+                            <p>Powered by <span style="color: #0d6efd; font-weight: bold;">Tiny</span></p>
+                        </div>
+
+                        <script>
+                            tinymce.init({
+                                selector: '#privacy', // Target the privacy textarea
+                                height: 300,
+                                menubar: false,
+                                plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                                toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link image',
+                                branding: false, // Optional: Hide branding
+                                statusbar: false, // Optional: Hide status bar
+                            });
+
+                            function savePrivacy() {
+                                const privacyText = tinymce.get('privacy').getContent().trim();
+
+                                // Validate input
+                                if (!privacyText) {
+                                    alert("Please enter a privacy policy.");
+                                    return;
+                                }
+
+                                // Create a confirmation prompt
+                                if (confirm("Are you sure you want to save the privacy policy?")) {
+                                    let xhr = new XMLHttpRequest();
+                                    xhr.open("POST", "process/privsave.php", true);
+                                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                                    xhr.onreadystatechange = function() {
+                                        if (xhr.readyState === 4 && xhr.status === 200) {
+                                            let response = JSON.parse(xhr.responseText);
+                                            alert(response.message);
+
+                                            // If success, clear the input field
+                                            if (response.success) {
+                                                tinymce.get('privacy').setContent(''); // Reset the editor
+                                            }
+                                        }
+                                    };
+
+                                    // Send the privacy policy text to the PHP file
+                                    xhr.send("privacy=" + encodeURIComponent(privacyText));
+                                }
+                            }
+                        </script>
+
+                        <!-- !-->
                         <!-- add cities -->
                         <div class="row">
                             <div class="col-12 text-center mb-0">
@@ -278,6 +344,44 @@ if (isset($_SESSION["a"])) {
                                             </button>
                                         </div>
 
+                                        <script>
+                                            function saveWeight() {
+                                                const weightId = document.getElementById("wid").value;
+                                                const fee = document.getElementById("wprice").value;
+
+                                                if (!weightId || !fee) {
+                                                    alert("Please select a weight and enter a fee.");
+                                                    return;
+                                                }
+
+                                                // Create a confirmation prompt
+                                                if (confirm("Are you sure you want to save the selected weight and fee?")) {
+                                                    let xhr = new XMLHttpRequest();
+                                                    xhr.open("POST", "process/DeliveryFeeforWeight.php", true);
+                                                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                                                    xhr.onreadystatechange = function() {
+                                                        if (xhr.readyState === 4 && xhr.status === 200) {
+                                                            let response = JSON.parse(xhr.responseText);
+                                                            alert(response.message);
+
+                                                            // If success, reset the form or close modal
+                                                            if (response.success) {
+                                                                document.getElementById("wid").value = ''; // Reset selection
+                                                                document.getElementById("wprice").value = ''; // Reset fee
+                                                                // Optionally close the modal here
+                                                                $('#exampleModal').modal('hide');
+                                                            }
+                                                        }
+                                                    };
+
+                                                    // Sending both the selected weight ID and the fee to the PHP file
+                                                    xhr.send("weightId=" + encodeURIComponent(weightId) + "&fee=" + encodeURIComponent(fee));
+                                                }
+                                            }
+                                        </script>
+
+
                                         <div class="mb-3">
                                             <label for="wid" class="form-label fw-semibold">Delete Weight</label>
                                             <div class="input-group">
@@ -306,7 +410,6 @@ if (isset($_SESSION["a"])) {
                                         <script>
                                             function deleteWeight() {
                                                 let selectedWeightId = document.getElementById("wid2").value;
-                                                alert(selectedWeightId);
                                                 if (selectedWeightId) {
                                                     if (confirm("Are you sure you want to delete this weight entry?")) {
                                                         let xhr = new XMLHttpRequest();

@@ -459,7 +459,7 @@ if ($batch_id > 0) {
 
 
                                     $price = $batchdata["selling_price"];
-                                    $discountpre = $discount_data["discount_pre"];
+                                    $discountpre = $discount_percentage;
                                     $discountAmount = ($price * $discountpre) / 100;
                                     $finalPricePerItem = $price - $discountAmount;
                                     ?>

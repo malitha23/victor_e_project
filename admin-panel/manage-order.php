@@ -58,6 +58,44 @@ if (isset($_SESSION["a"])) {
                                     <div class="mask d-flex align-items-center h-100">
                                         <div class="container">
 
+                                            <div class="container mt-4">
+                                                <div class="row justify-content-center">
+                                                    <div class="col-md-6 p-4 border rounded shadow bg-white">
+                                                        <h3 class="text-center mb-3">Add Order Status</h3>
+                                                        <div class="mb-3">
+                                                            <input type="text" id="orderStatus" class="form-control" placeholder="Enter Order Status" required>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            <button class="btn btn-primary btn-lg" onclick="saveOrderStatus()">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                function saveOrderStatus() {
+                                                    let status = document.getElementById("orderStatus").value.trim();
+
+                                                    if (status === "") {
+                                                        alert("Please enter an order status.");
+                                                        return;
+                                                    }
+
+                                                    let xhr = new XMLHttpRequest();
+                                                    xhr.open("POST", "process/saveorderstatus.php", true);
+                                                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                                    xhr.onreadystatechange = function() {
+                                                        if (xhr.readyState === 4 && xhr.status === 200) {
+                                                            let response = JSON.parse(xhr.responseText);
+                                                            alert(response.message);
+                                                            if (response.success) {
+                                                                document.getElementById("orderStatus").value = ""; // Clear input field on success
+                                                            }
+                                                        }
+                                                    };
+                                                    xhr.send("status=" + encodeURIComponent(status));
+                                                }
+                                            </script>
+
                                             <?php
                                             $order = Databases::Search("SELECT * FROM `order`");
                                             $ordernum = $order->num_rows;
@@ -155,10 +193,21 @@ if (isset($_SESSION["a"])) {
                                                                         <div class="modal-body">
                                                                             <div class="col-12 mb-3">
                                                                                 <div class="form-floating mb-1">
+                                                                                    <?php
+                                                                                    $orderm = Databases::Search("SELECT * FROM `order_status`");
+                                                                                    $ordermn = $orderm->num_rows;
+                                                                                    ?>
                                                                                     <select class="form-select rounded-0" aria-label="Floating label select example" id="statusChangeProduct1<?php echo $orderdata["id"] ?>">
-                                                                                        <option value="1" selected>Processing</option>
-                                                                                        <option value="2">Delivered</option>
-                                                                                        <option value="3">Canceled</option>
+                                                                                        <option value="0" selected>SELECT STATUS</option>
+                                                                                        <?php
+                                                                                        for ($im = 0; $im < $ordermn; $im++) {
+                                                                                            $ordermd = $orderm->fetch_assoc();
+                                                                                        ?>
+                                                                                            <option value="<?php echo  $ordermd["id"] ?>" selected><?php echo  $ordermd["status"] ?></option>
+
+                                                                                        <?php
+                                                                                        }
+                                                                                        ?>
                                                                                     </select>
                                                                                     <label for="statusChange">Change this order status
                                                                                         here.</label>
