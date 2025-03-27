@@ -151,6 +151,83 @@ function updatePassword() {
 
     req.send(data);
 }
+function Registernow() {
+    const mobile = document.getElementById("mobile").value.trim();
+    const email = document.getElementById("emailTwo").value.trim();
+    const password = document.getElementById("enter-password").value.trim();
+
+    // Check if fields are not empty
+    if (!mobile || !email || !password) {
+        alert("Please fill in all the fields.");
+        return;
+    }
+
+    // Create a new XMLHttpRequest object
+    const xhr = new XMLHttpRequest();
+
+    // Set up the request (POST method and the URL to send the data to)
+    xhr.open("POST", "datacheck.php", true);
+
+    // Set the content type to send form data as URL-encoded
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    // Create the data string to send
+    const data = `mobile=${encodeURIComponent(mobile)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+
+    // Define what happens on successful request
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            // Handle the plain text response
+            const response = xhr.responseText;
+            if (response == 1) {
+                openUserAgreement();
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: response,
+                    text: 'Please enter your mobile number.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#f39c12', // Orange color for warning
+                });
+            }
+            // Check if response contains a success message
+        } else {
+            alert("Request failed. Please try again later.");
+        }
+    };
+
+    // Handle request errors
+    xhr.onerror = function () {
+        alert("There was an error with the request.");
+    };
+
+    // Send the request with the data
+    xhr.send(data);
+}
+// Function to open the modal
+function openUserAgreement() {
+    var myModal = new bootstrap.Modal(document.getElementById('agreementModal'), {
+        keyboard: false // Optional: Disable closing by pressing Esc key
+    });
+    myModal.show(); // Open the modal
+}
+
+// Enable/Disable the register button based on checkbox status
+document.getElementById("agree").addEventListener("change", function () {
+    const registerBtn = document.getElementById("registerBtn");
+    registerBtn.disabled = !this.checked;
+});
+
+// Function to simulate the registration process (you can replace this with your actual registration logic)
+function register() {
+    var myModal = bootstrap.Modal.getInstance(document.getElementById('agreementModal'));
+    myModal.hide(); // Close the modal
+    var s = document.getElementById("agree").checked;
+    if (s == true) {
+        Register();
+    }
+}
+
 function Register() {
 
     const mobile = document.getElementById("mobile").value.trim();
@@ -341,7 +418,7 @@ function updatepro() {
                     }
                 }).then(() => {
                     location.reload();  // Corrected `window.reload()` to `location.reload()`
-                });                
+                });
             } else {
                 Swal.fire({
                     title: 'Alert',
@@ -615,22 +692,22 @@ function signout() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ action: "logout" })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    Swal.fire({
-                        title: "Logged Out",
-                        text: "You have been successfully logged out.",
-                        icon: "success",
-                        confirmButtonColor: "#ff6600",
-                    }).then(() => {
-                        window.location.href = "index.php"; // Redirect to home or login page
-                    });
-                } else {
-                    Swal.fire("Error", "Logout failed. Try again!", "error");
-                }
-            })
-            .catch(error => Swal.fire("Error", "Something went wrong!", "error"));
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        Swal.fire({
+                            title: "Logged Out",
+                            text: "You have been successfully logged out.",
+                            icon: "success",
+                            confirmButtonColor: "#ff6600",
+                        }).then(() => {
+                            window.location.href = "index.php"; // Redirect to home or login page
+                        });
+                    } else {
+                        Swal.fire("Error", "Logout failed. Try again!", "error");
+                    }
+                })
+                .catch(error => Swal.fire("Error", "Something went wrong!", "error"));
         }
     });
 }
@@ -665,24 +742,24 @@ function cartdelete(cartid) {
                 method: "POST",
                 body: formData
             })
-            .then(response => response.text())
-            .then(data => {
-                Swal.close(); // Close loading alert
+                .then(response => response.text())
+                .then(data => {
+                    Swal.close(); // Close loading alert
 
-                if (data.includes("successfully")) {
-                    Swal.fire({
-                        title: "Deleted!",
-                        text: "The item has been removed from your cart.",
-                        icon: "success",
-                        confirmButtonColor: "#ff6600"
-                    }).then(() => {
-                        location.reload(); // Refresh the cart page
-                    });
-                } else {
-                    Swal.fire("Error", data, "error");
-                }
-            })
-            .catch(error => Swal.fire("Error", "Something went wrong!", "error"));
+                    if (data.includes("successfully")) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "The item has been removed from your cart.",
+                            icon: "success",
+                            confirmButtonColor: "#ff6600"
+                        }).then(() => {
+                            location.reload(); // Refresh the cart page
+                        });
+                    } else {
+                        Swal.fire("Error", data, "error");
+                    }
+                })
+                .catch(error => Swal.fire("Error", "Something went wrong!", "error"));
         }
     });
 }
