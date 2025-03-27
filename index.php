@@ -205,26 +205,55 @@ include_once "connection.php";
                         </div>
                         <div class="deal-week-box__content px-sm-4 d-block w-100 text-center">
                             <h6 class="mb-20 wow bounceIn"><?php echo $offers_details["description"] ?></h6>
-                            <div class="countdown mt-20" id="countdown4">
-                                <ul class="countdown-list style-four flex-center flex-wrap">
-                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
-                                        <span class="days"></span>Days
-                                    </li>
-                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
-                                        <span class="hours"></span>Hour
-                                    </li>
-                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
-                                        <span class="minutes"></span>Min
-                                    </li>
-                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
-                                        <span class="seconds"></span>Sec
-                                    </li>
-                                </ul>
+                            <?php
+                            $phgd = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `discount_group_id`='" . $offers_details["id"] . "' ");
+                            $phgdd = $phgd->fetch_assoc();
+                            $phdate = Database::Search("SELECT * FROM `discount_date_range` WHERE `id`='" . $phgdd["discount_date_range_id"] . "' ");
+                            $phdatedeta = $phdate->fetch_assoc();
+                            ?>
+                            <div class="container text-center mt-4">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5 class="text-primary">Countdown Timer</h5>
+                                        <span class="fw-bold text-dark"><?php echo $phdatedeta["start_date"] ?></span> -
+                                        <span class="fw-bold text-danger"><?php echo $phdatedeta["end_date"] ?></span>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="countdown mt-3 p-3 rounded bg-light shadow" id="countdown4">
+                                            <ul class="countdown-list d-flex justify-content-center align-items-center gap-3">
+                                                <li class="countdown-list__item d-flex flex-column align-items-center text-white  bg-dark p-3">
+                                                    <span class="days fs-4 fw-bold">00</span>
+                                                    <span class="fs-6"></span>
+                                                </li>
+                                                <li class="countdown-list__item d-flex flex-column align-items-center text-white  bg-dark p-3">
+                                                    <span class="hours fs-4 fw-bold">00</span>
+                                                    <span class="fs-6"></span>
+                                                </li>
+                                                <li class="countdown-list__item d-flex flex-column align-items-center text-white  bg-dark p-3">
+                                                    <span class="minutes fs-4 fw-bold">00</span>
+                                                    <span class="fs-6"></span>
+                                                </li>
+                                                <li class="countdown-list__item d-flex flex-column align-items-center text-white  bg-dark p-3">
+                                                    <span class="seconds fs-4 fw-bold">00</span>
+                                                    <span class="fs-6"></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                         <div class="d-lg-block d-none flex-shrink-0 pe-xl-5" data-aos="zoom-in">
                             <div class="me-xxl-5">
-                                <img src="assets/images/thumbs/week-deal-img2.png" alt="">
+                                <?php
+                                if(empty($offers_details["image_path"])){
+                                    $disimgpath = "assets/images/thumbs/week-deal-img2.png";
+                                }else{
+                                    $disimgpath = "admin-panel/process/".$offers_details["image_path"];
+                                }
+                                 ?>
+                                <img src="<?php echo $disimgpath; ?>" alt="">
                             </div>
                         </div>
                     </div>
