@@ -805,10 +805,10 @@ function submitdisdetails(x) {
      var end_date = document.getElementById("end_date").value;
      var Discount = document.getElementById("Discount").value;
      var img = document.getElementById("imageUpload").files[0];
-      if (!img) {
-        alert("Please select an image file.");
-        return;
-    }
+     if (!img) {
+          alert("Please select an image file.");
+          return;
+     }
      var batches = [];
      var y = 0;
      for (let index = 0; index < x; index++) {
@@ -822,7 +822,7 @@ function submitdisdetails(x) {
      }
      var length = batches.length;
      var form = new FormData;
-     form.append("image",img);
+     form.append("image", img);
      form.append("length", length);
      form.append("title", title);
      form.append("desc", description);
@@ -846,4 +846,135 @@ function ADdiscount(x) {
      const modal = new bootstrap.Modal(document.getElementById('customModal'));
      modal.show();
      submitdiscount(x);
+}
+function updateQuantity(batchId, discountGroupId) {
+     let qtyInput = document.getElementById("qtyInput" + batchId);
+     let qty = qtyInput.value.trim();
+
+     if (qty === "" || qty < 1) {
+          Swal.fire({
+               icon: "error",
+               title: "Invalid Quantity",
+               text: "Quantity must be at least 1.",
+               confirmButtonColor: "#d33",
+          });
+          return;
+     }
+
+     let xhr = new XMLHttpRequest();
+     xhr.open("POST", "process/updateQuantity.php", true);
+     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+     xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+               if (xhr.status === 200) {
+                    alert(xhr.responseText);
+                    Swal.fire({
+                         icon: "success",
+                         title: "Updated Successfully",
+                         text: xhr.responseText,
+                         confirmButtonColor: "#3085d6",
+                    }).then(() => {
+                         location.reload(); // Reload the page after confirmation
+                    });
+               } else {
+                    Swal.fire({
+                         icon: "error",
+                         title: "Update Failed",
+                         text: "Something went wrong. Please try again.",
+                         confirmButtonColor: "#d33",
+                    });
+               }
+          }
+     };
+
+     // Send batch ID, discount group ID, and quantity as parameters
+     xhr.send("batchId=" + batchId + "&discountGroupId=" + discountGroupId + "&qty=" + qty);
+}
+function Removebatch(batchId, discountGroupId) {
+     Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "Yes, remove it!"
+     }).then((result) => {
+          if (result.isConfirmed) {
+               let xhr = new XMLHttpRequest();
+               xhr.open("POST", "process/removeBatch.php", true);
+               xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+               xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                         if (xhr.status === 200) {
+                              Swal.fire({
+                                   title: "Deleted!",
+                                   text: "The batch has been removed.",
+                                   icon: "success",
+                                   confirmButtonColor: "#3085d6"
+                              }).then(() => {
+                                   location.reload(); // Refresh page after success
+                              });
+                         } else {
+                              Swal.fire({
+                                   title: "Error!",
+                                   text: "Something went wrong. Please try again.",
+                                   icon: "error",
+                                   confirmButtonColor: "#d33"
+                              });
+                         }
+                    }
+               };
+               xhr.send("batchId=" + batchId + "&discountGroupId=" + discountGroupId);
+          }
+     });
+}
+function updatedis(discountGroupId) {
+     // Get the values from the modal's input fields
+     var title = document.getElementById('distitle' + discountGroupId).value;
+     var description = tinymce.get('disdescription' + discountGroupId).getContent();
+     var discount_pre = document.getElementById('discount_pre' + discountGroupId).value;
+
+     // Create a FormData object to send the data
+     var formData = new FormData();
+     formData.append('title', title);
+     formData.append('description', description);
+     formData.append('discount_pre', discount_pre);
+     formData.append('discount_group_id', discountGroupId);
+
+     // Create an XMLHttpRequest object to send the data
+     var xhr = new XMLHttpRequest();
+     xhr.open('POST', 'process/updateDiscountGroup.php', true);
+
+     // Set up the callback function to handle the response
+     xhr.onload = function () {
+          if (xhr.status === 200) {
+               // Show a success message using SweetAlert
+               Swal.fire({
+                    title: 'Success',
+                    text: 'Discount Group updated successfully!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+               }).then(() => {
+                    // Optionally close the modal after the update
+                    $('#disdetilModal' + discountGroupId).modal('hide');
+                    location.reload(); 
+                    // Optionally, update the UI with new values (e.g., update title/description on the page)
+               });
+          } else {
+               // Show an error message using SweetAlert
+               Swal.fire({
+                    title: 'Error',
+                    text: 'There was an error updating the Discount Group.',
+                    icon: 'error',
+                    confirmButtonText: 'Try Again'
+               });
+          }
+          location.reload();
+     };
+
+     // Send the form data to the server
+     xhr.send(formData);
 }
