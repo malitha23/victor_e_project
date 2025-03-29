@@ -56,11 +56,81 @@ if (isset($_SESSION["a"])) {
                             </div>
                         </div>
 
+                        <div class="container mt-5">
+                            <div class="row justify-content-center">
+                                <h3 class="text-center mb-4">Product Management Panel</h3>
+                                <div class="col-12">
+                                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="ProductResult">
+                                        <?php
+                                        $productone = Databases::Search("SELECT * FROM `product` WHERE `delete_id`='0' ");
+                                        $productonenum = $productone->num_rows;
+                                        for ($oi = 0; $oi < $productonenum; $oi++) {
+                                            $productonedata = $productone->fetch_assoc();
+                                        ?>
+                                            <div class="col">
+                                                <div class="card shadow-sm border-0 h-100 position-relative">
+                                                    <?php
+                                                    $img = Databases::Search("SELECT * FROM `picture` WHERE `product_id`='" .  $productonedata["id"] . "' AND `name`='Image 1' ");
+                                                    $imgnum = $img->num_rows;
+
+                                                    if ($imgnum > 0) {
+                                                        $imgdata = $img->fetch_assoc();
+                                                    ?>
+                                                        <img src="<?php echo $imgdata['path']; ?>" class="card-img-top img-fluid" alt="Product Image">
+                                                    <?php
+                                                    } else {
+                                                    ?>
+                                                        <img src="assets-admin/images/products/s5.jpg" class="card-img-top img-fluid" alt="Default Image">
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                    <div class="card-body text-center">
+                                                        <h5 class="card-title fw-bold"><?php echo htmlspecialchars($productonedata['title'] ?? 'Unknown Product'); ?></h5>
+                                                        <p class="card-text text-muted mb-2">Price: $<?php echo htmlspecialchars($productonedata['price'] ?? 'price in batch'); ?></p>
+                                                        <p class="card-text text-muted">Stock: <?php echo htmlspecialchars($productonedata['stock'] ?? 'stock in batch'); ?></p>
+                                                        <button type="button" class="btn btn-outline-danger fw-bold mt-2" onclick="deleteProduct('<?php echo $productonedata["id"]; ?>');">
+                                                            <i class="fa fa-trash"></i> Delete Product
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <style>
+                            .card {
+                                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                            }
+
+                            .card:hover {
+                                transform: scale(1.05);
+                                box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+                            }
+
+                            .card-img-top {
+                                height: 200px;
+                                object-fit: cover;
+                            }
+
+                            .btn-outline-danger {
+                                transition: background-color 0.3s ease, color 0.3s ease;
+                            }
+
+                            .btn-outline-danger:hover {
+                                background-color: #d33;
+                                color: #fff;
+                            }
+                        </style>
+
+
                         <div class="row d-flex justify-content-center" id="ProductResult">
 
                             <!-- Example Product Card Start -->
                             <?php
-                            $batch = Databases::Search("SELECT * FROM `batch` ORDER BY `date` ASC");
+                            $batch = Databases::Search("SELECT * FROM `batch` WHERE `Delete`='0' ORDER BY `date` ASC");
                             $batch_num = $batch->num_rows;
                             echo $batch_num;
                             for ($b = 0; $b < $batch_num; $b++) {

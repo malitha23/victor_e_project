@@ -1216,16 +1216,31 @@ function deleteProduct(productID) {
          cancelButtonText: 'Cancel'
      }).then((result) => {
          if (result.isConfirmed) {
+             // Show processing alert
+             Swal.fire({
+                 title: 'Processing...',
+                 text: 'Please wait while we delete the product.',
+                 icon: 'info',
+                 allowOutsideClick: false,
+                 showConfirmButton: false,
+             });
+ 
              const xhr = new XMLHttpRequest();
              xhr.open('POST', 'process/productdelete.php', true);
              xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
  
              xhr.onload = function() {
+                 // Close processing alert
+                 Swal.close();
+ 
                  if (xhr.status >= 200 && xhr.status < 300) {
                      Swal.fire({
                          title: 'Deleted!',
                          text: xhr.responseText,
                          icon: 'success'
+                     }).then(() => {
+                         // Reload the page after deletion confirmation
+                         window.location.reload();
                      });
                  } else {
                      Swal.fire({
@@ -1237,6 +1252,9 @@ function deleteProduct(productID) {
              };
  
              xhr.onerror = function() {
+                 // Close processing alert
+                 Swal.close();
+ 
                  Swal.fire({
                      title: 'Network Error!',
                      text: 'Failed to send request',
@@ -1248,6 +1266,7 @@ function deleteProduct(productID) {
          }
      });
  }
+ 
  function deletebatch(batch_id) {
      Swal.fire({
          title: 'Are you sure?',
