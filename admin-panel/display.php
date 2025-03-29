@@ -116,15 +116,7 @@ if (isset($_SESSION["a"])) {
                                                                  <span>Note: SUB-Image size 555*607</span>
 
                                                                  <!-- Main Image Upload -->
-                                                                 <div class="mb-3 text-center">
-                                                                      <label class="form-label fw-bold">Main Image</label>
-                                                                      <div class="border p-3 d-flex flex-column align-items-center justify-content-center rounded upload-box bg-light position-relative" style="height: 200px; cursor: pointer;" onclick="document.getElementById('main-img<?php echo $i ?>').click();">
-                                                                           <input type="file" class="d-none" id="main-img<?php echo $i ?>" accept="image/*" onchange="previewImage(event, 'main-preview-<?php echo $i ?>')">
-                                                                           <span class="small text-muted">Click to Upload Image</span>
-                                                                           <img src="" class="img-fluid mt-2 preview-img position-absolute" id="main-preview-<?php echo $i ?>" style="max-height: 100px; display: <?php echo $main ? 'block' : 'none'; ?>;">
-                                                                      </div>
-                                                                 </div>
-
+                                                                
                                                                  <!-- Sub Image Upload -->
                                                                  <div class="mb-3 text-center">
                                                                       <label class="form-label fw-bold">Sub Image</label>
@@ -178,18 +170,16 @@ if (isset($_SESSION["a"])) {
                                         }
 
                                         function savemainsliderde(index) {
-                                             let mainImage = document.getElementById('main-img' + index).files[0];
                                              let subImage = document.getElementById('sub-img' + index).files[0];
                                              let title = document.getElementById('title-main' + index).value;
                                              let desc = document.getElementById('desc-main' + index).value;
 
-                                             if (!mainImage || !subImage || title.trim() === '' || desc.trim() === '') {
+                                             if ( !subImage || title.trim() === '' || desc.trim() === '') {
                                                   alert('Please fill all fields and upload images.');
                                                   return;
                                              }
 
                                              let formData = new FormData();
-                                             formData.append('main_image', mainImage);
                                              formData.append('sub_image', subImage);
                                              formData.append('title', title);
                                              formData.append('description', desc);

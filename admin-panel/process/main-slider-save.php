@@ -12,19 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
      $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
      // Process main image
-     if (isset($_FILES['main_image']) && in_array($_FILES['main_image']['type'], $allowedTypes)) {
-          $mainImageName = uniqid('main_', true) . "." . pathinfo($_FILES['main_image']['name'], PATHINFO_EXTENSION);
-          $mainPath = $uploadDir . $mainImageName;
-
-          if (!move_uploaded_file($_FILES['main_image']['tmp_name'], $mainPath)) {
-               echo ("Error uploading main image.");
-               exit;
-          }
-     } else {
-          echo ("Invalid main image format.");
-          exit;
-     }
-
+     
      // Process sub image
      if (isset($_FILES['sub_image']) && in_array($_FILES['sub_image']['type'], $allowedTypes)) {
           $subImageName = uniqid('sub_', true) . "." . pathinfo($_FILES['sub_image']['name'], PATHINFO_EXTENSION);
@@ -69,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
      }
 
      Databases::IUD("INSERT INTO `main_slider` (`main_path`, `sub_path`, `title`, `description`, `slider`)
-      VALUES ('" . $mainPath . "', '" . $subPath . "', '" . $title . "', '" . $description . "', '" . $index . "');");
+      VALUES ('0', '" . $subPath . "', '" . $title . "', '" . $description . "', '" . $index . "');");
 
      echo  "images and details uploade successfully.";
 }
