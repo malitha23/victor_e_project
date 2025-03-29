@@ -100,34 +100,11 @@ if (isset($_SESSION["a"])) {
                             </div>
                         </div>
 
-                        <style>
-                            .card {
-                                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                            }
-
-                            .card:hover {
-                                transform: scale(1.05);
-                                box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-                            }
-
-                            .card-img-top {
-                                height: 200px;
-                                object-fit: cover;
-                            }
-
-                            .btn-outline-danger {
-                                transition: background-color 0.3s ease, color 0.3s ease;
-                            }
-
-                            .btn-outline-danger:hover {
-                                background-color: #d33;
-                                color: #fff;
-                            }
-                        </style>
+                        
 
 
                         <div class="row d-flex justify-content-center" id="ProductResult">
-
+                            <h1>Product Batch and update below..</h1>
                             <!-- Example Product Card Start -->
                             <?php
                             $batch = Databases::Search("SELECT * FROM `batch` WHERE `Delete`='0' ORDER BY `date` ASC");
@@ -203,7 +180,7 @@ if (isset($_SESSION["a"])) {
 
                                                     <!-- Modal Footer -->
                                                     <div class="modal-footer justify-content-between">
-                                                        <button type="button" class="btn btn-outline-danger fw-bold" onclick="deleteProduct('<?php echo $productdata["id"]; ?>');">
+                                                        <button type="button" disabled class="btn btn-outline-danger fw-bold" onclick="deleteProduct('<?php echo $productdata["id"]; ?>');">
                                                             <i class="fa fa-trash"></i> Delete Product
                                                         </button>
 
