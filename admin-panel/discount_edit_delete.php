@@ -116,10 +116,22 @@ if (isset($_SESSION["a"])) {
                                                                                                          <button class="btn btn-warning w-100 mb-2 fw-semibold" onclick="disablediscoun(<?php echo $disgdata['id']; ?>);">
                                                                                                               <i class="ph ph-eye-slash"></i> Disable
                                                                                                          </button>
-                                                                                                    <?php } else { ?>
-                                                                                                         <button class="btn btn-success w-100 mb-2 fw-semibold" onclick="disablediscoun(<?php echo $disgdata['id']; ?>);">
-                                                                                                              <i class="ph ph-eye"></i> Enable
-                                                                                                         </button>
+                                                                                                         <?php } else {
+                                                                                                         $tdb = Databases::Search("SELECT * FROM `discount_date_range_has_product` WHERE
+                                                                                                          `discount_group_id`='" . $disgdata['id'] . "' ");
+                                                                                                         $tdbn = $tdb->num_rows;
+                                                                                                         if ($tdbn > 0) {
+                                                                                                         ?>
+                                                                                                              <button class="btn btn-success w-100 mb-2 fw-semibold" onclick="disablediscoun(<?php echo $disgdata['id']; ?>);">
+                                                                                                                   <i class="ph ph-eye"></i> Enable
+                                                                                                              </button>
+                                                                                                         <?php
+                                                                                                         } else {
+                                                                                                         ?>
+                                                                                                              <span class="text-success fw-bold m-1">pleace add Batch and Enable</span>
+                                                                                                         <?php
+                                                                                                         }
+                                                                                                         ?>
                                                                                                     <?php } ?>
 
                                                                                                     <!-- Delete Button -->
@@ -149,6 +161,42 @@ if (isset($_SESSION["a"])) {
                                                                                                <!-- Modal Body -->
                                                                                                <div class="modal-body p-4">
                                                                                                     <div class="table-responsive">
+                                                                                                         <?php
+                                                                                                         $discountRange = Databases::Search("SELECT * FROM `discount_date_range_has_product` 
+                                                                                                         WHERE `discount_group_id`='" . $disgdata['id'] . "'");
+                                                                                                         if ($discountRange->num_rows > 0) {
+                                                                                                         ?>
+                                                                                                              <div class="form-floating mb-3">
+                                                                                                                   <input type="number" disabled class="form-control" id="EpercentageInput<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
+                                                                                                                   <label for="percentageInput<?php echo $disgdata['id']; ?>">Enter percentage</label>
+                                                                                                              </div>
+                                                                                                              <div class="form-floating mb-3">
+                                                                                                                   <input type="date" disabled class="form-control" id="startdate<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
+                                                                                                                   <label for="startdate<?php echo $disgdata['id']; ?>">discount start date</label>
+                                                                                                              </div>
+                                                                                                              <div class="form-floating mb-3">
+                                                                                                                   <input type="date" disabled class="form-control" id="enddate<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
+                                                                                                                   <label for="enddate<?php echo $disgdata['id']; ?>">discount end date</label>
+                                                                                                              </div>
+                                                                                                         <?php
+                                                                                                         } else {
+                                                                                                         ?>
+                                                                                                              <div class="form-floating mb-3">
+                                                                                                                   <input type="number"  class="form-control" id="EpercentageInput<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
+                                                                                                                   <label for="percentageInput<?php echo $disgdata['id']; ?>">Enter percentage</label>
+                                                                                                              </div>
+                                                                                                              <div class="form-floating mb-3">
+                                                                                                                   <input type="date"  class="form-control" id="startdate<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
+                                                                                                                   <label for="startdate<?php echo $disgdata['id']; ?>">discount start date</label>
+                                                                                                              </div>
+                                                                                                              <div class="form-floating mb-3">
+                                                                                                                   <input type="date"  class="form-control" id="enddate<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
+                                                                                                                   <label for="enddate<?php echo $disgdata['id']; ?>">discount end date</label>
+                                                                                                              </div>
+                                                                                                         <?php
+                                                                                                         }
+                                                                                                         ?>
+
                                                                                                          <table class="table table-hover align-middle">
                                                                                                               <thead class="table-dark">
                                                                                                                    <tr>
@@ -163,7 +211,7 @@ if (isset($_SESSION["a"])) {
                                                                                                               </thead>
                                                                                                               <tbody>
                                                                                                                    <?php
-                                                                                                                   $bach = Databases::Search("SELECT * FROM `batch`");
+                                                                                                                   $bach = Databases::Search("SELECT * FROM `batch` WHERE `Delete`='0' ");
                                                                                                                    while ($bach_d = $bach->fetch_assoc()) {
                                                                                                                         $pr = Databases::Search("SELECT * FROM `product` WHERE `id`='" . $bach_d["product_id"] . "' ");
                                                                                                                         $pr = $pr->fetch_assoc();

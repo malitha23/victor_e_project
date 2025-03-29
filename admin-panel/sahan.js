@@ -1123,6 +1123,10 @@ function deletdiscoun(disgroupId) {
 }
 function adtodiscount(batch_id, discount_id) {
      let qtyInput = document.getElementById("qtydisbach" + batch_id + discount_id);
+     let EpercentageInput = document.getElementById("EpercentageInput" + discount_id).value;
+     let startdate = document.getElementById("startdate" + discount_id).value;
+     let enddate = document.getElementById("enddate" + discount_id).value;
+
      let qty = qtyInput ? qtyInput.value : 1;
 
      // Validate quantity
@@ -1141,30 +1145,38 @@ function adtodiscount(batch_id, discount_id) {
      xhr.open("POST", "process/newbachfordis.php", true);
      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-     xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4) {
-               if (xhr.status === 200) {
-                    Swal.fire({
-                         icon: "success",
-                         title: "Success",
-                         text: xhr.responseText,
-                         confirmButtonColor: "#28a745",
-                    });
-               } else {
-                    Swal.fire({
-                         icon: "error",
-                         title: "Error",
-                         text: "Failed to add batch to discount.",
-                         confirmButtonColor: "#d33",
-                    });
-               }
+     xhr.onload = function () {
+          if (xhr.status === 200) {
+               Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: xhr.responseText,
+                    confirmButtonColor: "#28a745",
+               });
+          } else {
+               Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Failed to add batch to discount.",
+                    confirmButtonColor: "#d33",
+               });
           }
      };
 
+     xhr.onerror = function () {
+          Swal.fire({
+               icon: "error",
+               title: "Network Error",
+               text: "Failed to send request.",
+               confirmButtonColor: "#d33",
+          });
+     };
+
      // Send request
-     let params = "batch_id=" + batch_id + "&discount_id=" + discount_id + "&qty=" + qty;
+     let params = "batch_id=" + batch_id + "&discount_id=" + discount_id + "&qty=" + qty + "&EpercentageInput=" + EpercentageInput + "&startdate=" + startdate + "&enddate=" + enddate;
      xhr.send(params);
 }
+
 function upnewdisimg(discountId) {
      let formData = new FormData();
      let fileInput = document.querySelector(`#changeImageModal${discountId} input[name="new_image"]`);
@@ -1206,127 +1218,126 @@ function upnewdisimg(discountId) {
 }
 function deleteProduct(productID) {
      Swal.fire({
-         title: 'Are you sure?',
-         text: "Once deleted, you cannot recover this product!",
-         icon: 'warning',
-         showCancelButton: true,
-         confirmButtonColor: '#3085d6',
-         cancelButtonColor: '#d33',
-         confirmButtonText: 'Yes, delete it!',
-         cancelButtonText: 'Cancel'
+          title: 'Are you sure?',
+          text: "Once deleted, you cannot recover this product!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'Cancel'
      }).then((result) => {
-         if (result.isConfirmed) {
-             // Show processing alert
-             Swal.fire({
-                 title: 'Processing...',
-                 text: 'Please wait while we delete the product.',
-                 icon: 'info',
-                 allowOutsideClick: false,
-                 showConfirmButton: false,
-             });
- 
-             const xhr = new XMLHttpRequest();
-             xhr.open('POST', 'process/productdelete.php', true);
-             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
- 
-             xhr.onload = function() {
-                 // Close processing alert
-                 Swal.close();
- 
-                 if (xhr.status >= 200 && xhr.status < 300) {
-                     Swal.fire({
-                         title: 'Deleted!',
-                         text: xhr.responseText,
-                         icon: 'success'
-                     }).then(() => {
-                         // Reload the page after deletion confirmation
-                         window.location.reload();
-                     });
-                 } else {
-                     Swal.fire({
-                         title: 'Error!',
-                         text: xhr.responseText || 'Request failed',
+          if (result.isConfirmed) {
+               // Show processing alert
+               Swal.fire({
+                    title: 'Processing...',
+                    text: 'Please wait while we delete the product.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+               });
+
+               const xhr = new XMLHttpRequest();
+               xhr.open('POST', 'process/productdelete.php', true);
+               xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+               xhr.onload = function () {
+                    // Close processing alert
+                    Swal.close();
+
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                         Swal.fire({
+                              title: 'Deleted!',
+                              text: xhr.responseText,
+                              icon: 'success'
+                         }).then(() => {
+                              // Reload the page after deletion confirmation
+                              window.location.reload();
+                         });
+                    } else {
+                         Swal.fire({
+                              title: 'Error!',
+                              text: xhr.responseText || 'Request failed',
+                              icon: 'error'
+                         });
+                    }
+               };
+
+               xhr.onerror = function () {
+                    // Close processing alert
+                    Swal.close();
+
+                    Swal.fire({
+                         title: 'Network Error!',
+                         text: 'Failed to send request',
                          icon: 'error'
-                     });
-                 }
-             };
- 
-             xhr.onerror = function() {
-                 // Close processing alert
-                 Swal.close();
- 
-                 Swal.fire({
-                     title: 'Network Error!',
-                     text: 'Failed to send request',
-                     icon: 'error'
-                 });
-             };
- 
-             xhr.send('productID=' + encodeURIComponent(productID));
-         }
+                    });
+               };
+
+               xhr.send('productID=' + encodeURIComponent(productID));
+          }
      });
- }
- 
- function deletebatch(batch_id) {
+}
+
+function deletebatch(batch_id) {
      Swal.fire({
-         title: 'Are you sure?',
-         text: "Once deleted, you will not be able to recover this batch!",
-         icon: 'warning',
-         showCancelButton: true,
-         confirmButtonColor: '#3085d6',
-         cancelButtonColor: '#d33',
-         confirmButtonText: 'Yes, delete it!',
-         cancelButtonText: 'Cancel'
+          title: 'Are you sure?',
+          text: "Once deleted, you will not be able to recover this batch!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'Cancel'
      }).then((result) => {
-         if (result.isConfirmed) {
-             // Show waiting alert
-             Swal.fire({
-                 title: 'Processing...',
-                 text: 'Please wait while we delete the batch.',
-                 icon: 'info',
-                 allowOutsideClick: false,
-                 showConfirmButton: false,
-             });
- 
-             const xhr = new XMLHttpRequest();
-             xhr.open('POST', 'process/batchdelete.php', true);
-             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
- 
-             xhr.onload = function() {
-                 // Close waiting alert
-                 Swal.close();
- 
-                 if (xhr.status >= 200 && xhr.status < 300) {
-                     Swal.fire({
-                         title: 'Deleted!',
-                         text: xhr.responseText,
-                         icon: 'success'
-                     }).then(() => {
-                         // Reload the page after deletion confirmation
-                         window.location.reload();
-                     });
-                 } else {
-                     Swal.fire({
-                         title: 'Error!',
-                         text: xhr.responseText || 'Request failed',
+          if (result.isConfirmed) {
+               // Show waiting alert
+               Swal.fire({
+                    title: 'Processing...',
+                    text: 'Please wait while we delete the batch.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+               });
+
+               const xhr = new XMLHttpRequest();
+               xhr.open('POST', 'process/batchdelete.php', true);
+               xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+               xhr.onload = function () {
+                    // Close waiting alert
+                    Swal.close();
+
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                         Swal.fire({
+                              title: 'Deleted!',
+                              text: xhr.responseText,
+                              icon: 'success'
+                         }).then(() => {
+                              // Reload the page after deletion confirmation
+                              window.location.reload();
+                         });
+                    } else {
+                         Swal.fire({
+                              title: 'Error!',
+                              text: xhr.responseText || 'Request failed',
+                              icon: 'error'
+                         });
+                    }
+               };
+
+               xhr.onerror = function () {
+                    // Close waiting alert
+                    Swal.close();
+
+                    Swal.fire({
+                         title: 'Network Error!',
+                         text: 'Failed to send request',
                          icon: 'error'
-                     });
-                 }
-             };
- 
-             xhr.onerror = function() {
-                 // Close waiting alert
-                 Swal.close();
- 
-                 Swal.fire({
-                     title: 'Network Error!',
-                     text: 'Failed to send request',
-                     icon: 'error'
-                 });
-             };
- 
-             xhr.send('batch_id=' + encodeURIComponent(batch_id));
-         }
+                    });
+               };
+
+               xhr.send('batch_id=' + encodeURIComponent(batch_id));
+          }
      });
- }
- 
+}

@@ -59,7 +59,7 @@ if (isset($_SESSION["a"])) {
                                         </label>
                                    </div>
                                    <?php
-                                   $batch = Databases::Search("SELECT * FROM `batch` ORDER BY `date` ASC");
+                                   $batch = Databases::Search("SELECT * FROM `batch` WHERE `Delete`='0' ORDER BY `date` ASC");
                                    $batch_num = $batch->num_rows;
                                    ?>
                                    <button class="btn btn-danger" onclick="ADdiscount('<?php echo $batch_num;  ?>');">ADD Discount</button>
