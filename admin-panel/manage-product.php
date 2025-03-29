@@ -133,7 +133,7 @@ if (isset($_SESSION["a"])) {
 
                                                     <!-- Modal Footer -->
                                                     <div class="modal-footer justify-content-between">
-                                                        <button type="button" class="btn btn-outline-danger fw-bold" onclick="deleteproduct('<?php echo $productdata["id"]; ?>');">
+                                                        <button type="button" class="btn btn-outline-danger fw-bold" onclick="deleteProduct('<?php echo $productdata["id"]; ?>');">
                                                             <i class="fa fa-trash"></i> Delete Product
                                                         </button>
 

@@ -163,7 +163,9 @@ include_once "connection.php";
                                     </a>
                                 </div>
                                 <div class="pe-xxl-4">
-                                    <img src="<?php echo $adimgpath ?>" alt="">
+                                    <div class="row">
+                                        <img src="<?php echo $adimgpath ?>" alt="">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -247,13 +249,17 @@ include_once "connection.php";
                         <div class="d-lg-block d-none flex-shrink-0 pe-xl-5" data-aos="zoom-in">
                             <div class="me-xxl-5">
                                 <?php
-                                if(empty($offers_details["image_path"])){
+                                if (empty($offers_details["image_path"])) {
                                     $disimgpath = "assets/images/thumbs/week-deal-img2.png";
-                                }else{
-                                    $disimgpath = "admin-panel/process/".$offers_details["image_path"];
+                                } else {
+                                    $disimgpath = "admin-panel/process/" . $offers_details["image_path"];
                                 }
-                                 ?>
-                                <img src="<?php echo $disimgpath; ?>" alt="">
+                                ?>
+                                <div class="row d-flex align-items-end">
+                                    <div class="col-3 bg-blur">
+                                        <img class="img-fluid" src="<?php echo $disimgpath; ?>" alt="">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -503,8 +509,10 @@ include_once "connection.php";
                                 <div data-aos="fade-up" data-aos-duration="200">
                                     <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
                                         <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
-                                            <img src="<?php echo $pat; ?>" alt="Product Image" class="w-auto max-w-unset">
-                                        </a>
+                                       <div class="row">
+                                       <img src="<?php echo $pat; ?>" alt="Product Image" class="w-auto max-w-unset">
+                                       </div>
+                                    </a>
                                         <div class="product-card__content mt-16">
                                             <h6 class="title text-lg fw-semibold mt-12 mb-8">
                                                 <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo htmlspecialchars($id["title"]); ?></a>
@@ -588,7 +596,9 @@ include_once "connection.php";
                                                     <?php
                                                     } else {
                                                     ?>
-                                                        <img src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="w-auto max-w-unset">
+                                                    <div class="row">
+                                                    <img  src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="w-auto max-w-unset">
+                                                    </div>
                                                     <?php
                                                     }
                                                     ?>
