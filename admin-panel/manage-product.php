@@ -88,6 +88,58 @@ if (isset($_SESSION["a"])) {
                                                         <h5 class="card-title fw-bold"><?php echo htmlspecialchars($productonedata['title'] ?? 'Unknown Product'); ?></h5>
                                                         <p class="card-text text-muted mb-2">Price: $<?php echo htmlspecialchars($productonedata['price'] ?? 'price in batch'); ?></p>
                                                         <p class="card-text text-muted">Stock: <?php echo htmlspecialchars($productonedata['stock'] ?? 'stock in batch'); ?></p>
+                                                        <?php
+                                                        $statusone = Databases::Search("SELECT * FROM `status` WHERE `id`='" . $productonedata["status_id"] . "' ");
+                                                        $statusonenum = $statusone->num_rows;
+                                                        if ($statusonenum > 0) {
+                                                            $statusoned = $statusone->fetch_assoc();
+                                                        ?>
+                                                            <span class="animated-status">
+                                                                <?php echo $statusoned["name"] ?>
+                                                                <i class="fa-solid fa-plane airplane-icon"></i>
+                                                            </span>
+
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                        <style>
+                                                            .animated-status {
+                                                                position: relative;
+                                                                display: inline-block;
+                                                                font-weight: bold;
+                                                                font-size: 18px;
+                                                                color: #333;
+                                                                padding-right: 30px;
+                                                                /* Ensure space for the airplane */
+                                                            }
+
+                                                            .airplane-icon {
+                                                                position: absolute;
+                                                                top: 50%;
+                                                                right: 0;
+                                                                transform: translateY(-50%);
+                                                                font-size: 16px;
+                                                                color: #007bff;
+                                                                /* Bootstrap primary blue */
+                                                                animation: fly 3s linear infinite;
+                                                            }
+
+                                                            @keyframes fly {
+                                                                0% {
+                                                                    right: -30px;
+                                                                    opacity: 0;
+                                                                }
+
+                                                                50% {
+                                                                    opacity: 1;
+                                                                }
+
+                                                                100% {
+                                                                    right: 100%;
+                                                                    opacity: 0;
+                                                                }
+                                                            }
+                                                        </style>
                                                         <button type="button" class="btn btn-outline-danger fw-bold mt-2" onclick="deleteProduct('<?php echo $productonedata["id"]; ?>');">
                                                             <i class="fa fa-trash"></i> Delete Product
                                                         </button>
@@ -100,7 +152,7 @@ if (isset($_SESSION["a"])) {
                             </div>
                         </div>
 
-                        
+
 
 
                         <div class="row d-flex justify-content-center" id="ProductResult">
