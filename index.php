@@ -180,7 +180,7 @@ include_once "connection.php";
 
     <!-- ========================= Seasonal Offers ================================ -->
     <?php
-    $offers = Database::Search("SELECT * FROM `discount_group`");
+    $offers = Database::Search("SELECT * FROM `discount_group` WHERE `status`='1' ");
     $offers_num = $offers->num_rows;
     for ($i = 0; $i < $offers_num; $i++) {
         $offers_details = $offers->fetch_assoc();
@@ -435,20 +435,45 @@ include_once "connection.php";
                             ?>
 
                             <!-- Background & CTA Section -->
-                            <img src="assets/images/bg/deal-bg.png" alt="Background Image" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100">
-                            <div class="py-xl-4">
-                                <h6 class="mb-4 fw-semibold">Polaroid Now+ Gen 2 - White</h6>
-                                <h5 class="mb-40 fw-semibold">Fresh Vegetables</h5>
-                                <p class="text-muted">Shop top-quality products from trusted sellers. Explore unbeatable deals on electronics, fresh produce, and more—all in one place!</p>
-                                <a href="cart.php" class="btn text-heading border-neutral-600 hover-bg-neutral-600 hover-text-white py-16 px-24 d-inline-flex align-items-center rounded-pill gap-8 fw-medium">
-                                    Shop Now <i class="ph ph-shopping-cart text-xl d-flex"></i>
-                                </a>
-                            </div>
+                            <?php
+                            $top = Database::Search("SELECT * FROM `top_selling_add`");
+                            $topn = $top->num_rows;
+                            if ($topn > 0) {
+                                $topd = $top->fetch_assoc();
+                            ?>
+                                <img src="assets/images/bg/deal-bg.png" alt="Background Image" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100">
+                                <div class="py-xl-4">
+                                    <h5 class="mb-4 fw-semibold"><?php echo $topd["title"] ?></h5>
+                                    <p class="text-muted"><?php echo $topd["description"] ?></p>
+                                    <a href="shop.php" class="btn text-heading border-neutral-600 hover-bg-neutral-600 hover-text-white py-16 px-24 d-inline-flex align-items-center rounded-pill gap-8 fw-medium">
+                                        Shop Now <i class="ph ph-shopping-cart text-xl d-flex"></i>
+                                    </a>
+                                </div>
 
-                            <!-- Promotional Image -->
-                            <div class="d-md-block d-none mt-36">
-                                <img src="assets/images/thumbs/deal-img.png" alt="Promotion">
-                            </div>
+                                <!-- Promotional Image -->
+                                <div class="d-md-block d-none mt-36">
+                                    <img src="admin-panel/<?php echo $topd["path"]; ?>" alt="Promotion" class="img-fluid" style="width: 200px; height: 150px;">
+                                </div>
+                            <?php
+                            } else {
+                            ?>
+                                <img src="assets/images/bg/deal-bg.png" alt="Background Image" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100">
+                                <div class="py-xl-4">
+                                    <h6 class="mb-4 fw-semibold">Polaroid Now+ Gen 2 - White</h6>
+                                    <h5 class="mb-40 fw-semibold">Fresh Vegetables</h5>
+                                    <p class="text-muted">Shop top-quality products from trusted sellers. Explore unbeatable deals on electronics, fresh produce, and more—all in one place!</p>
+                                    <a href="cart.php" class="btn text-heading border-neutral-600 hover-bg-neutral-600 hover-text-white py-16 px-24 d-inline-flex align-items-center rounded-pill gap-8 fw-medium">
+                                        Shop Now <i class="ph ph-shopping-cart text-xl d-flex"></i>
+                                    </a>
+                                </div>
+
+                                <!-- Promotional Image -->
+                                <div class="d-md-block d-none mt-36">
+                                    <img src="assets/images/thumbs/deal-img.png" alt="Promotion">
+                                </div>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
 
@@ -508,14 +533,14 @@ include_once "connection.php";
                                 <!-- Product Card Start -->
                                 <div data-aos="fade-up" data-aos-duration="200">
                                     <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                        <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
-                                       <div class="row">
-                                       <img src="<?php echo $pat; ?>" alt="Product Image" class="w-auto max-w-unset">
-                                       </div>
-                                    </a>
+                                        <a href="product-details.php?batch_id=<?php echo $id["batch_id"]; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
+                                            <div class="row">
+                                                <img src="<?php echo $pat; ?>" alt="Product Image" class="w-auto max-w-unset">
+                                            </div>
+                                        </a>
                                         <div class="product-card__content mt-16">
                                             <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                                <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo htmlspecialchars($id["title"]); ?></a>
+                                                <a href="product-details.php?batch_id=<?php echo $id["batch_id"]; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2" tabindex="0"><?php echo htmlspecialchars($id["title"]); ?></a>
                                             </h6>
                                             <div class="mt-8">
                                                 <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
@@ -529,7 +554,7 @@ include_once "connection.php";
                                                 <span class="text-heading text-md fw-semibold">Rs <?php echo $id["price"]; ?> <span class="text-gray-500 fw-normal">/Qty</span></span>
                                             </div>
 
-                                            <a href="cart.php" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
+                                            <a onclick="adtocart(<?= $id["price"] ?>, <?= 0 ?>, <?= $id["batch_id"] ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
                                                 Add To Cart <i class="ph ph-shopping-cart"></i>
                                             </a>
                                         </div>
@@ -582,23 +607,21 @@ include_once "connection.php";
                                 $pr =  $pr->fetch_assoc();
                                 $discountid = 0;
                             ?>
-                                <div class="col-xxl-6">
+                                <div class="col-xxl-4 col-lg-4 col-md-6">
                                     <div class="featured-products__sliders">
-                                        <div class="" data-aos="fade-up" data-aos-duration="800">
-                                            <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                                <a href="product-details.php?batch_id=<?php echo $bach_d['id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
+                                        <div class="product-card-wrapper" data-aos="fade-up" data-aos-duration="800">
+                                            <div class="mt-24 product-card d-flex flex-column p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+                                                <a href="product-details.php?batch_id=<?php echo $bach_d['id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center h-100 rounded-8 bg-gray-50 position-relative overflow-hidden">
                                                     <?php
-                                                    $pic = Database::Search("SELECT * FROM `picture`  WHERE  `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
+                                                    $pic = Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
                                                     $pic_d = $pic->fetch_assoc();
                                                     if (empty($pic_d["path"])) {
                                                     ?>
-                                                        <img src="assets/images/thumbs/product-two-img2.png" alt="" class="w-auto max-w-unset">
+                                                        <img src="assets/images/thumbs/product-two-img2.png" alt="" class="product-image">
                                                     <?php
                                                     } else {
                                                     ?>
-                                                    <div class="row">
-                                                    <img  src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="w-auto max-w-unset">
-                                                    </div>
+                                                        <img src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="product-image">
                                                     <?php
                                                     }
                                                     ?>
@@ -609,7 +632,7 @@ include_once "connection.php";
                                                     </h6>
                                                     <div class="product-card__price my-20">
                                                         <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $bach_d["selling_price"] + 20 ?></span>
-                                                        <span class="text-heading text-md fw-semibold ">Rs <?php echo $bach_d["selling_price"] ?><span class="text-gray-500 fw-normal">/Qty</span><?php echo $bach_d["batch_qty"] ?></span>
+                                                        <span class="text-heading text-md fw-semibold">Rs <?php echo $bach_d["selling_price"] ?><span class="text-gray-500 fw-normal">/Qty</span> <?php echo $bach_d["batch_qty"] ?></span>
                                                     </div>
                                                     <?php
                                                     $sprice = $bach_d["selling_price"];
@@ -622,14 +645,14 @@ include_once "connection.php";
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </div>
                             <?php
                             }
                             ?>
                         </div>
+
+
                     </div>
                 </div>
 
@@ -685,20 +708,20 @@ include_once "connection.php";
 
                 <div class="row gy-4">
                     <?php
-                    $category = Database::Search("SELECT * FROM `category`");
+                    $category = Database::Search("SELECT * FROM `category` LIMIT 6");
                     $category_num = $category->num_rows;
 
                     for ($i = 0; $i < $category_num; $i++) {
                         $category_data = $category->fetch_assoc();
                     ?>
                         <div class="col-xxl-3 col-xl-4 col-sm-6 col-xs-6 wow bounceIn">
-                            <div class="product-card h-100 d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                <a href="product-details.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
-                                    <img src="assets/images/thumbs/popular-img1.png" alt="" class="w-auto max-w-unset">
+                            <div class="product-card h-100 d-flex flex-column gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+                                <a href="shop.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
+                                    <img src="admin-panel/<?php echo $category_data["image_path"]; ?>" data-src="<?php echo $category_data['image_path']; ?>" alt="" class="lazyload img-fluid" loading="lazy" style="width: 63px; height: 80px; object-fit: cover;">
                                 </a>
                                 <div class="product-card__content flex-grow-1">
                                     <h6 class="title text-lg fw-semibold mb-12">
-                                        <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $category_data["name"]; ?></a>
+                                        <a href="shop.php" class="link text-line-2" tabindex="0"><?php echo $category_data["name"]; ?></a>
                                     </h6>
 
                                     <?php
@@ -727,6 +750,7 @@ include_once "connection.php";
                 </div>
 
 
+
             </div>
         </div>
     </section>
@@ -736,8 +760,7 @@ include_once "connection.php";
     <!-- =========================== Top Vendor Section Start ========================== -->
     <section class="top-vendor py-80 overflow-hidden">
         <div class="container container-lg">
-            <div class=" p-24 rounded-16">
-
+            <div class="p-24 rounded-16">
                 <div class="row gy-4 vendor-card-wrapper">
                     <?php
                     $g = Database::Search("SELECT * FROM `group`");
@@ -748,22 +771,18 @@ include_once "connection.php";
                         <div class="col-xxl-3 col-lg-4 col-sm-6 wow bounceIn">
                             <div class="vendor-card text-center px-16 pb-24">
                                 <div class="">
-                                    <img src="assets/images/thumbs/vendor-logo1.png" alt="" class="vendor-card__logo m-12">
+                                    <img src="admin-panel/<?php echo $gd["image_path"]; ?>" alt="" class="vendor-card__logo m-12" style="width: 66px; height: 64px;">
                                     <h6 class="title mt-32 text-lg"><?php echo $gd["group_name"]; ?></h6>
                                 </div>
                                 <div class="position-relative slick-arrows-style-three">
-
                                     <div class="vendor-card__list style-two mt-22">
                                         <?php
-                                        $c = database::search("SELECT * FROM `category` WHERE `group_id`='" . $gd["id"] . "' ");
+                                        $c = Database::search("SELECT * FROM `category` WHERE `group_id`='" . $gd["id"] . "' ");
                                         $cn = $c->num_rows;
                                         for ($ic = 0; $ic <  $cn; $ic++) {
                                             $cd = $c->fetch_assoc();
                                         ?>
                                             <div class="">
-                                                <div class="vendor-card__item bg-white rounded-circle flex-center">
-                                                    <img src="assets/images/thumbs/vendor-two-img1.png" alt="">
-                                                </div>
                                                 <div>
                                                     <span><?php echo $cd["name"] ?></span>
                                                 </div>
@@ -782,6 +801,7 @@ include_once "connection.php";
             </div>
         </div>
     </section>
+
     <!-- =========================== Top Vendor Section End ========================== -->
 
 
