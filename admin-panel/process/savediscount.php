@@ -71,11 +71,12 @@ if (isset($_SESSION["a"])) {
                                         Databases::IUD("INSERT INTO `discount_date_range_has_product`
                                         (`discount_date_range_id`, `discount_pre`, `discount_group_id`, `qty`, `batch_id`) 
                                        VALUES ('" . $drlid . "', '" . $discount . "', '" . $idg . "', '" . $qty . "', '" . $batch . "');");
+                                        echo (1);
                                    }
                               }
                               //
-                              echo ("Image uploaded successfully!");
-                              echo ("discount Add successfully!");
+                            //  echo ("Image uploaded successfully!");
+                             // echo ("discount Add successfully!");
                          } else {
                               echo ("Failed to upload the image.");
                          }

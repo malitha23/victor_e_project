@@ -110,7 +110,7 @@ if (isset($_SESSION["a"])) {
                                                   </div>
                                                   <div id="qtySection" class="mb-3">
                                                        <label for="qtyInput" class="form-label">Quantity</label>
-                                                       <input type="number" value="1" class="form-control" id="qtyInput" placeholder="Enter Quantity">
+                                                       <input min="1" max="<?php echo $batchdata["batch_qty"]; ?>" type="number" value="1" class="form-control" id="qtyInput" placeholder="Enter Quantity">
                                                   </div>
                                                   <!-- !-->
                                              </div>

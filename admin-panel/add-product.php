@@ -388,7 +388,7 @@ if (isset($_SESSION["a"])) {
                   <div class="col-12 mt-4">
                     <div class="form-floating">
                       <?php 
-                      $product = Databases::Search("SELECT * FROM `product`");
+                      $product = Databases::Search("SELECT * FROM `product` WHERE `delete_id`='0' AND `status_id`='1' ");
                       $product_num = $product->num_rows;
                       ?>
                       <select id="bpro" class="form-select rounded-0" aria-label="Floating label select example">

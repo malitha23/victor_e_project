@@ -27,6 +27,18 @@ if (isset($_SESSION["a"])) {
                     echo ("enter city name");
                     $i = $length;
                } else {
+                    $city = Databases::Search("SELECT * FROM `city` WHERE `name`='".$cities[$v]."'");
+                    $citynum = $city->num_rows;
+                    if($citynum > 0){
+                         $citydeta = $city->fetch_assoc();
+                         $chd = Databases::Search("SELECT * FROM `city_has_distric` WHERE 
+                         `city_city_id`='".$citydeta["city_id"]."' AND `distric_distric_id`='".$distric."' ");
+                         $chdnum = $chd->num_rows;
+                         if($chdnum > 0){
+                              echo("You have previously added to the city.");
+                              exit();
+                         }
+                    }
                     $insid =  Databases::IUD("INSERT INTO `city` (`name`) 
                      VALUES ('" . $cities[$v] . "');");
                     Databases::IUD("INSERT INTO `city_has_distric` 

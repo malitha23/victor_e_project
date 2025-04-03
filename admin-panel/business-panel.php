@@ -371,6 +371,7 @@ if (isset($_SESSION["a"])) {
                                                                 document.getElementById("wprice").value = ''; // Reset fee
                                                                 // Optionally close the modal here
                                                                 $('#exampleModal').modal('hide');
+                                                                location.reload();
                                                             }
                                                         }
                                                     };

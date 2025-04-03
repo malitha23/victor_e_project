@@ -110,43 +110,48 @@ function productADD() {
      if (img3) formData.append("img3", img3);
 
      let xhr = new XMLHttpRequest();
+
+     // Show a waiting alert before sending the request
+     Swal.fire({
+          title: 'Please wait...',
+          text: 'Processing your request...',
+          allowOutsideClick: false,
+          didOpen: () => {
+               Swal.showLoading();
+          }
+     });
+
      xhr.open("POST", "product_add_pro.php", true);
      xhr.onload = function () {
+          Swal.close(); // Close the loading alert when the request completes
+
           if (this.status == 200) {
+               let toastConfig = {
+                    title: "Response",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    toast: true,
+                    position: "top-end"
+               };
+
                if (this.responseText == 1) {
-                    Swal.fire({
-                         title: "Response",
-                         text: "success,file not uploaded",
-                         icon: "success",
-                         showConfirmButton: false,
-                         timer: 3000,
-                         toast: true,
-                         position: "top-end"
-                    });
+                    toastConfig.text = "Success, file not uploaded";
                } else if (this.responseText == 2) {
-                    Swal.fire({
-                         title: "Response",
-                         text: "success,file uploaded",
-                         icon: "success",
-                         showConfirmButton: false,
-                         timer: 3000,
-                         toast: true,
-                         position: "top-end"
-                    });
+                    toastConfig.text = "Success, file uploaded";
                } else {
-                    Swal.fire({
-                         title: "Response",
-                         text: this.responseText,
-                         icon: "warning",
-                         showConfirmButton: false,
-                         timer: 3000,
-                         toast: true,
-                         position: "top-end"
-                    });
+                    toastConfig.text = this.responseText;
+                    toastConfig.icon = "warning"; // Change icon for warnings
                }
+
+               Swal.fire(toastConfig).then(() => {
+                    location.reload(); // Reload the page after the alert
+               });
           }
      };
+
      xhr.send(formData);
+
 }
 function addnewbrand() {
      var name = document.getElementById("newbrand").value;
@@ -202,8 +207,21 @@ function batchADD() {
 
      // AJAX request
      let xhr = new XMLHttpRequest();
+
+     // Show a waiting alert before sending the request
+     Swal.fire({
+          title: 'Please wait...',
+          text: 'Processing your request...',
+          allowOutsideClick: false,
+          didOpen: () => {
+               Swal.showLoading();
+          }
+     });
+
      xhr.open("POST", "add_batch.php", true);
      xhr.onload = function () {
+          Swal.close(); // Close the loading alert when the request completes
+
           if (this.status == 200) {
                Swal.fire({
                     title: "Success!",
@@ -211,17 +229,23 @@ function batchADD() {
                     icon: "success",
                     timer: 3000,
                     showConfirmButton: false
+               }).then(() => {
+                    location.reload(); // Reload the page after the success message
                });
-               //  document.getElementById("vendor").value = "";
-               //  document.getElementById("batchqty").value = "";
-               //  document.getElementById("batchprice").value = "";
-               //  document.getElementById("SellingPrice").value = "";
-               //  document.querySelector(".form-select").value = "0";
+
+               // Clear form fields
+               document.getElementById("vendor").value = "";
+               document.getElementById("batchqty").value = "";
+               document.getElementById("batchprice").value = "";
+               document.getElementById("SellingPrice").value = "";
+               document.getElementById("batchcode").value = ""; // Fixed querySelector mistake
           } else {
                Swal.fire("Error!", "Something went wrong.", "error");
           }
      };
+
      xhr.send(formData);
+
 }
 function update_product(product_id, batch_id) {
      // Get the values from the form fields
@@ -655,7 +679,6 @@ function savecities() {
                y = y + 1;
           }
           var length = cities.length;
-          var req = new XMLHttpRequest();
           var form = new FormData;
           form.append("length", length);
           form.append("distric", distric);
@@ -666,39 +689,63 @@ function savecities() {
                m = m + 1;
                z = z + 1;
           }
-          req.onreadystatechange = function () {
-               if (req.readyState === 4 && req.status === 200) {
-                    if (req.responseText == 1) {
-                         Swal.fire({
-                              title: 'City Added',
-                              text: "City Added success",
-                              icon: 'success',
-                              showClass: {
-                                   popup: 'animate__animated animate__fadeInDown'
-                              },
-                              hideClass: {
-                                   popup: 'animate__animated animate__fadeOutUp'
-                              }
-                         });
+          var req = new XMLHttpRequest();
 
+          // Show a loading alert before sending the request
+          Swal.fire({
+               title: 'Please wait...',
+               text: 'Adding city...',
+               allowOutsideClick: false,
+               didOpen: () => {
+                    Swal.showLoading();
+               }
+          });
+
+          req.onreadystatechange = function () {
+               if (req.readyState === 4) {
+                    Swal.close(); // Close the loading alert when the request is complete
+
+                    if (req.status === 200) {
+                         if (req.responseText == 1) {
+                              Swal.fire({
+                                   title: 'City Added',
+                                   text: 'City added successfully!',
+                                   icon: 'success',
+                                   showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                   },
+                                   hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                   }
+                              }).then(() => {
+                                   location.reload(); // Reload the page after the user clicks "OK"
+                              });
+                         } else {
+                              Swal.fire({
+                                   title: 'Error!',
+                                   text: req.responseText,
+                                   icon: 'error',
+                                   showClass: {
+                                        popup: 'animate__animated animate__fadeInDown'
+                                   },
+                                   hideClass: {
+                                        popup: 'animate__animated animate__fadeOutUp'
+                                   }
+                              });
+                         }
                     } else {
                          Swal.fire({
-                              title: 'City Added',
-                              text: req.responseText,
-                              icon: 'error',
-                              showClass: {
-                                   popup: 'animate__animated animate__fadeInDown'
-                              },
-                              hideClass: {
-                                   popup: 'animate__animated animate__fadeOutUp'
-                              }
+                              title: 'Error!',
+                              text: 'Something went wrong. Please try again.',
+                              icon: 'error'
                          });
-
                     }
                }
-          }
+          };
+
           req.open("POST", "process/Savecity.php", true);
           req.send(form);
+
      } else {
           alert("type city name..press the add button");
      }
@@ -712,25 +759,49 @@ function update_dprice() {
      form.append("d_price", d_price);
 
      var req = new XMLHttpRequest();
+
+     // Show a loading alert before sending the request
+     Swal.fire({
+          title: 'Please wait...',
+          text: 'Adding delivery fee...',
+          allowOutsideClick: false,
+          didOpen: () => {
+               Swal.showLoading();
+          }
+     });
+
      req.open("POST", "process/addeliveryfee.php", true);
 
      req.onreadystatechange = function () {
-          if (req.readyState === 4 && req.status === 200) {
-               Swal.fire({
-                    title: 'Delivery fee Added status',
-                    text: req.responseText,
-                    icon: 'success',
-                    showClass: {
-                         popup: 'animate__animated animate__fadeInDown'
-                    },
-                    hideClass: {
-                         popup: 'animate__animated animate__fadeOutUp'
-                    }
-               });
+          if (req.readyState === 4) {
+               Swal.close(); // Close the loading alert once request is complete
+
+               if (req.status === 200) {
+                    Swal.fire({
+                         title: 'Delivery Fee Added Status',
+                         text: req.responseText,
+                         icon: 'success',
+                         showClass: {
+                              popup: 'animate__animated animate__fadeInDown'
+                         },
+                         hideClass: {
+                              popup: 'animate__animated animate__fadeOutUp'
+                         }
+                    }).then(() => {
+                         location.reload(); // Reload the page after user clicks "OK"
+                    });
+               } else {
+                    Swal.fire({
+                         title: 'Error!',
+                         text: 'Failed to add delivery fee. Please try again.',
+                         icon: 'error'
+                    });
+               }
           }
      };
 
      req.send(form);
+
 }
 function change_emailN() {
      var email = document.getElementById("contact_email").value;
@@ -821,6 +892,10 @@ function submitdisdetails(x) {
           }
      }
      var length = batches.length;
+     if (length == 0) {
+          alert("Please select an batches.");
+          return;
+     }
      var form = new FormData;
      form.append("image", img);
      form.append("length", length);
@@ -834,13 +909,52 @@ function submitdisdetails(x) {
           form.append("qty" + index, batches[index][1]);
      }
      var req = new XMLHttpRequest();
-     req.onreadystatechange = function () {
-          if (req.readyState === 4 && req.status === 200) {
-               alert(req.responseText);
+
+     // Show a loading alert before sending the request
+     Swal.fire({
+          title: 'Please wait...',
+          text: 'Saving discount details...',
+          allowOutsideClick: false,
+          didOpen: () => {
+               Swal.showLoading();
           }
-     }
+     });
+
+     req.onreadystatechange = function () {
+          if (req.readyState === 4) {
+               Swal.close(); // Close the loading alert when request is complete
+
+               if (req.status === 200) {
+                    if (req.responseText == 1) {
+                         Swal.fire({
+                              icon: 'success',
+                              title: 'Success!',
+                              text: 'Discount added successfully! Image uploaded successfully!',
+                              timer: 2000, // Show alert for 2 seconds
+                              showConfirmButton: false
+                         }).then(() => {
+                              location.reload();
+                         });
+                    } else {
+                         Swal.fire({
+                              icon: 'info',
+                              title: 'information!',
+                              text: req.responseText
+                         });
+                    }
+               } else {
+                    Swal.fire({
+                         icon: 'error',
+                         title: 'Error!',
+                         text: 'Failed to save the discount. Please try again.'
+                    });
+               }
+          }
+     };
+     // Send the request with the form data
      req.open("POST", "process/savediscount.php", true);
      req.send(form);
+
 }
 function ADdiscount(x) {
      const modal = new bootstrap.Modal(document.getElementById('customModal'));
