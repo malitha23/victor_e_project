@@ -62,7 +62,7 @@ if (isset($_SESSION["a"])) {
                                             $ordernum = $order->num_rows;
                                             for ($i = 0; $i < $ordernum; $i++) {
                                                 $orderdata = $order->fetch_assoc();
-                                                $invoice = Databases::Search("SELECT * FROM `invoice`WHERE `id`='" . $orderdata["invoice_id"] . "' ");
+                                                $invoice = Databases::Search("SELECT * FROM `invoice`WHERE `uni_code`='" . $orderdata["invoice_id"] . "' ");
                                                 $invoicedata = $invoice->fetch_assoc();
                                                 $cuser = Databases::Search("SELECT * FROM `user` WHERE `email`='" . $invoicedata["user_email"] . "' ");
                                                 $cuserdata = $cuser->fetch_assoc();
