@@ -181,7 +181,7 @@ if (isset($_SESSION["a"])) {
                 // Handle the response
                 req.onload = function() {
                     if (req.status === 200) {
-                       alert(req.responseText);
+                      
                        document.getElementById("exampleModal").innerHTML =req.responseText;
                     } else {
                         // Handle error if status is not 200
