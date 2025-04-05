@@ -25,8 +25,7 @@ if (isset($_SESSION["a"])) {
 
         <body>
             <!-- Body Wrapper -->
-            <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-                data-sidebar-position="fixed" data-header-position="fixed">
+            <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
 
                 <?php
                 require "side.php";
@@ -43,8 +42,7 @@ if (isset($_SESSION["a"])) {
                                 <div class="row d-flex flex-row justify-content-center">
 
                                     <div class="col-12 col-md-6 order-2 order-md-1 mt-3 mt-md-0 text-center">
-                                        <img src="../admin-panel/assets-admin/images/contact/invoice-check.svg"
-                                            class="img-fluid" width="400px">
+                                        <img src="../admin-panel/assets-admin/images/contact/invoice-check.svg" class="img-fluid" width="400px">
                                     </div>
 
                                     <div class="col-12 col-md-6 text-center d-flex flex-row align-items-center justify-content-center order-1 order-lg-2">
@@ -61,8 +59,7 @@ if (isset($_SESSION["a"])) {
                                                         <div><span class="mb-9 text-dark-emphasis">Manage your Invoices here</span></div>
                                                     </div>
                                                     <div class="col-12 mt-3">
-                                                        <button class="btn fw-bold col-8 btn-danger" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModal"><i class="fa-solid fa-receipt"></i> Show Invoices</button>
+                                                        <button class="btn fw-bold col-8 btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-receipt"></i> Show Invoices</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -71,13 +68,11 @@ if (isset($_SESSION["a"])) {
                                 </div>
 
                                 <!-- Invoice Management Modal -->
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                    aria-hidden="true">
+                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-xl modal-dialog modal-dialog-scrollable">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <div class="modal-title fs-4 fw-bold" id="exampleModalLabel"><i
-                                                        class="fa-solid fa-receipt"></i>&nbsp; Invoice Management</div>
+                                                <div class="modal-title fs-4 fw-bold" id="exampleModalLabel"><i class="fa-solid fa-receipt"></i>&nbsp; Invoice Management</div>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
@@ -85,11 +80,8 @@ if (isset($_SESSION["a"])) {
                                                     <div class="col-12 col-lg-6">
                                                         <form action="">
                                                             <div class="input-group rounded border rounded-5">
-                                                                <input type="search" class="form-control border-0 border-end"
-                                                                    placeholder="Search by Invoice Id" aria-label="Search"
-                                                                    aria-describedby="search-addon" id="keyword" />
-                                                                <span class="input-group-text btn border-0"
-                                                                    id="search-addon" onclick="SearchInvoice();">
+                                                                <input type="search" class="form-control border-0 border-end" placeholder="Search by Invoice Id" aria-label="Search" aria-describedby="search-addon" id="keyword" />
+                                                                <span class="input-group-text btn border-0" id="search-addon" onclick="SearchInvoice();">
                                                                     <i class="fas fa-search"></i>
                                                                 </span>
                                                             </div>
@@ -116,27 +108,47 @@ if (isset($_SESSION["a"])) {
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
-                                                                                    <!-- Sample Data -->
-                                                                                    <tr>
-                                                                                        <td>1</td>
-                                                                                        <td>INV12345</td>
-                                                                                        <td>John Doe</td>
-                                                                                        <td>LKR 150.00</td>
-                                                                                        <td>2025-02-05</td>
-                                                                                        <td><a href="../invoice.php" target="_blank" class="btn x py-1 px-3 rounded-1"><i class="fa fa-download" aria-hidden="true"></i></a></td>
-                                                                                    </tr>
+                                                                                    <?php
+                                                                                    $invoice = Databases::Search("SELECT * FROM `invoice`");
+                                                                                    $invoicenum = $invoice->num_rows;
+                                                                                    for ($i = 0; $i < $invoicenum; $i++) {
+                                                                                        $invoicedata = $invoice->fetch_assoc();
+                                                                                        $useri = Databases::Search("SELECT * FROM `user` WHERE `email`='" . $invoicedata["user_email"] . "' ");
+                                                                                        $userid = $useri->fetch_assoc();
+                                                                                        $batch = Databases::Search("SELECT * FROM `batch` WHERE `id`='" . $invoicedata["batch_id"] . "' ");
+                                                                                        $batchdata = $batch->fetch_assoc();
+                                                                                    ?>
+                                                                                        <tr>
+                                                                                            <td><?php echo $i + 1 ?></td>
+                                                                                            <td><?php echo $invoicedata["uni_code"] ?></td>
+                                                                                            <td><?php echo $userid["fname"] ?></td>
+                                                                                            <td>selling_price : LKR <?php echo $batchdata["selling_price"] ?></td>
+                                                                                            <td><?php echo $invoicedata["date_time"] ?></td>
+                                                                                            <td>
+                                                                                                <button class="btn btn-primary py-1 px-3 rounded-1 view-invoice-btn" data-bs-toggle="modal" data-bs-target="#invoiceModal<?php echo $i ?>" data-invoiceid="<?php echo $invoicedata['id']; ?>" data-targetdiv="invoice-details-content-<?php echo $i ?>">
+                                                                                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                                                                                </button>
+                                                                                            </td>
+                                                                                        </tr>
 
-                                                                                    <tr>
-                                                                                        <td>2</td>
-                                                                                        <td>INV12346</td>
-                                                                                        <td>Jane Smith</td>
-                                                                                        <td>LKR 200.00</td>
-                                                                                        <td>2025-02-04</td>
-                                                                                        <td><a href="../invoice.php" target="_blank" class="btn x py-1 px-3 rounded-1"><i class="fa fa-download" aria-hidden="true"></i></a></td>
-                                                                                    </tr>
-
-                                                                                    <!-- Add more rows for other invoices -->
+                                                                                        <!-- Invoice Modal -->
+                                                                                        <div class="modal fade" id="invoiceModal<?php echo $i ?>" tabindex="-1" aria-labelledby="invoiceModalLabel<?php echo $i ?>" aria-hidden="true">
+                                                                                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                                                                                <div class="modal-content">
+                                                                                                    <div class="modal-header">
+                                                                                                        <h5 class="modal-title" id="invoiceModalLabel<?php echo $i ?>">Invoice Details</h5>
+                                                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                                    </div>
+                                                                                                    <div class="modal-body" id="invoice-details-content-<?php echo $i ?>">
+                                                                                                        <div class="text-center"><?php echo $invoicedata["uni_code"] ?></div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    <?php } ?>
                                                                                 </tbody>
+
+                                                                                <!-- Place this script AFTER the table -->
                                                                             </table>
                                                                         </div>
                                                                     </div>
