@@ -125,29 +125,15 @@ if (isset($_SESSION["a"])) {
                                                                                             <td>selling_price : LKR <?php echo $batchdata["selling_price"] ?></td>
                                                                                             <td><?php echo $invoicedata["date_time"] ?></td>
                                                                                             <td>
-                                                                                                <button class="btn btn-primary py-1 px-3 rounded-1 view-invoice-btn" data-bs-toggle="modal" data-bs-target="#invoiceModal<?php echo $i ?>" data-invoiceid="<?php echo $invoicedata['id']; ?>" data-targetdiv="invoice-details-content-<?php echo $i ?>">
+                                                                                                <button onclick="downloardin(<?php echo $invoicedata["id"] ?>)" class="btn btn-primary py-1 px-3 rounded-1 view-invoice-btn" data-invoiceid="<?php echo $invoicedata['id']; ?>" data-targetdiv="invoice-details-content-<?php echo $i ?>">
                                                                                                     <i class="fa fa-download" aria-hidden="true"></i>
                                                                                                 </button>
                                                                                             </td>
                                                                                         </tr>
 
                                                                                         <!-- Invoice Modal -->
-                                                                                        <div class="modal fade" id="invoiceModal<?php echo $i ?>" tabindex="-1" aria-labelledby="invoiceModalLabel<?php echo $i ?>" aria-hidden="true">
-                                                                                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                                                                                <div class="modal-content">
-                                                                                                    <div class="modal-header">
-                                                                                                        <h5 class="modal-title" id="invoiceModalLabel<?php echo $i ?>">Invoice Details</h5>
-                                                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                                                    </div>
-                                                                                                    <div class="modal-body" id="invoice-details-content-<?php echo $i ?>">
-                                                                                                        <div class="text-center"><?php echo $invoicedata["uni_code"] ?></div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
                                                                                     <?php } ?>
                                                                                 </tbody>
-
                                                                                 <!-- Place this script AFTER the table -->
                                                                             </table>
                                                                         </div>
@@ -179,7 +165,39 @@ if (isset($_SESSION["a"])) {
             <script src="assets-admin/libs/simplebar/dist/simplebar.js"></script>
             <script src="assets-admin/js/dashboard.js"></script>
         </body>
+        <script>
+            function downloardin(invoiceId) {
+                // Optional: Disable button or show loading
+                const button = document.querySelector(`[data-invoiceid='${invoiceId}']`);
+                button.disabled = true;
+                button.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
 
+                // Create a new XMLHttpRequest
+                var req = new XMLHttpRequest();
+
+                // Set up the request
+                req.open('POST', 'process/invicedown.php', true);
+                req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                // Handle the response
+                req.onload = function() {
+                    if (req.status === 200) {
+                       alert(req.responseText);
+                       document.getElementById("exampleModal").innerHTML =req.responseText;
+                    } else {
+                        // Handle error if status is not 200
+                        alert("Download failed. Please try again.");
+                    }
+                };
+
+                // Handle any error that might occur during the request
+                req.onerror = function() {
+                    alert("Error in sending request. Please try again.");
+                };
+
+                // Send the request with the invoice ID
+                req.send('id=' + encodeURIComponent(invoiceId));
+            }
+        </script>
 
         </html>
 
