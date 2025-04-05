@@ -164,9 +164,22 @@ include_once "connection.php";
                                 </div>
                                 <div class="pe-xxl-4">
                                     <div class="row">
-                                        <img src="<?php echo $adimgpath ?>" alt="">
+                                        <div class="col-12">
+                                            <img src="<?php echo $adimgpath ?>" alt="Ad Image" class="img-fluid rounded business-ad-img">
+                                        </div>
                                     </div>
                                 </div>
+                                <style>
+                                    .business-ad-img {
+                                        max-width: 100%;
+                                        height: 250px;
+                                        /* Set a fixed height or adjust as needed */
+                                        object-fit: cover;
+                                        /* Ensures image maintains aspect ratio and fills the area */
+                                        border: 1px solid #dee2e6;
+                                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                                    }
+                                </style>
                             </div>
                         </div>
                     </div>
@@ -256,10 +269,22 @@ include_once "connection.php";
                                 }
                                 ?>
                                 <div class="row d-flex align-items-end">
-                                    <div class="col-3 bg-blur">
-                                        <img class="img-fluid" src="<?php echo $disimgpath; ?>" alt="">
+                                    <div class="col-12 bg-blur">
+                                        <img class="img-fluid fixed-discount-img" src="<?php echo $disimgpath; ?>" alt="Discount Image">
                                     </div>
                                 </div>
+                                <style>
+                                    .fixed-discount-img {
+                                        height: 180px;
+                                        /* Adjust height as needed */
+                                        width:100%;
+                                        /* Makes it fill the column */
+                                        object-fit: cover;
+                                        /* Keeps image looking good */
+                                        border-radius: 8px;
+                                        border: 1px solid #ccc;
+                                    }
+                                </style>
                             </div>
                         </div>
                     </div>
@@ -279,24 +304,27 @@ include_once "connection.php";
                             <div data-aos="fade-up" data-aos-duration="200">
                                 <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
                                     <a href="product-details.php?batch_id=<?php echo $dpro_data['batch_id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
-                                        <span class="product-card__badge bg-main-600 px-8 py-4 text-sm text-white position-absolute inset-inline-start-0 inset-block-start-0"><?php echo  $dpro_data["discount_pre"]; ?> % Off </span>
+                                        <span class="product-card__badge bg-main-600 px-8 py-4 text-sm text-white position-absolute inset-inline-start-0 inset-block-start-0">
+                                            <?php echo  $dpro_data["discount_pre"]; ?> % Off
+                                        </span>
                                         <?php
                                         $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bad["product_id"] . "' ");
                                         $pr =  $pr->fetch_assoc();
-                                        ?>
-                                        <?php
                                         $pic = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
                                         $pic_d = $pic->fetch_assoc();
-                                        if (empty($pic_d["path"])) {
+                                        $imgSrc = empty($pic_d["path"]) ? "assets/images/thumbs/product-two-img2.png" : "admin-panel/" . $pic_d["path"];
                                         ?>
-                                            <img src="assets/images/thumbs/product-two-img2.png" alt="" class="w-auto max-w-unset">
-                                        <?php
-                                        } else {
-                                        ?>
-                                            <img src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="w-auto max-w-unset">
-                                        <?php
+                                        <img src="<?php echo $imgSrc; ?>" alt="Product Image" class="product-card-img img-fluid">
+                                    </a>
+                                    <style>
+                                        .product-card-img {
+                                            width: 100%;
+                                            height: 220px;
+                                            /* You can adjust this based on your card layout */
+                                            object-fit: cover;
+                                            border-radius: 8px;
                                         }
-                                        ?> </a>
+                                    </style>
                                     <div class="product-card__content mt-16">
                                         <h6 class="title text-lg fw-semibold mt-12 mb-8">
                                             <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"]; ?></a>
@@ -656,24 +684,7 @@ include_once "connection.php";
                     </div>
                 </div>
 
-                <div class="col-xxl-4">
-                    <div class="position-relative rounded-16 bg-light-purple overflow-hidden p-28 pb-0 z-1 text-center h-100" data-aos="fade-up" data-aos-duration="1000">
-                        <img src="assets/images/bg/big-deal-pattern.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100 cover-img">
-                        <div class="py-xl-4 text-center">
-                            <h4 class=" mb-20 text-dark">iPhone Smart Phone - Red</h>
-                                <div class="flex-center gap-12 text-white h6 mt-3">
-                                    <span class="text-dark">FROM</span>
-                                    <h4 class="mb-8 text-dark">$890</h4>
-                                    <span class="badge-style-two position-relative me-8 bg-main-two-600 text-white text-sm py-2 px-8 rounded-4">20% off</span>
-                                </div>
-                                <a href="shop.php" class="mt-16 mb-24 btn btn-main-two fw-medium d-inline-flex align-items-center rounded-pill gap-8" tabindex="0">
-                                    Shop Now
-                                    <span class="icon text-xl d-flex"><i class="ph ph-arrow-right"></i></span>
-                                </a>
-                        </div>
-                        <img src="assets/images/thumbs/featured-product-img.png" alt="" class="d-xxl-inline-flex d-none wow bounceInUp">
-                    </div>
-                </div>
+               
             </div>
         </div>
     </section>
@@ -806,7 +817,7 @@ include_once "connection.php";
 
 
     <!-- ================================== Day Sale Section Start =================================== -->
-    <section class="day-sale">
+    <!-- <section class="day-sale">
         <div class="container container-lg">
             <div class="day-sale-box rounded-16 overflow-hidden flex-between position-relative mb-24 z-1">
 
@@ -827,7 +838,7 @@ include_once "connection.php";
                 </div>
             </div>
         </div>
-    </section>
+    </section> !-->
     <!-- ================================== Day Sale Section End =================================== -->
 
     <!-- ============================== Top Brand Section Start ==================================== -->
