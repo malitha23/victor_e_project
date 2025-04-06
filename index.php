@@ -555,11 +555,13 @@ include_once "connection.php";
                             ?>
                                 <div data-aos="fade-up" data-aos-duration="200">
                                     <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                        <a href="product-details.php?batch_id=<?php echo $tbatchd["id"]; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
-                                            <div class="row">
-                                                <img src="admin-panel/<?php echo $tpicd["path"]; ?>" alt="Product Image" class="w-auto max-w-unset">
-                                            </div>
+
+                                        <!-- IMAGE AREA -->
+                                        <a href="product-details.php?batch_id=<?php echo $tbatchd["id"]; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative" style="height: 200px; overflow: hidden;">
+                                            <img src="admin-panel/<?php echo $tpicd["path"]; ?>" alt="Product Image" style="max-height: 100%; max-width: 100%; object-fit: contain;">
                                         </a>
+
+                                        <!-- CONTENT AREA -->
                                         <div class="product-card__content mt-16">
                                             <h6 class="title text-lg fw-semibold mt-12 mb-8">
                                                 <a href="product-details.php?batch_id=<?php echo $tbatchd["id"]; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2" tabindex="0"><?php echo htmlspecialchars($tproductd["title"]); ?></a>
@@ -581,6 +583,7 @@ include_once "connection.php";
                                                 Add To Cart <i class="ph ph-shopping-cart"></i>
                                             </a>
                                         </div>
+
                                     </div>
                                 </div>
                             <?php
