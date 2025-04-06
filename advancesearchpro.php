@@ -65,17 +65,12 @@ if (!empty($condition)) {
 if (!empty($searchtext)) {
      $conditions[] = " `title` LIKE '%$searchtext%'";
 }
-if ($maxprice != 0) {
-     $mb = Database::Search("SELECT * FROM `batch` WHERE `selling_price` <= '" . $maxprice . "' ");
+if ($maxprice || $minprice) {
+     $mb = Database::Search(" SELECT * FROM `batch` WHERE `selling_price` >= '$minprice' AND `selling_price` <= '$maxprice' ");
      $mbn = $mb->num_rows;
-     for ($i = 0; $i <  $mbn; $i++) {
-          $mbd = $mb->fetch_assoc();
-          $conditions[] = " `id` = '" . $mbd["product_id"] . "' ";
+     if ($mbn == 0) {
+          exit();
      }
-}
-if ($minprice != 0) {
-     $mb = Database::Search("SELECT * FROM `batch` WHERE `selling_price` >= '" . $minprice . "' ");
-     $mbn = $mb->num_rows;
      for ($i = 0; $i <  $mbn; $i++) {
           $mbd = $mb->fetch_assoc();
           $conditions[] = " `id` = '" . $mbd["product_id"] . "' ";
