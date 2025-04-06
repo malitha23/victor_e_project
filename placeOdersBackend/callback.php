@@ -101,7 +101,7 @@ if ($orderStatusId > 0) {
                 $invoice_id = $row['invoice_id'];
 
                 // Get product details from invoice
-                $getInvoiceQuery = "SELECT product_id, batch_id, qty FROM invoice WHERE uni_code = '$invoice_id'";
+                $getInvoiceQuery = "SELECT product_id, batch_id, qty, discount FROM invoice WHERE uni_code = '$invoice_id'";
                 $invoiceResult = Database::SEARCH($getInvoiceQuery);
 
                 if ($invoiceResult) {
@@ -109,6 +109,7 @@ if ($orderStatusId > 0) {
                         $productId = $invoiceRow['product_id'];
                         $quantity = $invoiceRow['qty'];
                         $batchId = $invoiceRow['batch_id'];
+                        $discount = $invoiceRow['discount'];
 
                         // Get current batch quantity
                         $getBatchQuery = "SELECT batch_qty FROM batch WHERE product_id = '$productId' AND id = '$batchId'";
@@ -125,6 +126,18 @@ if ($orderStatusId > 0) {
                                 $updateBatchQuery = "UPDATE batch SET batch_qty = ? WHERE id = ? AND product_id = ?";
                                 $batchUpdateResult = Database::IUD($updateBatchQuery, [$newBatchQty, $batchId, $productId], "iii");
 
+                                // Update discount_date_range_has_product table if discount is greater than 0
+                                if ($discount > 0) {
+                                    $updateDiscountQuery = "UPDATE discount_date_range_has_product SET qty = ? WHERE batch_id = ?";
+                                    $discountUpdateResult = Database::IUD($updateDiscountQuery, [$newBatchQty, $batchId], "ii");
+
+                                    if ($discountUpdateResult) {
+                                        file_put_contents('ipay_callback_log.txt', "Discount table updated for product ID: {$productId}. New quantity: {$newBatchQty}\n", FILE_APPEND);
+                                    } else {
+                                        file_put_contents('ipay_callback_log.txt', "Failed to update discount table for product ID: {$productId}\n", FILE_APPEND);
+                                    }
+                                }
+
                                 if ($batchUpdateResult) {
                                     file_put_contents('ipay_callback_log.txt', "Batch quantity updated for product ID: {$productId}. New quantity: {$newBatchQty}\n", FILE_APPEND);
                                 } else {
@@ -135,6 +148,7 @@ if ($orderStatusId > 0) {
                             }
                         }
                     }
+
 
                     $getInvoiceQuery = "SELECT 
                         i.id AS invoice_id,
