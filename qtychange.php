@@ -51,7 +51,7 @@ if (isset($_POST["id"]) && isset($_POST["qty"])) {
                 }
             }
         }
-        echo "Error: Cart item not found in session.";
+      //  echo "Error: Cart item not found in session.";
         exit();
     } else {
         $email = $_SESSION["user_vec"]["email"];
@@ -127,7 +127,7 @@ if (isset($_POST["id"]) && isset($_POST["qty"])) {
                     }
                 }
             }
-            echo "Error: Cart item not found.";
+         ///   echo "Error: Cart item not found.";
         }
     }
 } else {
