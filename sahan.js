@@ -547,7 +547,7 @@ function minprice(qty, id) {
     req.send(form);
 }
 function adtocart(sprice, discountPercentage, batchId) {
-    alert(discountPercentage);
+    console.log(discountPercentage);
     console.log(sprice);
     console.log(discountPercentage);
 
