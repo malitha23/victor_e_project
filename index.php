@@ -570,9 +570,10 @@ include_once "connection.php";
                                             <h6 class="title text-lg fw-semibold mt-12 mb-8">
                                                 <a href="product-details.php?batch_id=<?php echo $id["batch_id"]; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2" tabindex="0"><?php echo htmlspecialchars($id["title"]); ?></a>
                                             </h6>
+                                           
                                             <div class="mt-8">
                                                 <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
-                                                    <div class="progress-bar bg-tertiary-600 rounded-pill" style="width: <?php echo ($tsqty / $id["batch_qty"]) * 100; ?>%"></div>
+                                                    <div class="progress-bar bg-tertiary-600 rounded-pill" style="width: <?php echo ($tsqty / $id["batch_qty"] == "0" ? "1" : $id["batch_qty"]) * 100; ?>%"></div>
                                                 </div>
                                                 <span class="text-gray-900 text-xs fw-medium mt-8">Sold: <?php echo $tsqty; ?>/<?php echo $id["batch_qty"]; ?></span>
                                             </div>
