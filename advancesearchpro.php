@@ -20,7 +20,6 @@ $subcatagoryid = $_POST['subcatagoryid'] ?? '';
 $sort = $_POST['sort'] ?? 'latest';
 $discountstatus = $_POST['discount'] ?? 0;
 
-
 $itemsPerPage = 20;
 $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $start = ($currentPage - 1) * $itemsPerPage;
@@ -30,55 +29,47 @@ $query = "SELECT * FROM `product`";
 $conditions = [];
 $conditionsid = [];
 $brandforquery = [];
+
 if ($subcatagoryid != 0) {
      $conditions[] = " `sub_category_id` = '" . $subcatagoryid . "' ";
 } else {
      if ($catagoryid != 0) {
-          $c = Database::Search("SELECT * FROM `sub_category` WHERE `category_id`='" . $catagoryid . "'  ");
-          $cnum = $c->num_rows;
-          for ($i = 0; $i < $cnum; $i++) {
-               $cdata = $c->fetch_assoc();
+          $c = Database::Search("SELECT * FROM `sub_category` WHERE `category_id`='" . $catagoryid . "'");
+          while ($cdata = $c->fetch_assoc()) {
                $conditionsid[] = " `sub_category_id` = '" . $cdata["id"] . "' ";
           }
-     } else {
-          if ($groupid != 0) {
-               $g = Database::Search("SELECT * FROM `category` WHERE `group_id`='" . $groupid . "' ");
-               $gnum = $g->num_rows;
-               for ($i = 0; $i < $gnum; $i++) {
-                    $gdata = $g->fetch_assoc();
-                    $c = Database::Search("SELECT * FROM `sub_category` WHERE `category_id`='" . $gdata["id"] . "'  ");
-                    $cnum = $c->num_rows;
-                    for ($i = 0; $i < $cnum; $i++) {
-                         $cdata = $c->fetch_assoc();
-                         $conditionsid[] = " `sub_category_id` = '" . $cdata["id"] . "' ";
-                    }
+     } elseif ($groupid != 0) {
+          $g = Database::Search("SELECT * FROM `category` WHERE `group_id`='" . $groupid . "'");
+          while ($gdata = $g->fetch_assoc()) {
+               $c = Database::Search("SELECT * FROM `sub_category` WHERE `category_id`='" . $gdata["id"] . "'");
+               while ($cdata = $c->fetch_assoc()) {
+                    $conditionsid[] = " `sub_category_id` = '" . $cdata["id"] . "' ";
                }
           }
      }
 }
-if (!empty($condition)) {
-     if ($condition != 0) {
-          $conditions[] = " `condition_id` = '" . $condition . "' ";
-     }
+
+if (!empty($condition) && $condition != 0) {
+     $conditions[] = " `condition_id` = '" . $condition . "' ";
 }
 
 if (!empty($searchtext)) {
      $conditions[] = " `title` LIKE '%$searchtext%'";
 }
+
 if ($maxprice || $minprice) {
-     $mb = Database::Search(" SELECT * FROM `batch` WHERE `selling_price` >= '$minprice' AND `selling_price` <= '$maxprice' ");
-     $mbn = $mb->num_rows;
-     if ($mbn == 0) {
-          exit();
+     $mb = Database::Search("SELECT DISTINCT `product_id` FROM `batch` WHERE `selling_price` >= '$minprice' AND `selling_price` <= '$maxprice'");
+     $productIds = [];
+     while ($mbd = $mb->fetch_assoc()) {
+          $productIds[] = (int)$mbd["product_id"];
      }
-     for ($i = 0; $i <  $mbn; $i++) {
-          $mbd = $mb->fetch_assoc();
-          $conditions[] = " `id` = '" . $mbd["product_id"] . "' ";
-     }
+     if (count($productIds) == 0) exit();
+     $conditions[] = " `id` IN (" . implode(",", $productIds) . ")";
 }
+
 if ($brandid[0] != 0) {
-     for ($i = 0; $i < $brandidlength; $i++) {
-          $brandforquery[] = " `brand_id` = '" . $brandid[$i] . "' ";
+     foreach ($brandid as $bid) {
+          $brandforquery[] = " `brand_id` = '" . $bid . "' ";
      }
 }
 
@@ -87,62 +78,47 @@ if (count($conditions) > 0) {
 }
 
 if (count($conditionsid) > 0) {
-     $query .= (count($conditions) > 0 ? " AND " : " WHERE ") . implode(" OR ", $conditionsid);
+     $query .= (count($conditions) > 0 ? " AND " : " WHERE ") . "(" . implode(" OR ", $conditionsid) . ")";
 }
 
 if (count($brandforquery) > 0) {
-     $query .= (count($conditions) > 0 || count($conditionsid) > 0 ? " AND " : " WHERE ") . implode(" OR ", $brandforquery);
+     $query .= (count($conditions) > 0 || count($conditionsid) > 0 ? " AND " : " WHERE ") . "(" . implode(" OR ", $brandforquery) . ")";
 }
 
-switch ($sort) {
-     case 'Latest':
+switch (strtolower($sort)) {
+     case 'latest':
           $query .= " ORDER BY `date` DESC";
           break;
 
-     case 'Popular':
-          $ivoice = Database::Search("SELECT 
-               `product_id`,
-               COUNT(`product_id`) AS `total_sales`
-           FROM 
-               invoice
-           GROUP BY 
-               `product_id`
-           ORDER BY 
-               `total_sales` DESC;
-           ");
-          $ivoicenum = $ivoice->num_rows;
-          for ($i = 0; $i < $ivoicenum; $i++) {
-               $productIds = [];
-               while ($ivoicenumdata = $ivoice->fetch_assoc()) {
-                    $productIds[] = " `id` = '" . $ivoicenumdata["product_id"] . "' ";
-               }
-               if (count($productIds) > 0) {
-                    $query .= (count($conditions) > 0 || count($conditionsid) || count($brandforquery)  > 0 ? " AND " : " WHERE ") . implode(" AND ", $productIds);
-               }
+     case 'popular':
+          $ivoice = Database::Search("SELECT `product_id`, COUNT(`product_id`) AS `total_sales` FROM `invoice` GROUP BY `product_id` ORDER BY `total_sales` DESC");
+          $popularIds = [];
+          while ($ivoicenumdata = $ivoice->fetch_assoc()) {
+               $popularIds[] = (int)$ivoicenumdata["product_id"];
+          }
+          if (count($popularIds) > 0) {
+               $query .= (strpos($query, 'WHERE') !== false ? " AND " : " WHERE ") . "`id` IN (" . implode(",", $popularIds) . ")";
           }
           break;
 
-     case 'Trending':
+     case 'trending':
           $query .= " ORDER BY RAND()";
           break;
 
-     case 'Matches':
+     case 'matches':
           $Bsort = Database::Search("SELECT * FROM `batch` ORDER BY `selling_price` ASC");
-          $Bsortnum = $Bsort->num_rows;
-          if ($Bsortnum > 0) {
-               $productIds = [];
-               while ($Bsortdata = $Bsort->fetch_assoc()) {
-                    $productIds[] = " `id` = '" . $Bsortdata["product_id"] . "' ";
-               }
-               if (count($productIds) > 0) {
-                    $query .= (count($conditions) > 0 || count($conditionsid) || count($brandforquery)  > 0 ? " AND " : " WHERE ") . implode(" OR ", $productIds);
-               }
+          $matchIds = [];
+          while ($Bsortdata = $Bsort->fetch_assoc()) {
+               $matchIds[] = (int)$Bsortdata["product_id"];
+          }
+          if (count($matchIds) > 0) {
+               $query .= (strpos($query, 'WHERE') !== false ? " AND " : " WHERE ") . "`id` IN (" . implode(",", $matchIds) . ")";
           }
           break;
 }
 
-
 $query .= " LIMIT $itemsPerPage OFFSET $start";
+
 $product_rs = Database::search($query);
 $product_num = $product_rs->num_rows;
 ?>
