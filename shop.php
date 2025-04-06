@@ -367,13 +367,14 @@
                             ?>
                                 <div class="col-6 col-md-4">
                                     <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                        <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
-                                            <img src="admin-panel/<?php echo $picturepath; ?>" alt="" class="w-auto max-w-unset">
+                                        <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative product-thumb-container">
+                                            <img src="admin-panel/<?php echo $picturepath; ?>" alt="" class="product-thumb-img">
                                         </a>
                                         <div class="product-card__content mt-16">
                                             <h6 class="title text-lg fw-semibold mt-12 mb-8">
                                                 <a href="product-details.php" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
                                             </h6>
+
                                             <div class="mt-8">
                                                 <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
                                                     <div class="progress-bar bg-main-two-600 rounded-pill" style="width: 35%"></div>
@@ -386,7 +387,9 @@
                                             </div>
 
                                             <div class="product-card__price mt-3 mb-4 d-flex flex-column gap-1">
-                                                <span class="text-secondary text-decoration-line-through fw-semibold fs-6">Rs <?php echo $batchdata["selling_price"] + 10; ?></span>
+                                                <span class="text-secondary text-decoration-line-through fw-semibold fs-6">
+                                                    Rs <?php echo $batchdata["selling_price"] + 10; ?>
+                                                </span>
                                                 <span class="text-dark fw-bold fs-5">
                                                     Rs <?php echo $batchdata["selling_price"]; ?>
                                                     <span class="text-muted fw-normal fs-6 ms-1">Quantity / <?php echo $batchdata["batch_qty"]; ?> Available</span>
@@ -399,12 +402,28 @@
                                         </div>
                                     </div>
                                 </div>
+
                             <?php
                             }
                             ?>
                         </div>
                     </div>
+                    <style>
+                        .product-thumb-container {
+                            height: 200px;
+                            overflow: hidden;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
 
+                        .product-thumb-img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            border-radius: 8px;
+                        }
+                    </style>
                     <!-- Pagination Start -->
                     <ul class="pagination flex-center flex-wrap gap-16 mt-4">
                         <!-- Previous Page Link -->
