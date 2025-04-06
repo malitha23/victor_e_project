@@ -109,7 +109,7 @@ switch ($sort) {
                `product_id`,
                COUNT(`product_id`) AS `total_sales`
            FROM 
-               victore.invoice
+               invoice
            GROUP BY 
                `product_id`
            ORDER BY 
