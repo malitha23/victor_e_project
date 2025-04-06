@@ -32,9 +32,9 @@ include_once "connection.php";
 <body>
 
     <!--==================== Preloader Start ====================-->
-    <div class="preloader">
+    <!-- <div class="preloader">
         <img src="assets/images/icon/preloader.gif" alt="">
-    </div>
+    </div> -->
     <!--==================== Preloader End ====================-->
 
     <?php require_once "index_header.php"; ?>
