@@ -78,7 +78,7 @@ include_once "connection.php";
                                                 $subcategory_data = $subcategory->fetch_assoc();
                                             ?>
                                                 <li>
-                                                    <a href="shop.php?category=<?php echo $category_data['id']; ?>&subcategory=<?php echo $subcategory_data['id']; ?>">
+                                                    <a href="shop.php?category_id=<?php echo $category_data['id']; ?>&sub_categoryid=<?php echo $subcategory_data['id']; ?>">
                                                         <?php echo $subcategory_data["name"]; ?>
                                                     </a>
                                                 </li>
