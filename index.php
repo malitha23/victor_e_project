@@ -277,7 +277,7 @@ include_once "connection.php";
                                     .fixed-discount-img {
                                         height: 180px;
                                         /* Adjust height as needed */
-                                        width:100%;
+                                        width: 100%;
                                         /* Makes it fill the column */
                                         object-fit: cover;
                                         /* Keeps image looking good */
@@ -542,53 +542,47 @@ include_once "connection.php";
                             <?php
 
 
-                            $tsi = Database::Search("
-            SELECT i.*, b.*, p.*, pic.path AS image_path 
-            FROM `invoice` i
-            JOIN `batch` b ON i.batch_id = b.id
-            JOIN `product` p ON b.product_id = p.id
-            LEFT JOIN `picture` pic ON p.id = pic.product_id AND pic.name = 'Image 1'
-        ");
-
-                            while ($id = $tsi->fetch_assoc()) {
-                                $pat = !empty($id["image_path"]) ? "admin-panel/" . $id["image_path"] : "assets/images/thumbs/product-two-img7.png";
-
-                                // Fetch total sold quantity for the batch
-                                $tsic = Database::Search("SELECT SUM(qty) as total_sold FROM `invoice` WHERE `batch_id`='" . $id["batch_id"] . "'");
-                                $tsicd = $tsic->fetch_assoc();
-                                $tsqty = $tsicd["total_sold"] ?? 0;
+                            $tsi = Database::Search("SELECT * FROM `invoice`");
+                            $tsin = $tsi->num_rows;
+                            for ($i = 0; $i < $tsin; $i++) {
+                                $tsid = $tsi->fetch_assoc();
+                                $tbatch = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $tsid["batch_id"] . "' ");
+                                $tbatchd = $tbatch->fetch_assoc();
+                                $tproduct = Database::Search("SELECT * FROM `product` WHERE `id`='" . $tbatchd["product_id"] . "' ");
+                                $tproductd = $tproduct->fetch_assoc();
+                                $tpic = Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $tproductd["id"] . "' AND `name`='Image 1' ");
+                                $tpicd = $tpic->fetch_assoc();
                             ?>
-                                <!-- Product Card Start -->
                                 <div data-aos="fade-up" data-aos-duration="200">
                                     <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                        <a href="product-details.php?batch_id=<?php echo $id["batch_id"]; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
+                                        <a href="product-details.php?batch_id=<?php echo $tbatchd["id"]; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
                                             <div class="row">
-                                                <img src="<?php echo $pat; ?>" alt="Product Image" class="w-auto max-w-unset">
+                                                <img src="admin-panel/<?php echo $tpicd["path"]; ?>" alt="Product Image" class="w-auto max-w-unset">
                                             </div>
                                         </a>
                                         <div class="product-card__content mt-16">
                                             <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                                <a href="product-details.php?batch_id=<?php echo $id["batch_id"]; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2" tabindex="0"><?php echo htmlspecialchars($id["title"]); ?></a>
+                                                <a href="product-details.php?batch_id=<?php echo $tbatchd["id"]; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2" tabindex="0"><?php echo htmlspecialchars($tproductd["title"]); ?></a>
                                             </h6>
+
                                             <div class="mt-8">
                                                 <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
-                                                    <div class="progress-bar bg-tertiary-600 rounded-pill" style="width: <?php echo ($tsqty / $id["batch_qty"]) * 100; ?>%"></div>
+                                                    <div class="progress-bar bg-tertiary-600 rounded-pill" style="width:fit-content"></div>
                                                 </div>
-                                                <span class="text-gray-900 text-xs fw-medium mt-8">Sold: <?php echo $tsqty; ?>/<?php echo $id["batch_qty"]; ?></span>
+                                                <span class="text-gray-900 text-xs fw-medium mt-8">Sold: <?php echo $tsid["qty"]; ?>/<?php echo $tbatchd["batch_qty"]; ?></span>
                                             </div>
 
                                             <div class="product-card__price my-20">
-                                                <span class="text-gray-400 text-md fw-semibold text-decoration-line-through">Rs 28.99</span>
-                                                <span class="text-heading text-md fw-semibold">Rs <?php echo $id["price"]; ?> <span class="text-gray-500 fw-normal">/Qty</span></span>
+                                                <span class="text-gray-400 text-md fw-semibold text-decoration-line-through">Rs <?php echo $tsid["price"] - 10; ?></span>
+                                                <span class="text-heading text-md fw-semibold">Rs <?php echo $tsid["price"]; ?> <span class="text-gray-500 fw-normal">/Qty</span></span>
                                             </div>
 
-                                            <a onclick="adtocart(<?= $id["price"] ?>, <?= 0 ?>, <?= $id["batch_id"] ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
+                                            <a onclick="adtocart(<?= $tsid["price"] ?>, <?= 0 ?>, <?= $tbatchd["id"] ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
                                                 Add To Cart <i class="ph ph-shopping-cart"></i>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Product Card End -->
                             <?php
                             }
                             ?>
@@ -684,7 +678,7 @@ include_once "connection.php";
                     </div>
                 </div>
 
-               
+
             </div>
         </div>
     </section>
