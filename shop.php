@@ -41,6 +41,48 @@
 
     <?php require_once "shop_header.php"; ?>
 
+    <?php
+    if (isset($_GET['category_id']) && isset($_GET['sub_categoryid'])) {
+        $category_id = $_GET['category_id'];
+        $sub_categoryid = $_GET['sub_categoryid'];
+
+        $mhc = Database::Search("SELECT * FROM `category` WHERE `id`='" . $category_id . "' ");
+        $mhcd = $mhc->fetch_assoc();
+
+        $mhg = Database::Search("SELECT * FROM `group` WHERE `id`='" . $mhcd["group_id"] . "' ");
+        $mhgd = $mhg->fetch_assoc();
+    ?>
+        <input id="mhc" type="hidden" value="<?php echo $category_id; ?>">
+        <input id="mhsc" type="hidden" value="<?php echo $sub_categoryid; ?>">
+        <input id="mhg" type="hidden" value="<?php echo $mhgd["id"]; ?>">
+
+        <script>
+            function mhfs() {
+                const mhg = document.getElementById("mhg").value;
+                const cid = document.getElementById("mhc").value;
+                const scid = document.getElementById("mhsc").value;
+                document.getElementById('groupset').value = mhg;
+                document.getElementById('catgoryset').value = cid;
+                document.getElementById('subcatagoryset').value = scid;
+                advancesearch();
+                {
+                    document.getElementById('groupset').value = "";
+                    document.getElementById('catgoryset').value = "";
+                    document.getElementById('subcatagoryset').value = "";
+                    document.getElementById("mhg").value = "";
+                    document.getElementById("mhc").value = "";
+                    document.getElementById("mhsc").value = "";
+                } {
+                    window.history.replaceState(null, null, window.location.pathname);
+
+                }
+            }
+        </script>
+    <?php
+    }
+    ?>
+
+
     <!-- ========================= Breadcrumb Start =============================== -->
     <div class="breadcrumb mb-0 py-26 bg-main-two-50">
         <div class="container container-lg">
@@ -543,7 +585,15 @@
     <script src="assets/js/main.js"></script>
 
     <script src='sahan.js'></script>
-
+    <?php
+    if (isset($_GET['category_id']) && isset($_GET['sub_categoryid'])) {
+    ?>
+        <script>
+            mhfs();
+        </script>
+    <?php
+    }
+    ?>
 </body>
 
 </html>
