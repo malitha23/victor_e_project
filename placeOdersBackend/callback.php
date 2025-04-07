@@ -32,7 +32,7 @@ if (!$transactionReference || !$orderId || !$transactionTimeInMillis || !$transa
     exit();
 }
 
-$secret = "@A123456";
+$secret = "@722812280V";
 
 // Generate checksum for validation
 $message = $transactionReference . $orderId . $transactionTimeInMillis . $transactionAmount . $transactionStatus;
