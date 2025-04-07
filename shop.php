@@ -40,6 +40,64 @@
     <!--==================== Preloader End ====================-->
 
     <?php require_once "shop_header.php"; ?>
+    <?php
+    if (isset($_GET['search']) && isset($_GET['subcategory'])) {
+        $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+        $subcategoryId = isset($_GET['subcategory']) ? $_GET['subcategory'] : '0';
+        if ($subcategoryId != 0) {
+            $isb = Database::Search("SELECT * FROM `sub_category` WHERE `id`='" . $subcategoryId . "' ");
+            $isbd = $isb->fetch_assoc();
+
+            $mhc = Database::Search("SELECT * FROM `category` WHERE `id`='" . $isbd["category_id"] . "' ");
+            $mhcd = $mhc->fetch_assoc();
+
+            $icatid = $mhcd["id"];
+
+            $mhg = Database::Search("SELECT * FROM `group` WHERE `id`='" . $mhcd["group_id"] . "' ");
+            $mhgd = $mhg->fetch_assoc();
+
+            $igroupid = $mhgd["id"];
+        } else {
+            $icatid = 0;
+            $igroupid = 0;
+        }
+    ?>
+        <input id="igroupid" type="hidden" value="<?php echo $igroupid;  ?>" />
+        <input id="icatid" type="hidden" value="<?php echo $icatid;  ?>" />
+        <input id="isearch" type="hidden" value="<?php echo $searchTerm  ?>" />
+        <input id="subid" type="hidden" value="<?php echo $subcategoryId  ?>" />
+        <script>
+            get();
+
+            function get() {
+                var igroupid = document.getElementById("igroupid").value;
+                var icatid = document.getElementById("icatid").value;
+                var search = document.getElementById("isearch").value;
+                var subid = document.getElementById("subid").value;
+
+                document.getElementById('searchtext').value = search;
+                document.getElementById('groupset').value = igroupid;
+                document.getElementById('catgoryset').value = icatid;
+                document.getElementById('subcatagoryset').value = subid;
+                advancesearch();
+                {
+                    document.getElementById('searchtext').value = "";
+                    document.getElementById('groupset').value = "";
+                    document.getElementById('catgoryset').value = "";
+                    document.getElementById('subcatagoryset').value = "";
+                } {
+                    document.getElementById("igroupid").value = "";
+                    document.getElementById("icatid").value = "";
+                    document.getElementById("isearch").value = "";
+                    document.getElementById("subid").value = "";
+                } {
+                    window.history.replaceState(null, null, window.location.pathname);
+                }
+            }
+        </script>
+    <?php
+    }
+    ?>
 
     <?php
     if (isset($_GET['category_id']) && isset($_GET['sub_categoryid'])) {
@@ -74,7 +132,6 @@
                     document.getElementById("mhsc").value = "";
                 } {
                     window.history.replaceState(null, null, window.location.pathname);
-
                 }
             }
         </script>
@@ -590,6 +647,15 @@
     ?>
         <script>
             mhfs();
+        </script>
+    <?php
+    }
+    ?>
+    <?php
+    if (isset($_GET['search']) && isset($_GET['subcategory'])) {
+    ?>
+        <script>
+            get();
         </script>
     <?php
     }
