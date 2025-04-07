@@ -344,13 +344,7 @@ function Register() {
                         title: 'Oops!',
                         text: x,
                         icon: 'error',
-                        confirmButtonText: 'Try Again',
-                        backdrop: `
-                            rgba(255,0,0,0.4)
-                            url("https://media.giphy.com/media/5t9IcFhUEk2PzxHcYK/giphy.gif")
-                            center left
-                            no-repeat
-                        `
+                        confirmButtonText: 'Try Again'
                     });
                 }
             } else {
@@ -763,4 +757,19 @@ function cartdelete(cartid) {
         }
     });
 }
+function lordcity() {
+    var disid = document.getElementById("district").value;
+    var req = new XMLHttpRequest();
+    var form = new FormData();
+    form.append("district_id", disid);
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            // Assuming you want to update a <select> with id="city"
+            document.getElementById("city").innerHTML = req.responseText;
+        }
+    };
+    req.open("POST", "loadcity.php", true);
+    req.send(form);
+}
+
 

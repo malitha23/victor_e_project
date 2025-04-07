@@ -196,10 +196,7 @@ require "connection.php";
                     <!-- Register Card End -->
                     <!-- agreement model -->
                     <!-- Trigger button for the modal -->
-                    <button type="button" class="btn btn-primary" onclick="openUserAgreement();">
-                        Sign Up
-                    </button>
-
+                    
                     <!-- Modal Structure -->
                     <div class="modal fade" id="agreementModal" tabindex="-1" aria-labelledby="agreementModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -211,9 +208,15 @@ require "connection.php";
                                 <div class="modal-body">
                                     <?php
                                     $a = Database::Search("SELECT * FROM `privacy`");
-                                    $adata = $a->fetch_assoc();
+                                    $anum = $a->num_rows;
+                                    if($anum == 1){
+                                        $adata = $a->fetch_assoc();
+                                        $pri = $adata["Privacy"];
+                                    }else{
+                                        $pri = "";
+                                    }
                                     ?>
-                                    <p><?php echo $adata["Privacy"]; ?></p>
+                                    <p><?php echo $pri; ?></p>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="agree" />
                                         <label class="form-check-label" for="agree">

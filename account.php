@@ -213,7 +213,7 @@ if (isset($_SESSION["user_vec"])) {
                                 ?>
                                     <div class="col-12 col-lg-6 mb-24">
                                         <label for="district" class="text-neutral-900 text-lg mb-8 fw-medium">District <span class="text-danger">*</span></label>
-                                        <select id="district" class="common-input">
+                                        <select onchange="lordcity();" id="district" class="common-input">
                                             <option value="" selected disabled>Select District</option>
                                             <?php
                                             $dis = Database::Search("SELECT * FROM `distric` ");
@@ -252,7 +252,7 @@ if (isset($_SESSION["user_vec"])) {
                                 ?>
                                     <div class="col-12 col-lg-6 mb-24">
                                         <label for="district" class="text-neutral-900 text-lg mb-8 fw-medium">District <span class="text-danger">*</span></label>
-                                        <select id="district" class="common-input">
+                                        <select onchange="lordcity();" id="district" class="common-input">
                                             <option value="<?php echo $distric["distric_id"] ?>" selected><?php echo $distric["name"] ?></option>
                                             <?php
                                             $dis = Database::Search("SELECT * FROM `distric` ");
