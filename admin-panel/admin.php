@@ -146,35 +146,44 @@ if (isset($_SESSION["a"])) {
 
             <!-- Recent Transactions Timeline -->
             <div class="row">
+
+              <!-- Timeline: Recent Invoices -->
               <div class="col-lg-4 d-flex align-items-stretch">
                 <div class="card w-100">
                   <div class="card-body p-4">
                     <div class="mb-4">
-                      <h5 class="card-title fw-semibold">Recent Transactions</h5>
+                      <h5 class="card-title fw-semibold">Recent Invoices</h5>
                     </div>
                     <ul class="timeline-widget mb-0 position-relative mb-n5">
                       <?php
-                      $recent_rs = Databases::search("SELECT * FROM `invoice` ORDER BY `date_time` DESC LIMIT 5");
-                      while ($recent = $recent_rs->fetch_assoc()) {
-                        $time = explode(" ", $recent['date_time'])[1];
+                      try {
+                        $recent_rs = Databases::search("SELECT * FROM `invoice` ORDER BY `date_time` DESC LIMIT 5");
+                        while ($recent = $recent_rs->fetch_assoc()) {
+                          $time = explode(" ", $recent['date_time'])[1];
                       ?>
-                        <li class="timeline-item d-flex position-relative overflow-hidden">
-                          <div class="timeline-time text-dark flex-shrink-0 text-end"><?php echo $time; ?></div>
-                          <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                            <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                            <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                          </div>
-                          <div class="timeline-desc fs-3 text-dark mt-n1">
-                            Payment received from <?php echo $recent['user_email']; ?> of LKR <?php echo number_format($recent['total_amount'], 2); ?>
-                          </div>
-                        </li>
-                      <?php } ?>
+                          <li class="timeline-item d-flex position-relative overflow-hidden">
+                            <div class="timeline-time text-dark flex-shrink-0 text-end"><?php echo $time; ?></div>
+                            <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                              <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
+                              <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                            </div>
+                            <div class="timeline-desc fs-3 text-dark mt-n1">
+                              Payment received from <?php echo $recent['user_email']; ?> of
+                              LKR <?php echo number_format($recent['price'] + $recent['delivery_fee'] - $recent['discount'], 2); ?>
+                            </div>
+                          </li>
+                      <?php
+                        }
+                      } catch (Exception $e) {
+                        echo "<li class='text-danger'>Error loading recent invoices: " . $e->getMessage() . "</li>";
+                      }
+                      ?>
                     </ul>
                   </div>
                 </div>
               </div>
 
-              <!-- Recent Transactions Table -->
+              <!-- Table: Recent Transactions -->
               <div class="col-lg-8 d-flex align-items-stretch">
                 <div class="card w-100">
                   <div class="card-body p-4">
@@ -184,53 +193,67 @@ if (isset($_SESSION["a"])) {
                         <thead class="text-dark fs-4">
                           <tr>
                             <th>
-                              <h6 class="fw-semibold mb-0">Id</h6>
+                              <h6 class="fw-semibold mb-0">ID</h6>
                             </th>
                             <th>
-                              <h6 class="fw-semibold mb-0">Invoice</h6>
+                              <h6 class="fw-semibold mb-0">Reference</h6>
                             </th>
                             <th>
-                              <h6 class="fw-semibold mb-0">Name</h6>
+                              <h6 class="fw-semibold mb-0">Order ID</h6>
                             </th>
                             <th>
                               <h6 class="fw-semibold mb-0">Status</h6>
                             </th>
                             <th>
-                              <h6 class="fw-semibold mb-0">Budget</h6>
+                              <h6 class="fw-semibold mb-0">Amount</h6>
                             </th>
                           </tr>
                         </thead>
                         <tbody>
                           <?php
-                          $trans_rs = Databases::search("SELECT * FROM `invoice` ORDER BY `id` DESC LIMIT 10");
-                          while ($trans = $trans_rs->fetch_assoc()) {
+                          try {
+                            $trans_rs = Databases::search("SELECT * FROM `transactions` ORDER BY `id` DESC LIMIT 10");
+                            while ($trans = $trans_rs->fetch_assoc()) {
                           ?>
-                            <tr>
-                              <td>
-                                <h6 class="fw-semibold mb-0"><?php echo $trans["id"]; ?></h6>
-                              </td>
-                              <td>
-                                <h6 class="fw-semibold mb-1"><?php echo $trans["invoice_id"]; ?></h6>
-                                <span class="fw-normal"><?php echo explode(" ", $trans["date_time"])[0]; ?></span>
-                              </td>
-                              <td>
-                                <p class="mb-0 fw-normal"><?php echo $trans["user_email"]; ?></p>
-                              </td>
-                              <td>
-                                <div class="d-flex align-items-center gap-2">
-                                  <span class="badge bg-primary rounded-3 fw-semibold">Success</span>
-                                </div>
-                              </td>
-                              <td><span class="fw-semibold mb-0 text-black">LKR <?php echo number_format($trans["total_amount"], 2); ?></span></td>
-                            </tr>
-                          <?php } ?>
+                              <tr>
+                                <td>
+                                  <h6 class="fw-semibold mb-0"><?php echo $trans["id"]; ?></h6>
+                                </td>
+                                <td>
+                                  <h6 class="fw-semibold mb-1"><?php echo $trans["transaction_reference"]; ?></h6>
+                                  <span class="fw-normal"><?php echo explode(" ", $trans["transaction_time"])[0]; ?></span>
+                                </td>
+                                <td>
+                                  <p class="mb-0 fw-normal"><?php echo $trans["order_id"]; ?></p>
+                                </td>
+                                <td>
+                                  <div class="d-flex align-items-center gap-2">
+                                    <span class="badge 
+                          <?php echo $trans["transaction_status"] == 'Success' ? 'bg-success' : 'bg-danger'; ?> 
+                          rounded-3 fw-semibold">
+                                      <?php echo $trans["transaction_status"]; ?>
+                                    </span>
+                                  </div>
+                                </td>
+                                <td>
+                                  <span class="fw-semibold mb-0 text-black">LKR <?php echo number_format($trans["transaction_amount"], 2); ?></span>
+                                </td>
+                              </tr>
+                          <?php
+                            }
+                          } catch (Exception $e) {
+                            echo "<tr><td colspan='5' class='text-danger'>Error loading transactions: " . $e->getMessage() . "</td></tr>";
+                          }
+                          ?>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
               </div>
+
             </div>
+
 
             <!-- Footer -->
             <div class="py-6 px-6 text-center">
