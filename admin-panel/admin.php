@@ -42,7 +42,7 @@ if (isset($_SESSION["a"])) {
           <div class="container-fluid">
             <!-- Row 1 -->
             <div class="row">
-              <div class="col-lg-8 d-flex align-items-strech">
+              <div class="col-lg-8 d-flex align-items-stretch">
                 <div class="card w-100">
                   <div class="card-body">
                     <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
@@ -60,29 +60,47 @@ if (isset($_SESSION["a"])) {
                   <div class="col-lg-12">
                     <?php
                     $today = date("Y-m-d");
-                    $thismonth = date("m");
-                    $thisyear = date("Y");
+                    $thisMonth = date("m");
+                    $thisYear = date("Y");
 
                     $a = $b = $c = $e = $f = 0;
 
-                    $invoice_rs = Databases::search("SELECT * FROM `invoice`");
+                    // Fetch only successful transactions and join with invoice
+                    $query = "
+          SELECT invoice.*, transactions.transaction_time
+          FROM invoice
+          INNER JOIN transactions ON invoice.id = transactions.order_id
+          WHERE transactions.transaction_status = 'Success'
+        ";
+
+                    $invoice_rs = Databases::search($query);
                     $invoice_num = $invoice_rs->num_rows;
 
                     for ($x = 0; $x < $invoice_num; $x++) {
                       $invoice_data = $invoice_rs->fetch_assoc();
-                      $f += $invoice_data["qty"];
-                      $pdate = explode(" ", $invoice_data["date_time"])[0];
+                      $qty = (int)$invoice_data["qty"];
+                      $price = (float)$invoice_data["price"];
+                      $discount = (float)$invoice_data["discount"];
+                      $delivery = (float)$invoice_data["delivery_fee"];
+                      $total = ($price - $discount + $delivery) * $qty;
+
+                      $f += $qty;
+
+                      $pdate = explode(" ", $invoice_data["transaction_time"])[0];
+
                       if ($pdate == $today) {
-                        $a += $invoice_data["total_amount"];
-                        $c += $invoice_data["qty"];
+                        $a += $total;
+                        $c += $qty;
                       }
+
                       $splitMonth = explode("-", $pdate);
-                      if ($splitMonth[0] == $thisyear && $splitMonth[1] == $thismonth) {
-                        $b += $invoice_data["total_amount"];
-                        $e += $invoice_data["qty"];
+                      if ($splitMonth[0] == $thisYear && $splitMonth[1] == $thisMonth) {
+                        $b += $total;
+                        $e += $qty;
                       }
                     }
                     ?>
+
                     <div class="card overflow-hidden">
                       <div class="card-body p-4">
                         <h5 class="card-title mb-9 fw-semibold">Daily Breakup</h5>
@@ -118,14 +136,14 @@ if (isset($_SESSION["a"])) {
                       <div class="card-body">
                         <div class="row align-items-start">
                           <div class="col-8">
-                            <h5 class="card-title mb-9 fw-semibold"> Monthly Earnings </h5>
+                            <h5 class="card-title mb-9 fw-semibold">Monthly Earnings</h5>
                             <h4 class="fw-semibold mb-3">LKR <?php echo number_format($b, 2); ?></h4>
                             <div class="d-flex align-items-center pb-1">
                               <span class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
                                 <i class="ti ti-arrow-down-right text-danger"></i>
                               </span>
                               <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                              <p class="fs-3 mb-0">last year</p>
+                              <p class="fs-3 mb-0">Last Year</p>
                             </div>
                           </div>
                           <div class="col-4">
@@ -143,6 +161,7 @@ if (isset($_SESSION["a"])) {
                 </div>
               </div>
             </div>
+
 
             <!-- Recent Transactions Timeline -->
             <div class="row">
