@@ -132,7 +132,6 @@ try {
     $updateUserQuery = "UPDATE user SET fname = ?, lname = ?, mobile = ?, adress_id = ? WHERE email = ?";
     Database::IUD($updateUserQuery, [$fname, $lname, $mobile, $address_id, $email], "sssis");
     finalizeProcess($email);
-
 } catch (Exception $e) {
     echo json_encode(["status" => "error", "message" => "Database error: " . $e->getMessage()]);
 }
@@ -236,14 +235,16 @@ function finalizeProcess($email)
             $weigdeliveryfee = 0;
         }
 
-        $total_delivery_fee = $delivery_fee + $weigdeliveryfee; 
+        $total_delivery_fee = $delivery_fee + $weigdeliveryfee;
         // Fetch batch details from the database
         $batch_query = Database::Search("SELECT `batch_code`, `product_id`, `vendor_name`, `batch_price`, `selling_price`, `batch_qty`, `date`, `id` FROM `batch` WHERE `id` = '$batch_id'");
         $batch_data = ($batch_query->num_rows > 0) ? $batch_query->fetch_assoc() : [];
 
+        $currentDateTime = date("Y-m-d H:i:s");
         // Insert into invoice table
-        Database::IUD("INSERT INTO `invoice`(`uni_code`, `product_id`, `batch_id`, `price`, `discount`, `delivery_fee`, `user_email`, `qty`) 
-                         VALUES ('$unique_code', 
+        Database::IUD("INSERT INTO `invoice`(`date_time`,`uni_code`, `product_id`, `batch_id`, `price`, `discount`, `delivery_fee`, `user_email`, `qty`) 
+                         VALUES ('$currentDateTime',
+                                 '$unique_code', 
                                  '" . $batch_data["product_id"] . "', 
                                  '" . $batch_id . "',
                                  '" . $batch_data["selling_price"] . "', 
@@ -300,5 +301,3 @@ function finalizeProcess($email)
 
 // Close database connection after all operations
 Database::CloseConnection();
-
-?>
