@@ -71,6 +71,76 @@ if (isset($_SESSION["a"])) {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="container mt-5">
+                                                <div class="row justify-content-center">
+                                                    <div class="col-md-6">
+                                                        <div class="card shadow-sm">
+                                                            <div class="card-body">
+                                                                <h4 class="card-title mb-4 text-center text-danger">Delete Order Status</h4>
+                                                                <?php
+                                                                $ordermd = Databases::Search("SELECT * FROM `order_status`");
+                                                                $ordermnd = $ordermd->num_rows;
+                                                                ?>
+                                                                <div class="mb-3">
+                                                                    <label for="statusdelete" class="form-label">Select Order Status</label>
+                                                                    <select class="form-select" id="statusdelete">
+                                                                        <option value="0">-- Select Status --</option>
+                                                                        <?php
+                                                                        for ($imd = 0; $imd < $ordermnd; $imd++) {
+                                                                            $ordermde = $ordermd->fetch_assoc();
+                                                                        ?>
+                                                                            <option value="<?php echo  $ordermde["id"]; ?>">
+                                                                                <?php echo  $ordermde["status"]; ?>
+                                                                            </option>
+                                                                        <?php
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="d-grid gap-2">
+                                                                    <button onclick="deleteorder();" class="btn btn-danger">Delete Selected Status</button>
+                                                                </div>
+                                                                <div class="mt-3 text-muted text-center">
+                                                                    <label>Need to change instead? Try updating status instead of deleting.</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                function deleteorder() {
+                                                    const statusId = document.getElementById("statusdelete").value;
+
+                                                    if (statusId === "0") {
+                                                        alert("Please select a valid order status to delete.");
+                                                        return;
+                                                    }
+
+                                                    if (!confirm("Are you sure you want to delete this order status?")) {
+                                                        return;
+                                                    }
+
+                                                    const formData = new FormData();
+                                                    formData.append("status_id", statusId);
+
+                                                    fetch("process/orderdelete.php", {
+                                                            method: "POST",
+                                                            body: formData
+                                                        })
+                                                        .then(response => response.text())
+                                                        .then(data => {
+                                                            alert(data.trim()); // Show server response
+                                                            location.reload(); // Reload to refresh the list
+                                                        })
+                                                        .catch(error => {
+                                                            console.error("Error deleting order status:", error);
+                                                            alert("Something went wrong. Please try again.");
+                                                        });
+                                                }
+                                            </script>
+
+
                                             <script>
                                                 function saveOrderStatus() {
                                                     let status = document.getElementById("orderStatus").value.trim();

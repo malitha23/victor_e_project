@@ -51,6 +51,7 @@ if (isset($_SESSION["a"])) {
                     $date = date('Y-m-d H:i:s');
                     $lastid = Databases::IUD("INSERT INTO `product` (`title`, `description`, `delete_id`, `condition_id`, `status_id`, `consignment_stock`, `weight`, `date`, `sub_category_id`, `brand_id`)
                      VALUES ('" . $title . "', '" . $description . "', '0', '" . $condition . "', '" . $status . "', '" . $consignmentStock . "', '" . $weight . "', '" . $date . "', '" . $product_subcategory . "', '" . $brand . "');");
+                    Databases::IUD("INSERT INTO `weight` (`weight`) VALUES ('". $weight."');");
                     if ($lastid > 0) {
                         #imae hadle
                         $targetDir = "product_image/";
