@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </div>
                     <div class="modal-body pt-4">
                          <!-- Personal Info Card -->
+
                          <div class="card mb-4">
                               <div class="row pt-3 px-2">
                                    <div class="col-4 col-md-2 d-flex justify-content-center align-items-center">
@@ -37,6 +38,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                              </div>
                                              <div class="col-12 col-md-6 mb-3">
                                                   <div class="form-floating">
+                                                       <input type="text" class="form-control rounded-0" value="<?php echo $umdata["email"]; ?>" readonly>
+                                                       <label>Email</label>
+                                                  </div>
+                                             </div>
+                                             <div class="col-12 col-md-6 mb-3">
+                                                  <div class="form-floating">
+                                                       <input type="text" class="form-control rounded-0" value="<?php echo $umdata["mail"]; ?>" readonly>
+                                                       <label>Mail (Recovery)</label>
+                                                  </div>
+                                             </div>
+                                             <div class="col-12 col-md-6 mb-3">
+                                                  <div class="form-floating">
                                                        <input type="date" class="form-control rounded-0" value="<?php echo $umdata["bod"]; ?>" readonly>
                                                        <label>Date of Birth</label>
                                                   </div>
@@ -50,19 +63,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                              <div class="col-12 mb-3">
                                                   <div class="form-floating">
                                                        <?php
-                                                       $address = Databases::Search("SELECT * FROM `address` WHERE `address_id`='" . $umdata["adress_id"] . "' ");
-                                                       if ($address->num_rows == 1) {
-                                                            $addressdata = $address->fetch_assoc();
+                                                       $address_rs = Databases::Search("SELECT * FROM `address` WHERE `address_id`='" . $umdata["adress_id"] . "'");
+                                                       if ($address_rs->num_rows == 1) {
+                                                            $addressdata = $address_rs->fetch_assoc();
+
+                                                            // Get city and district names
+                                                            $city_rs = Databases::Search("SELECT * FROM `city` WHERE `city_id`='" . $addressdata["city_city_id"] . "'");
+                                                            $city_data = $city_rs->fetch_assoc();
+
+                                                            $district_rs = Databases::Search("SELECT * FROM `distric` WHERE `distric_id`='" . $addressdata["distric_distric_id"] . "'");
+                                                            $district_data = $district_rs->fetch_assoc();
+
+                                                            $full_address = $addressdata["line_1"] . ", " . $addressdata["line_2"] . ", " . $city_data["name"] . ", " . $district_data["name"];
                                                        ?>
-                                                            <input type="text" class="form-control rounded-0" value="<?php echo $addressdata["line_1"] . " " . $addressdata["line_2"]; ?>" readonly>
+                                                            <input type="text" class="form-control rounded-0" value="<?php echo $full_address; ?>" readonly>
                                                             <label>Address</label>
                                                        <?php } ?>
+                                                  </div>
+                                             </div>
+                                             <div class="col-12 col-md-6 mb-3">
+                                                  <div class="form-floating">
+                                                       <input type="text" class="form-control rounded-0" value="<?php echo $umdata["status"] == 1 ? 'Active' : 'Inactive'; ?>" readonly>
+                                                       <label>Status</label>
+                                                  </div>
+                                             </div>
+                                             <div class="col-12 col-md-6 mb-3">
+                                                  <div class="form-floating">
+                                                       <input type="text" class="form-control rounded-0" value="<?php echo $umdata["v_code"]; ?>" readonly>
+                                                       <label>Verification Code</label>
                                                   </div>
                                              </div>
                                         </div>
                                    </div>
                               </div>
                          </div>
+
 
                          <!-- Invoice Details -->
                          <h5 class="text-primary"><i class="fa fa-file-invoice"></i> Invoice Details</h5>
