@@ -116,7 +116,7 @@ if (isset($_SESSION["a"])) {
                                                                  <span>Note: SUB-Image size 555*607</span>
 
                                                                  <!-- Main Image Upload -->
-                                                                
+
                                                                  <!-- Sub Image Upload -->
                                                                  <div class="mb-3 text-center">
                                                                       <label class="form-label fw-bold">Sub Image</label>
@@ -174,7 +174,7 @@ if (isset($_SESSION["a"])) {
                                              let title = document.getElementById('title-main' + index).value;
                                              let desc = document.getElementById('desc-main' + index).value;
 
-                                             if ( !subImage || title.trim() === '' || desc.trim() === '') {
+                                             if (!subImage || title.trim() === '' || desc.trim() === '') {
                                                   alert('Please fill all fields and upload images.');
                                                   return;
                                              }
@@ -416,6 +416,68 @@ if (isset($_SESSION["a"])) {
                                              });
                                         });
                                    </script>
+                                   <!-- !-->
+                                   <div class="container mt-4">
+                                        <div class="card shadow-lg p-4">
+                                             <h1 class="mb-4">Group, Category, Brand Image Uploader</h1>
+
+                                             <form action="process/gbcimage.php" method="POST" enctype="multipart/form-data">
+                                                  <div class="row mb-3">
+                                                       <!-- Group Selector -->
+                                                       <div class="col-md-4">
+                                                            <label class="form-label fw-semibold">Select Group</label>
+                                                            <select name="group_id" class="form-select">
+                                                                 <option value="">-- Select Group --</option>
+                                                                 <?php
+                                                                 $egroup = Databases::Search("SELECT * FROM `group` WHERE `image_path` IS NULL OR `image_path` = ''");
+                                                                 while ($gdata = $egroup->fetch_assoc()) {
+                                                                      echo "<option value='" . $gdata['id'] . "'>" . $gdata['group_name'] . "</option>";
+                                                                 }
+                                                                 ?>
+                                                            </select>
+                                                       </div>
+
+                                                       <!-- Category Selector -->
+                                                       <div class="col-md-4">
+                                                            <label class="form-label fw-semibold">Select Category</label>
+                                                            <select name="category_id" class="form-select">
+                                                                 <option value="">-- Select Category --</option>
+                                                                 <?php
+                                                                 $ecategory = Databases::Search("SELECT * FROM `category` WHERE `image_path` IS NULL OR `image_path` = ''");
+                                                                 while ($cdata = $ecategory->fetch_assoc()) {
+                                                                      echo "<option value='" . $cdata['id'] . "'>" . $cdata['name'] . "</option>";
+                                                                 }
+                                                                 ?>
+                                                            </select>
+                                                       </div>
+
+                                                       <!-- Brand Selector -->
+                                                       <div class="col-md-4">
+                                                            <label class="form-label fw-semibold">Select Brand</label>
+                                                            <select name="brand_id" class="form-select">
+                                                                 <option value="">-- Select Brand --</option>
+                                                                 <?php
+                                                                 $ebrand = Databases::Search("SELECT * FROM `brand` WHERE `img_path` IS NULL OR `img_path` = ''");
+                                                                 while ($bdata = $ebrand->fetch_assoc()) {
+                                                                      echo "<option value='" . $bdata['id'] . "'>" . $bdata['name'] . "</option>";
+                                                                 }
+                                                                 ?>
+                                                            </select>
+                                                       </div>
+                                                  </div>
+
+                                                  <!-- File Input -->
+                                                  <div class="mb-3">
+                                                       <label class="form-label fw-semibold">Upload Image</label>
+                                                       <input type="file" name="image" class="form-control" required>
+                                                  </div>
+
+                                                  <!-- Submit Button -->
+                                                  <button type="submit" class="btn btn-primary w-100">Upload Image</button>
+                                             </form>
+                                        </div>
+                                   </div>
+
                                    <!-- !-->
                               </div>
                          </div>
