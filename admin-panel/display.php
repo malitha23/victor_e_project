@@ -477,6 +477,79 @@ if (isset($_SESSION["a"])) {
                                              </form>
                                         </div>
                                    </div>
+                                   <!-- !-->
+                                   <div class="container mt-4">
+                                        <div class="card shadow-lg p-4">
+                                             <h1>Group, Category, Brand Image Editor</h1>
+
+                                             <form action="process/gcbimage_edit.php" method="POST" enctype="multipart/form-data">
+
+                                                  <!-- Select group/category/brand -->
+                                                  <div class="mb-3">
+                                                       <label class="form-label fw-bold">Select Group</label>
+                                                       <select name="group_id" class="form-select">
+                                                            <option value="">-- Select --</option>
+                                                            <?php
+                                                            $grp = Databases::Search("SELECT * FROM `group` WHERE `image_path` IS NOT NULL AND `image_path` != ''");
+                                                            while ($g = $grp->fetch_assoc()) {
+                                                                 echo "<option value='{$g['id']}'>{$g['group_name']}</option>";
+                                                            }
+                                                            ?>
+                                                       </select>
+                                                  </div>
+
+                                                  <div class="mb-3">
+                                                       <label class="form-label fw-bold">Select Category</label>
+                                                       <select name="category_id" class="form-select">
+                                                            <option value="">-- Select --</option>
+                                                            <?php
+                                                            $cat = Databases::Search("SELECT * FROM `category` WHERE `image_path` IS NOT NULL AND `image_path` != ''");
+                                                            while ($c = $cat->fetch_assoc()) {
+                                                                 echo "<option value='{$c['id']}'>{$c['name']}</option>";
+                                                            }
+                                                            ?>
+                                                       </select>
+                                                  </div>
+
+                                                  <div class="mb-3">
+                                                       <label class="form-label fw-bold">Select Brand</label>
+                                                       <select name="brand_id" class="form-select">
+                                                            <option value="">-- Select --</option>
+                                                            <?php
+                                                            $br = Databases::Search("SELECT * FROM `brand` WHERE `img_path` IS NOT NULL AND `img_path` != ''");
+                                                            while ($b = $br->fetch_assoc()) {
+                                                                 echo "<option value='{$b['id']}'>{$b['name']}</option>";
+                                                            }
+                                                            ?>
+                                                       </select>
+                                                  </div>
+
+                                                  <!-- File input -->
+                                                  <div class="mb-3">
+                                                       <label class="form-label fw-bold">Upload New Image</label>
+                                                       <input type="file" name="image" class="form-control" required onchange="previewImage(event)">
+                                                  </div>
+
+                                                  <!-- Preview Area -->
+                                                  <div class="mb-3">
+                                                       <label class="form-label">New Image Preview:</label><br>
+                                                       <img id="preview" src="#" alt="Preview" class="img-fluid border" style="max-width: 200px; display: none;">
+                                                  </div>
+
+                                                  <!-- Submit -->
+                                                  <button type="submit" class="btn btn-warning fw-bold">Update Image</button>
+                                             </form>
+                                        </div>
+                                   </div>
+
+                                   <script>
+                                        function previewImage(event) {
+                                             const preview = document.getElementById("preview");
+                                             preview.src = URL.createObjectURL(event.target.files[0]);
+                                             preview.style.display = "block";
+                                        }
+                                   </script>
+
 
                                    <!-- !-->
                               </div>
