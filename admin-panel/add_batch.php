@@ -10,7 +10,7 @@ if (isset($_SESSION["a"])) {
           $batchPrice = trim($_POST["batchPrice"]);
           $sellingPrice = trim($_POST["sellingPrice"]);
           $batchcode = trim($_POST["batchcode"]);
-          
+
           if ($productID == "0" || empty($vendor) || !is_numeric($batchQty) || $batchQty <= 0 || !is_numeric($batchPrice) || $batchPrice <= 0 || !is_numeric($sellingPrice) || $sellingPrice <= 0) {
                echo "Invalid input data!";
           } else {
@@ -20,8 +20,11 @@ if (isset($_SESSION["a"])) {
                     echo "repeat batch_code,pleace enter new batch code or update";
                } else {
                     // Insert into database
-                    $query = "INSERT INTO `batch` (`product_id`,`batch_code`, `vendor_name`, `batch_qty`, `batch_price`, `selling_price`) VALUES (?, ?, ?, ?, ?, ?)";
-                    $result = Databases::IUD($query, [$productID, $batchcode, $vendor, $batchQty, $batchPrice, $sellingPrice], "issddd");
+                    date_default_timezone_set('Asia/Colombo'); // Set timezone to Sri Jayawardenepura Kotte, Sri Lanka
+                    $date = date('Y-m-d H:i:s');
+                    $delete = 0;
+                    $query = "INSERT INTO `batch` (`product_id`,`Delete`,`date`,`batch_code`, `vendor_name`, `batch_qty`, `batch_price`, `selling_price`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    $result = Databases::IUD($query, [$productID,$delete, $date, $batchcode, $vendor, $batchQty, $batchPrice, $sellingPrice], "iisssddd");
 
                     if ($result) {
                          echo "Batch added successfully!";

@@ -334,7 +334,7 @@ if (isset($_SESSION["a"])) {
                             <input id="Weight" type="text" class="form-control rounded-0" placeholder="Enter Amount" required>
                             <label>Product Weight ( Ex:-3.450 )</label>
                           </div>
-                          <span class="input-group-text rounded-0">kg</span>
+                          <span class="input-group-text rounded-0">g/ml</span>
                         </div>
                       </div>
                     </div>

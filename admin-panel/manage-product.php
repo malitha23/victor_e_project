@@ -57,100 +57,109 @@ if (isset($_SESSION["a"])) {
                         </div>
 
                         <div class="container mt-5">
-                            <div class="row justify-content-center">
-                                <h3 class="text-center mb-4">Product Management Panel</h3>
-                                <div class="col-12">
-                                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="ProductResult">
-                                        <?php
-                                        $productone = Databases::Search("SELECT * FROM `product` WHERE `delete_id`='0' ");
-                                        $productonenum = $productone->num_rows;
-                                        for ($oi = 0; $oi < $productonenum; $oi++) {
-                                            $productonedata = $productone->fetch_assoc();
-                                        ?>
-                                            <div class="col">
-                                                <div class="card shadow-sm border-0 h-100 position-relative">
-                                                    <?php
-                                                    $img = Databases::Search("SELECT * FROM `picture` WHERE `product_id`='" .  $productonedata["id"] . "' AND `name`='Image 1' ");
-                                                    $imgnum = $img->num_rows;
+                            <h3 class="text-center mb-4">Product Management Panel</h3>
+                            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="ProductResult">
+                                <?php
+                                $productone = Databases::Search("SELECT * FROM `product` WHERE `delete_id`='0'");
+                                while ($productonedata = $productone->fetch_assoc()) {
+                                ?>
+                                    <div class="col">
+                                        <div class="card shadow-sm border-0 h-100 position-relative">
+                                            <?php
+                                            $img = Databases::Search("SELECT * FROM `picture` WHERE `product_id`='" . $productonedata["id"] . "' AND `name`='Image 1'");
+                                            $imgdata = $img->num_rows > 0 ? $img->fetch_assoc() : null;
+                                            ?>
+                                            <img src="<?php echo $imgdata ? $imgdata['path'] : 'assets-admin/images/products/s5.jpg'; ?>" class="card-img-top img-fluid" alt="Product Image">
 
-                                                    if ($imgnum > 0) {
-                                                        $imgdata = $img->fetch_assoc();
-                                                    ?>
-                                                        <img src="<?php echo $imgdata['path']; ?>" class="card-img-top img-fluid" alt="Product Image">
-                                                    <?php
-                                                    } else {
-                                                    ?>
-                                                        <img src="assets-admin/images/products/s5.jpg" class="card-img-top img-fluid" alt="Default Image">
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                    <div class="card-body text-center">
-                                                        <h5 class="card-title fw-bold"><?php echo htmlspecialchars($productonedata['title'] ?? 'Unknown Product'); ?></h5>
-                                                        <p class="card-text text-muted mb-2">Price: $<?php echo htmlspecialchars($productonedata['price'] ?? 'price in batch'); ?></p>
-                                                        <p class="card-text text-muted">Stock: <?php echo htmlspecialchars($productonedata['stock'] ?? 'stock in batch'); ?></p>
-                                                        <?php
-                                                        $statusone = Databases::Search("SELECT * FROM `status` WHERE `id`='" . $productonedata["status_id"] . "' ");
-                                                        $statusonenum = $statusone->num_rows;
-                                                        if ($statusonenum > 0) {
-                                                            $statusoned = $statusone->fetch_assoc();
-                                                        ?>
-                                                            <span class="animated-status">
-                                                                <?php echo $statusoned["name"] ?>
-                                                                <i class="fa-solid fa-plane airplane-icon"></i>
-                                                            </span>
+                                            <div class="card-body text-center">
+                                                <?php
+                                                $pb = Databases::Search("SELECT * FROM `batch` WHERE `product_id`='" . $productonedata["id"] . "'");
+                                                if ($pb->num_rows > 0) {
+                                                    $pdd = $pb->fetch_assoc();
+                                                } else {
+                                                    $pdd = [
+                                                        "selling_price" => "Not available",
+                                                        "batch_qty" => "0",
+                                                        "batch_code" => "-",
+                                                        "vendor_name" => "Unknown",
+                                                        "batch_price" => "-",
+                                                        "date" => "-"
+                                                    ];
+                                                }
+                                                ?>
 
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                        <style>
-                                                            .animated-status {
-                                                                position: relative;
-                                                                display: inline-block;
-                                                                font-weight: bold;
-                                                                font-size: 18px;
-                                                                color: #333;
-                                                                padding-right: 30px;
-                                                                /* Ensure space for the airplane */
-                                                            }
+                                                <h5 class="card-title fw-bold"><?php echo htmlspecialchars($productonedata['title'] ?? 'Unknown Product'); ?></h5>
+                                                <p class="card-text text-muted mb-2">Price: RS <?php echo htmlspecialchars($pdd['selling_price']); ?></p>
+                                                <p class="mb-1 text-success">Stock: <?php echo $pdd["batch_qty"]; ?> units</p>
+                                                <p class="mb-1 text-info">Batch Code: <?php echo htmlspecialchars($pdd["batch_code"] ?? '-'); ?></p>
+                                                <p class="mb-1 text-secondary">Vendor: <?php echo htmlspecialchars($pdd["vendor_name"] ?? 'Unknown'); ?></p>
+                                                <?php
+                                                $conditionResult = Databases::Search("SELECT `name` FROM `condition` WHERE `id`='" . $productonedata["condition_id"] . "'");
+                                                $conditionData = ($conditionResult->num_rows > 0) ? $conditionResult->fetch_assoc() : ['name' => 'Unknown'];
+                                                ?>
+                                                <p class="mb-1 text-warning">Condition: <?php echo htmlspecialchars($conditionData["name"]); ?></p>
+                                                <p class="text-muted small">Added on: <?php echo date('Y-m-d', strtotime($productonedata['date'])); ?></p>
 
-                                                            .airplane-icon {
-                                                                position: absolute;
-                                                                top: 50%;
-                                                                right: 0;
-                                                                transform: translateY(-50%);
-                                                                font-size: 16px;
-                                                                color: #007bff;
-                                                                /* Bootstrap primary blue */
-                                                                animation: fly 3s linear infinite;
-                                                            }
+                                                <?php
+                                                $statusone = Databases::Search("SELECT * FROM `status` WHERE `id`='" . $productonedata["status_id"] . "'");
+                                                if ($statusone->num_rows > 0) {
+                                                    $statusoned = $statusone->fetch_assoc();
+                                                ?>
+                                                    <span class="animated-status d-block my-2">
+                                                        <?php echo $statusoned["name"]; ?>
+                                                        <i class="fa-solid fa-plane airplane-icon"></i>
+                                                    </span>
+                                                <?php } ?>
 
-                                                            @keyframes fly {
-                                                                0% {
-                                                                    right: -30px;
-                                                                    opacity: 0;
-                                                                }
-
-                                                                50% {
-                                                                    opacity: 1;
-                                                                }
-
-                                                                100% {
-                                                                    right: 100%;
-                                                                    opacity: 0;
-                                                                }
-                                                            }
-                                                        </style>
-                                                        <button type="button" class="btn btn-outline-danger fw-bold mt-2" onclick="deleteProduct('<?php echo $productonedata["id"]; ?>');">
-                                                            <i class="fa fa-trash"></i> Delete Product
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                                <button type="button" class="btn btn-outline-danger fw-bold mt-2" onclick="deleteProduct('<?php echo $productonedata["id"]; ?>');">
+                                                    <i class="fa fa-trash"></i> Delete Product
+                                                </button>
                                             </div>
-                                        <?php } ?>
+                                        </div>
                                     </div>
-                                </div>
+                                <?php } ?>
                             </div>
                         </div>
+
+                        <style>
+                            .animated-status {
+                                position: relative;
+                                display: inline-block;
+                                font-weight: bold;
+                                font-size: 18px;
+                                color: #333;
+                                padding-right: 30px;
+                            }
+
+                            .airplane-icon {
+                                position: absolute;
+                                top: 50%;
+                                right: 0;
+                                transform: translateY(-50%);
+                                font-size: 16px;
+                                color: #007bff;
+                                animation: fly 3s linear infinite;
+                            }
+
+                            @keyframes fly {
+                                0% {
+                                    right: -30px;
+                                    opacity: 0;
+                                }
+
+                                50% {
+                                    opacity: 1;
+                                }
+
+                                100% {
+                                    right: 100%;
+                                    opacity: 0;
+                                }
+                            }
+
+                           
+                        </style>
+
 
 
 
