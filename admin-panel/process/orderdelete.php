@@ -10,7 +10,7 @@ if (isset($_POST["status_id"])) {
           Databases::IUD("DELETE FROM `order_status` WHERE (`id` = '" . $id . "');");
           echo "Order status deleted successfully.";
      } catch (\Throwable $th) {
-          echo ("can't  delete this");
+          echo ("can't  delete this..");
      }
 } else {
      echo "No status selected.";
