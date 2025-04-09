@@ -38,17 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                echo "Invalid edit ID.";
           }
      } else {
-          // ADD new entry
-          // Insert into discount_date_range table
-          Databases::iud("INSERT INTO discount_date_range (start_date, end_date) VALUES ('$start_date', '$end_date')");
-          $date_range_id = Database::$connection->insert_id;
-
-          // Insert into discount_date_range_has_product
-          Databases::iud("INSERT INTO discount_date_range_has_product 
-            (discount_date_range_id, discount_pre, discount_group_id, qty, batch_id) 
-            VALUES ('$date_range_id', '$percentage', '$discount_group_id', 0, 0)");
-
-          echo "Saved successfully.";
+         ?>
+         <script>
+          alert("Please add new batch first. There you can add a start date, end date, and percentage.");
+         </script>
+         <?php
      }
 }
 ?>
