@@ -135,18 +135,91 @@ if (isset($_SESSION["a"])) {
                                                                                                     <?php } ?>
 
                                                                                                     <!-- Delete Button -->
-                                                                                                    <button class="btn btn-danger w-100 mb-2 fw-semibold" onclick="deletdiscoun(<?php echo $disgdata['id']; ?>);">
+                                                                                                    <button class="btn btn-danger w-100 mb-2 fw-semibold m-1 mb-3" onclick="deletdiscoun(<?php echo $disgdata['id']; ?>);">
                                                                                                          <i class="ph ph-trash"></i> Delete
                                                                                                     </button>
 
+                                                                                                    <button class="btn btn-dark w-100 fw-semibold" data-bs-toggle="modal" data-bs-target="#addnewdatpreModal<?php echo $disgdata['id']; ?>">
+                                                                                                         <i class="ph ph-plus-circle"></i> Add New Date, pre(%)
+                                                                                                    </button>
+
                                                                                                     <!-- Add New Batch -->
-                                                                                                    <button class="btn btn-dark w-100 fw-semibold" data-bs-toggle="modal" data-bs-target="#disbachdetilModal<?php echo $disgdata['id']; ?>">
+                                                                                                    <button class="btn btn-dark w-100 fw-semibold m-2" data-bs-toggle="modal" data-bs-target="#disbachdetilModal<?php echo $disgdata['id']; ?>">
                                                                                                          <i class="ph ph-plus-circle"></i> Add New Batch
                                                                                                     </button>
                                                                                                </div>
                                                                                           </div>
                                                                                      </div>
                                                                                 </div>
+
+                                                                                <!-- !-->
+                                                                                <?php
+                                                                                $query = Databases::Search("
+                                                                                SELECT 
+                                                                                    ddp.id,
+                                                                                    ddp.discount_date_range_id,
+                                                                                    ddp.discount_pre,
+                                                                                    ddp.discount_group_id,
+                                                                                    ddp.qty,
+                                                                                    ddp.batch_id,
+                                                                                    ddr.start_date,
+                                                                                    ddr.end_date
+                                                                                FROM 
+                                                                                    discount_date_range_has_product ddp
+                                                                                JOIN 
+                                                                                    discount_date_range ddr 
+                                                                                ON 
+                                                                                    ddp.discount_date_range_id = ddr.id
+                                                                                WHERE 
+                                                                                    ddp.discount_group_id = '" . $disgdata['id'] . "'
+                                                                                ");
+
+                                                                                if ($query->num_rows > 0) {
+                                                                                     $existing = $query->fetch_assoc(); // You can loop through multiple entries if needed
+                                                                                }
+                                                                                ?>
+
+                                                                                <div class="modal fade" id="addnewdatpreModal<?php echo $disgdata['id']; ?>" tabindex="-1" aria-labelledby="addNewDatePreLabel<?php echo $disgdata['id']; ?>" aria-hidden="true">
+                                                                                     <div class="modal-dialog modal-dialog-centered">
+                                                                                          <div class="modal-content rounded-3 shadow">
+                                                                                               <div class="modal-header bg-dark text-white">
+                                                                                                    <h5 class="modal-title" id="addNewDatePreLabel<?php echo $disgdata['id']; ?>">Add / Edit Discount Period</h5>
+                                                                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                               </div>
+
+                                                                                               <form action="update_discount_date.php" method="POST">
+                                                                                                    <div class="modal-body">
+                                                                                                         <input type="hidden" name="discount_group_id" value="<?php echo $disgdata['id']; ?>">
+                                                                                                         <?php if (!empty($existing)) { ?>
+                                                                                                              <input type="hidden" name="edit_id" value="<?php echo $existing['id']; ?>">
+                                                                                                         <?php } ?>
+
+                                                                                                         <div class="mb-3">
+                                                                                                              <label for="percentage<?php echo $disgdata['id']; ?>" class="form-label">Percentage (%)</label>
+                                                                                                              <input type="number" name="percentage" class="form-control" id="percentage<?php echo $disgdata['id']; ?>" value="<?php echo isset($existing['discount_pre']) ? $existing['discount_pre'] : ''; ?>" required>
+                                                                                                         </div>
+
+                                                                                                         <div class="mb-3">
+                                                                                                              <label for="startDate<?php echo $disgdata['id']; ?>" class="form-label">Start Date</label>
+                                                                                                              <input type="date" name="start_date" class="form-control" id="startDate<?php echo $disgdata['id']; ?>" value="<?php echo isset($existing['start_date']) ? $existing['start_date'] : ''; ?>" required>
+                                                                                                         </div>
+
+                                                                                                         <div class="mb-3">
+                                                                                                              <label for="endDate<?php echo $disgdata['id']; ?>" class="form-label">End Date</label>
+                                                                                                              <input type="date" name="end_date" class="form-control" id="endDate<?php echo $disgdata['id']; ?>" value="<?php echo isset($existing['end_date']) ? $existing['end_date'] : ''; ?>" required>
+                                                                                                         </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="modal-footer">
+                                                                                                         <button type="submit" class="btn btn-success"><?php echo !empty($existing) ? 'Update' : 'Save'; ?></button>
+                                                                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                                                    </div>
+                                                                                               </form>
+                                                                                          </div>
+                                                                                     </div>
+                                                                                </div>
+
+                                                                                <!-- !-->
 
                                                                                 <!-- Modal for viewing batch details -->
                                                                                 <div class="modal fade" id="disbachdetilModal<?php echo $disgdata['id']; ?>" tabindex="-1" aria-labelledby="batchModalLabel" aria-hidden="true">
@@ -182,15 +255,15 @@ if (isset($_SESSION["a"])) {
                                                                                                          } else {
                                                                                                          ?>
                                                                                                               <div class="form-floating mb-3">
-                                                                                                                   <input type="number"  class="form-control" id="EpercentageInput<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
+                                                                                                                   <input type="number" class="form-control" id="EpercentageInput<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
                                                                                                                    <label for="percentageInput<?php echo $disgdata['id']; ?>">Enter percentage</label>
                                                                                                               </div>
                                                                                                               <div class="form-floating mb-3">
-                                                                                                                   <input type="date"  class="form-control" id="startdate<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
+                                                                                                                   <input type="date" class="form-control" id="startdate<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
                                                                                                                    <label for="startdate<?php echo $disgdata['id']; ?>">discount start date</label>
                                                                                                               </div>
                                                                                                               <div class="form-floating mb-3">
-                                                                                                                   <input type="date"  class="form-control" id="enddate<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
+                                                                                                                   <input type="date" class="form-control" id="enddate<?php echo $disgdata['id']; ?>" placeholder="Enter percentage">
                                                                                                                    <label for="enddate<?php echo $disgdata['id']; ?>">discount end date</label>
                                                                                                               </div>
                                                                                                          <?php
