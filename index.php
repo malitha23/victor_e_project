@@ -11,6 +11,7 @@ include_once "connection.php";
     <!-- Title -->
     <title>replace_title</title>
     <!-- Favicon -->
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="shortcut icon" href="assets/images/logo/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <!-- Bootstrap -->
@@ -114,8 +115,8 @@ include_once "connection.php";
                                         Shop Now<span class="icon text-xl d-flex"><i class="ph ph-shopping-cart-simple"></i> </span>
                                     </a>
                                 </div>
-                                <div class="banner-item-two__thumb position-absolute bottom-0 wow bounceInUp" data-wow-duration="1s" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-scale="1.06">
-                                    <img src="<?php echo "admin-panel/process/" . $sliderd["sub_path"]; ?>" alt="">
+                                <div class="banner-item-two__thumb position-absolute bottom-0 wow bounceInUp" style="margin-bottom: 40px;" data-wow-duration="1s" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-scale="1.06">
+                                    <img src="<?php echo "admin-panel/process/" . $sliderd["sub_path"]; ?>" class="b-20" alt="">
                                 </div>
                             </div>
                         <?php
@@ -151,7 +152,7 @@ include_once "connection.php";
                     }
                 ?>
                     <div class="col-lg-4 col-sm-6" data-aos="fade-up" data-aos-duration="600">
-                        <div class="position-relative rounded-16 overflow-hidden z-1 p-32">
+                        <div class="position-relative rounded-16 overflow-hidden z-1 p-32 hand">
                             <img src="<?php echo $bimgA ?>" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 object-fit-cover z-n1">
                             <div class="flex-between flex-wrap gap-16">
                                 <div class="">
@@ -165,7 +166,7 @@ include_once "connection.php";
                                 <div class="pe-xxl-4">
                                     <div class="row">
                                         <div class="col-12">
-                                            <img src="<?php echo $adimgpath ?>" alt="Ad Image" class="img-fluid rounded business-ad-img">
+                                            <img src="<?php echo $adimgpath ?>" alt="Ad Image" class="img-fluid business-ad-img b-10 shadow-none" style="width: 100px !important; height: 100px !important;">
                                         </div>
                                     </div>
                                 </div>
@@ -198,6 +199,7 @@ include_once "connection.php";
     for ($i = 0; $i < $offers_num; $i++) {
         $offers_details = $offers->fetch_assoc();
     ?>
+
         <section class="deals-weeek pt-80 overflow-hidden">
             <div class="container container-lg">
                 <div class="border border-gray-100 p-24 rounded-16">
@@ -219,72 +221,40 @@ include_once "connection.php";
                             <img src="assets/images/thumbs/week-deal-img1.png" alt="">
                         </div>
                         <div class="deal-week-box__content px-sm-4 d-block w-100 text-center">
-                            <h6 class="mb-20 wow bounceIn"><?php echo $offers_details["description"] ?></h6>
+                            <h6 class="mb-20 wow bounceIn fw-bolder"><?php echo $offers_details["description"] ?></h6>
                             <?php
                             $phgd = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `discount_group_id`='" . $offers_details["id"] . "' ");
                             $phgdd = $phgd->fetch_assoc();
                             $phdate = Database::Search("SELECT * FROM `discount_date_range` WHERE `id`='" . $phgdd["discount_date_range_id"] . "' ");
                             $phdatedeta = $phdate->fetch_assoc();
                             ?>
-                            <div class="container text-center mt-4">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h5 class="text-primary">Countdown Timer</h5>
-                                        <span class="fw-bold text-dark"><?php echo $phdatedeta["start_date"] ?></span> -
-                                        <span class="fw-bold text-danger"><?php echo $phdatedeta["end_date"] ?></span>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="countdown mt-3 p-3 rounded bg-light shadow" id="countdown4">
-                                            <ul class="countdown-list d-flex justify-content-center align-items-center gap-3">
-                                                <li class="countdown-list__item d-flex flex-column align-items-center text-white  bg-dark p-3">
-                                                    <span class="days fs-4 fw-bold">00</span>
-                                                    <span class="fs-6"></span>
-                                                </li>
-                                                <li class="countdown-list__item d-flex flex-column align-items-center text-white  bg-dark p-3">
-                                                    <span class="hours fs-4 fw-bold">00</span>
-                                                    <span class="fs-6"></span>
-                                                </li>
-                                                <li class="countdown-list__item d-flex flex-column align-items-center text-white  bg-dark p-3">
-                                                    <span class="minutes fs-4 fw-bold">00</span>
-                                                    <span class="fs-6"></span>
-                                                </li>
-                                                <li class="countdown-list__item d-flex flex-column align-items-center text-white  bg-dark p-3">
-                                                    <span class="seconds fs-4 fw-bold">00</span>
-                                                    <span class="fs-6"></span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="countdown mt-20" id="countdown<?php echo $i; ?>">
+                                <ul class="countdown-list style-four flex-center flex-wrap">
+                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                        <span class="days"></span>Days
+                                    </li>
+                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                        <span class="hours"></span>Hour
+                                    </li>
+                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                        <span class="minutes"></span>Min
+                                    </li>
+                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                        <span class="seconds"></span>Sec
+                                    </li>
+                                </ul>
                             </div>
+
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    initializeCountdown("countdown<?php echo $i; ?>", "<?php echo $phdatedeta["end_date"] ?>");
+                                });
+                            </script>
 
                         </div>
                         <div class="d-lg-block d-none flex-shrink-0 pe-xl-5" data-aos="zoom-in">
                             <div class="me-xxl-5">
-                                <?php
-                                if (empty($offers_details["image_path"])) {
-                                    $disimgpath = "assets/images/thumbs/week-deal-img2.png";
-                                } else {
-                                    $disimgpath = "admin-panel/process/" . $offers_details["image_path"];
-                                }
-                                ?>
-                                <div class="row d-flex align-items-end">
-                                    <div class="col-12 bg-blur">
-                                        <img class="img-fluid fixed-discount-img" src="<?php echo $disimgpath; ?>" alt="Discount Image">
-                                    </div>
-                                </div>
-                                <style>
-                                    .fixed-discount-img {
-                                        height: 180px;
-                                        /* Adjust height as needed */
-                                        width: 100%;
-                                        /* Makes it fill the column */
-                                        object-fit: cover;
-                                        /* Keeps image looking good */
-                                        border-radius: 8px;
-                                        border: 1px solid #ccc;
-                                    }
-                                </style>
+                                <img src="assets/images/thumbs/week-deal-img2.png" alt="">
                             </div>
                         </div>
                     </div>
@@ -362,6 +332,7 @@ include_once "connection.php";
                 </div>
             </div>
         </section>
+
     <?php
     }
     ?>
@@ -398,7 +369,6 @@ include_once "connection.php";
                             if ($tss->num_rows > 0) {
                                 $tssd = $tss->fetch_assoc();
                                 $max_qty = $tssd["qty"];
-                                echo "<h6 class='fw-bold text-danger'>🔥 Maximum Sold Quantity: $max_qty</h6>";
 
                                 // Fetch products with the same highest quantity
                                 $in = Database::Search("SELECT batch_id FROM `invoice` WHERE `qty`='$max_qty'");
@@ -406,55 +376,6 @@ include_once "connection.php";
 
                                 if ($inn > 0) {
                             ?>
-                                    <!-- Bootstrap Carousel -->
-                                    <div id="topSellingCarousel" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <span class="fw-bold text-primary">🚀 Best-Selling Products</span>
-                                            </div>
-
-                                            <?php
-                                            while ($ind = $in->fetch_assoc()) {
-                                                $batch_id = $ind["batch_id"];
-                                                $bach = Database::Search("SELECT * FROM `batch` WHERE id='$batch_id'");
-
-                                                if ($bach->num_rows > 0) {
-                                                    $batchdata = $bach->fetch_assoc();
-                                                    $product = Database::Search("SELECT * FROM `product` WHERE `id`='" . $batchdata["product_id"] . "'");
-                                                    $productdata = $product->fetch_assoc();
-                                            ?>
-                                                    <!-- Product Slide -->
-                                                    <div class="carousel-item">
-                                                        <div class="carousel-content text-center">
-                                                            <?php
-                                                            $pic = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" .  $productdata["id"] . "' AND `name`='Image 1' ");
-                                                            $pic_d = $pic->fetch_assoc();
-                                                            if (empty($pic_d["path"])) {
-                                                                $pp = "assets/images/thumbs/deal-img.png";
-                                                            } else {
-                                                                $pp = "admin-panel/" . $pic_d["path"];
-                                                            }
-                                                            ?>
-                                                            <img src="<?php echo $pp ?>" alt="Product Image" class="carousel-image">
-                                                            <p class="carousel-text"><strong><?php echo $productdata["title"]; ?></strong> is a top-selling item! ✅</p>
-                                                        </div>
-                                                    </div>
-                                            <?php
-                                                }
-                                            }
-                                            ?>
-                                        </div>
-
-                                        <!-- Carousel Controls -->
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#topSellingCarousel" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#topSellingCarousel" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </button>
-                                    </div>
                             <?php
                                 }
                             } else {
@@ -626,56 +547,74 @@ include_once "connection.php";
                             <?php
                             $bach = Database::Search("SELECT * FROM `batch`");
                             $bach_n = $bach->num_rows;
-                            for ($i = 0; $i < $bach_n; $i++) {
-                                $bach_d = $bach->fetch_assoc();
-                                $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bach_d["product_id"] . "' ");
-                                $pr =  $pr->fetch_assoc();
-                                $discountid = 0;
+                            $col_2 = ceil($bach_n / 2);
+                            for ($i = 0; $i < $col_2; $i++) {
+                                if ($bach_n >= 2) {
+                                    $b_times = 2;
+                                } else {
+                                    $b_times = 1;
+                                }
                             ?>
-                                <div class="col-xxl-4 col-lg-4 col-md-6">
+                                <div class="col-xxl-6">
                                     <div class="featured-products__sliders">
-                                        <div class="product-card-wrapper" data-aos="fade-up" data-aos-duration="800">
-                                            <div class="mt-24 product-card d-flex flex-column p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                                <a href="product-details.php?batch_id=<?php echo $bach_d['id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center h-100 rounded-8 bg-gray-50 position-relative overflow-hidden">
-                                                    <?php
-                                                    $pic = Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
-                                                    $pic_d = $pic->fetch_assoc();
-                                                    if (empty($pic_d["path"])) {
-                                                    ?>
-                                                        <img src="assets/images/thumbs/product-two-img2.png" alt="" class="product-image">
-                                                    <?php
-                                                    } else {
-                                                    ?>
-                                                        <img src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="product-image">
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </a>
-                                                <div class="product-card__content my-20 flex-grow-1">
-                                                    <h6 class="title text-lg fw-semibold mb-12">
-                                                        <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"] ?></a>
-                                                    </h6>
-                                                    <div class="product-card__price my-20">
-                                                        <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $bach_d["selling_price"] + 20 ?></span>
-                                                        <span class="text-heading text-md fw-semibold">Rs <?php echo $bach_d["selling_price"] ?><span class="text-gray-500 fw-normal">/Qty</span> <?php echo $bach_d["batch_qty"] ?></span>
-                                                    </div>
-                                                    <?php
-                                                    $sprice = $bach_d["selling_price"];
-                                                    $discountpercentage = 0;
-                                                    $batch_id = $bach_d["id"];
-                                                    ?>
-                                                    <a onclick="adtocart(<?= $sprice ?>, <?= $discountpercentage ?>, <?= $batch_id ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
-                                                        Add To Cart <i class="ph ph-shopping-cart"></i>
+
+                                        <?php
+                                        for ($j = 0; $j < $b_times; $j++) {
+                                            $bach_d = $bach->fetch_assoc();
+                                            $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bach_d["product_id"] . "' ");
+                                            $pr =  $pr->fetch_assoc();
+                                            $discountid = 0;
+                                        ?>
+                                            <div class="" data-aos="fade-up" data-aos-duration="800">
+                                                <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+                                                    <a href="product-details.php?batch_id=<?php echo $bach_d['id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
+                                                        <?php
+                                                        $pic = Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
+                                                        $pic_d = $pic->fetch_assoc();
+                                                        if (empty($pic_d["path"])) {
+                                                        ?>
+                                                            <img src="assets/images/thumbs/product-two-img2.png" alt="" class="product-image w-auto max-w-unset">
+                                                        <?php
+                                                        } else {
+                                                        ?>
+                                                            <img src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="product-image ">
+                                                        <?php
+                                                        }
+                                                        ?>
                                                     </a>
+                                                    <div class="product-card__content my-20 flex-grow-1">
+                                                        <h6 class="title text-lg fw-semibold mb-12">
+                                                            <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"] ?></a>
+                                                        </h6>
+                                                        <div class="product-card__price my-20">
+                                                            <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $bach_d["selling_price"] + 20 ?></span>
+                                                            <span class="text-heading text-md fw-semibold ">Rs <?php echo $bach_d["selling_price"] ?> <span class="text-gray-500 fw-normal">/Qty</span> <?php echo $bach_d["batch_qty"] ?></span>
+                                                        </div>
+                                                        <?php
+                                                        $sprice = $bach_d["selling_price"];
+                                                        $discountpercentage = 0;
+                                                        $batch_id = $bach_d["id"];
+                                                        ?>
+                                                        <a onclick="adtocart(<?= $sprice ?>, <?= $discountpercentage ?>, <?= $batch_id ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
+                                                            Add To Cart <i class="ph ph-shopping-cart"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        <?php
+                                            $bach_n = $bach_n - 1;
+                                        }
+                                        ?>
+
                                     </div>
                                 </div>
                             <?php
+
                             }
                             ?>
                         </div>
+
+                        
 
 
                     </div>
@@ -714,7 +653,7 @@ include_once "connection.php";
                     </div>
                 </div>
 
-                <div class="row gy-4">
+                <div class="row gy-4 d-flex justify-content-center">
                     <?php
                     $category = Database::Search("SELECT * FROM `category` LIMIT 6");
                     $category_num = $category->num_rows;
@@ -769,7 +708,7 @@ include_once "connection.php";
     <section class="top-vendor py-80 overflow-hidden">
         <div class="container container-lg">
             <div class="p-24 rounded-16">
-                <div class="row gy-4 vendor-card-wrapper">
+                <div class="row gy-4 vendor-card-wrapper d-flex justify-content-center">
                     <?php
                     $g = Database::Search("SELECT * FROM `group`");
                     $gn = $g->num_rows;
@@ -861,7 +800,6 @@ include_once "connection.php";
                         <div class="top-brand__item flex-center rounded-8 transition-1 px-8">
                             <img src="<?php echo $bimgpath; ?>" alt="<?php echo $branddata["name"]; ?>">
                         </div>
-                        <span class="brand-name"><?php echo $branddata["name"]; ?></span>
                     </div>
                 <?php
                 }
@@ -962,6 +900,41 @@ include_once "connection.php";
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
+        function initializeCountdown(elementId, endDate) {
+            const second = 1000,
+                minute = second * 60,
+                hour = minute * 60,
+                day = hour * 24;
+
+            const countDown = new Date(endDate).getTime();
+
+            const interval = setInterval(function() {
+                const now = new Date().getTime(),
+                    distance = countDown - now;
+
+                const daysElement = document.querySelector(`#${elementId} .days`);
+                const hoursElement = document.querySelector(`#${elementId} .hours`);
+                const minutesElement = document.querySelector(`#${elementId} .minutes`);
+                const secondsElement = document.querySelector(`#${elementId} .seconds`);
+
+                if (daysElement && hoursElement && minutesElement && secondsElement) {
+                    daysElement.innerText = Math.floor(distance / day);
+                    hoursElement.innerText = Math.floor((distance % day) / hour);
+                    minutesElement.innerText = Math.floor((distance % hour) / minute);
+                    secondsElement.innerText = Math.floor((distance % minute) / second);
+                }
+
+                //do something later when date is reached
+                if (distance < 0) {
+                    const countdownElement = document.querySelector(`#${elementId}`);
+                    if (countdownElement) {
+                        countdownElement.style.display = "none";
+                    }
+                    clearInterval(interval);
+                }
+            }, 1000);
+        }
+
         AOS.init({
             duration: 800,
             easing: "ease-in-out",

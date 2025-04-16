@@ -37,7 +37,7 @@ function initializeCountdown(elementId, endDate) {
 initializeCountdown('countdown1', '2025-12-30');
 initializeCountdown('countdown2', '2025-12-20');
 initializeCountdown('countdown3', '2025-11-24');
-initializeCountdown('countdown4', '2025-11-11');
+
 initializeCountdown('countdown5', '2025-11-13');
 initializeCountdown('countdown6', '2025-11-03');
 initializeCountdown('countdown7', '2025-11-03');

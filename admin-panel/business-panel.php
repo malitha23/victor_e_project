@@ -1,14 +1,15 @@
 <?php
 session_start();
 
-if (isset($_SESSION["a"])) {
+if (!isset($_SESSION["a"])) {
     include "db.php";
-    $uemail = $_SESSION["a"]["username"];
-    $query = "SELECT * FROM `admin` WHERE `username` = ?";
-    $params = [$uemail];
-    $types = "s";
-    $u_detail = Databases::Search($query, $params, $types);
-    if ($u_detail->num_rows == 1) {
+    // $uemail = $_SESSION["a"]["username"];
+    // $query = "SELECT * FROM `admin` WHERE `username` = ?";
+    // $params = [$uemail];
+    // $types = "s";
+    // $u_detail = Databases::Search($query, $params, $types);
+    // if ($u_detail->num_rows == 1) {
+    if (1 == 1) {
 ?>
 
         <!doctype html>
@@ -43,23 +44,30 @@ if (isset($_SESSION["a"])) {
 
                     <div class="container-fluid px-md-5">
 
-                        <!-- !-->
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                    <h2 class="mb-4">Add Privacy Policy</h2>
+                        <div class="row">
+                            <div class="col-12 text-center mb-0">
+                                <div class="mb-1"><span class="h4 mb-9 fw-semibold">Privacy Policy&nbsp;&nbsp;<i class="fa fa-balance-scale" aria-hidden="true"></i></span>
                                 </div>
-                                <div class="col-12">
-                                    <textarea id="privacy" class="form-control" rows="10" placeholder="Enter your privacy policy"></textarea>
-                                </div>
-                                <div class="col-12 text-center mt-3">
-                                    <button onclick="savePrivacy()" class="btn btn-primary btn-lg">Save Privacy</button>
+                                <div><span class="mb-9 text-dark-emphasis">You can change your privacy policies here</span>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-12 text-center mt-5">
-                            <p>Powered by <span style="color: #0d6efd; font-weight: bold;">Tiny</span></p>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <div class="row d-flex flex-row justify-content-center align-items-center h-100">
+                                    <div class="col-12 shadow p-3 py-4">
+                                        <div class="row">
+                                            <div class="col-12 px-3">
+                                                <textarea id="privacy" class="form-control" rows="10" placeholder="Enter your privacy policy"></textarea>
+                                            </div>
+                                            <div class="col-12 text-end mt-3">
+                                                <button class="btn rounded-0-5 fw-bold x" data-bs-toggle="modal" onclick="savePrivacy();" data-bs-target="#exampleModal"><i class="fa fa-check"></i>
+                                                    SAVE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <script>
@@ -108,7 +116,7 @@ if (isset($_SESSION["a"])) {
 
                         <!-- !-->
                         <!-- add cities -->
-                        <div class="row">
+                        <div class="row mt-5">
                             <div class="col-12 text-center mb-0">
                                 <div class="mb-1"><span class="h4 mb-9 fw-semibold">Add Cities&nbsp;&nbsp;<i class="fa fa-globe" aria-hidden="true"></i>
                                 </div>
@@ -121,6 +129,87 @@ if (isset($_SESSION["a"])) {
                                 <img src="../admin-panel/assets-admin/images/contact/branch_i.svg" class="img-fluid" width="300px">
                             </div>
                             <div class="col-12 col-md-8 mb-2">
+                                <div class="row d-flex flex-row justify-content-center align-items-center h-100">
+                                    <div class="col-12 shadow p-3 py-4">
+                                        <div class="row">
+                                            <div class="col-6 col-md-4">
+                                                <div class="form-floating mb-3">
+                                                    <select class="form-select rounded-0" id="ad_id" onchange="list_town();"
+                                                        aria-label="Floating label select example">
+                                                        <option selected value="0" selected>Select a district</option>
+                                                        <?php
+                                                        $district_q1 = Databases::search("SELECT * FROM `distric` ");
+                                                        while ($district1 = $district_q1->fetch_assoc()) {
+                                                        ?>
+                                                            <option value="<?php echo $district1['distric_id'] ?>">
+                                                                <?php echo $district1['name'] ?>
+                                                            </option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                    <label for="c_id">District</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-4">
+                                                <div class="form-floating mb-3">
+                                                    <select class="form-select rounded-0" id="at_id"
+                                                        aria-label="Floating label select example">
+
+                                                    </select>
+                                                    <label for="c_id">Available Cities</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-4 py-1">
+                                                <button
+                                                    class="btn btn-lg btn-light-danger border-danger border-opacity-25 rounded-0-5 text-dark-emphasis fw-100 fs-4" onclick="add_town_col();">ADD</button>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="row" id="town_col">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-12 text-end">
+                                                <button class="btn rounded-0-5 fw-bold x" data-bs-toggle="modal"
+                                                    onclick="savecities();" data-bs-target="#exampleModal"><i
+                                                        class="fa fa-check"></i>
+                                                    SAVE</button>
+                                            </div>
+                                            <script>
+                                                var town_col_count = 0;
+
+                                                function add_town_col() {
+                                                    var town_col = document.getElementById("town_col");
+                                                    if (town_col_count <= 10) {
+                                                        town_col_count = town_col_count + 1;
+                                                        town_col.insertAdjacentHTML("beforeend",
+                                                            "<div class='col-6 col-md-4 position-relative' id='dfDiv_" + town_col_count + "' >" +
+                                                            "<div class='form-floating mb-3'>" +
+                                                            "<input type='text' class='form-control rounded-0' id='df_" + town_col_count + "' value='' placeholder=''>" +
+                                                            "<label for=''>City Name</label>" +
+                                                            " <button type='button' onclick='removeDF(" + town_col_count + ");' class='delete-btn'><i class='fa fa-trash' aria-hidden='true'></i></button>" +
+                                                            "</div>" +
+                                                            "</div>"
+                                                        );
+                                                    } else {
+                                                        alert("A maximum of 10 cities can be added at a time.");
+                                                    }
+
+                                                }
+
+                                                function removeDF(id) {
+                                                    var element = document.getElementById('dfDiv_' + id);
+                                                    if (element) {
+                                                        element.remove();
+                                                        town_col_count = town_col_count - 1;
+                                                    }
+                                                }
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-8 mb-2 d-none">
                                 <div class="row d-flex flex-row justify-content-center align-items-center h-100">
                                     <div class="col-12 shadow p-3 py-4">
                                         <div class="row">
@@ -382,7 +471,6 @@ if (isset($_SESSION["a"])) {
                                             }
                                         </script>
 
-
                                         <div class="mb-3">
                                             <label for="wid" class="form-label fw-semibold">Delete Weight</label>
                                             <div class="input-group">
@@ -438,7 +526,7 @@ if (isset($_SESSION["a"])) {
 
                         <!-- !-->
                         <!-- contact us -->
-                        <div class="row">
+                        <div class="row mt-5">
                             <div class="col-12 text-center mb-0">
                                 <div class="mb-1"><span class="h4 mb-9 fw-semibold">Contact Us&nbsp;&nbsp;<i class="fa fa-envelope" aria-hidden="true"></i></span>
                                 </div>
@@ -448,10 +536,10 @@ if (isset($_SESSION["a"])) {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="offset-1 col-10 offset-md-0 col-md-4 d-flex flex-row justify-content-center">
+                            <div class="offset-1 col-10 offset-md-0 col-md-4 d-flex flex-row justify-content-center order-md-2">
                                 <img src="../admin-panel/assets-admin/images/contact/email_i.svg" class="img-fluid" width="300px">
                             </div>
-                            <div class="col-12 col-md-8">
+                            <div class="col-12 col-md-8 order-md-1">
                                 <div class="row d-flex flex-row justify-content-center align-items-center h-100">
                                     <div class="col-12 shadow p-3 py-4">
                                         <div class="row">

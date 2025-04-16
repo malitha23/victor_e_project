@@ -1,0 +1,15 @@
+.bg-orange{
+    background-color: #FA6800 !important;
+}
+
+.b-20{
+    border-radius: 20px !important;
+}
+
+.b-10{
+    border-radius: 10px !important;
+}
+
+.hand{
+    cursor: pointer !important;
+}
