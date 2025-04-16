@@ -3,13 +3,12 @@ session_start();
 
 if (!isset($_SESSION["a"])) {
     include "db.php";
-    // $uemail = $_SESSION["a"]["username"];
-    // $query = "SELECT * FROM `admin` WHERE `username` = ?";
-    // $params = [$uemail];
-    // $types = "s";
-    // $u_detail = Databases::Search($query, $params, $types);
-    // if ($u_detail->num_rows == 1) {
-    if (1 == 1) {
+    $uemail = $_SESSION["a"]["username"];
+    $query = "SELECT * FROM `admin` WHERE `username` = ?";
+    $params = [$uemail];
+    $types = "s";
+    $u_detail = Databases::Search($query, $params, $types);
+    if ($u_detail->num_rows == 1) {
 ?>
 
         <!doctype html>
