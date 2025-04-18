@@ -180,13 +180,17 @@ $product_num = $product_rs->num_rows;
                                         }
           ?>
                                         <div class="col-6 col-md-4">
+                                             <?php
+                                             $dispre = $disdetails["discount_pre"];
+                                             $sellprice = $batchdata["selling_price"] - ($batchdata["selling_price"] * $dispre / 100);
+                                             ?>
                                              <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                                  <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
+                                                  <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $dispre; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
                                                        <img src="admin-panel/<?php echo $picturepath; ?>" alt="" class="w-auto max-w-unset">
                                                   </a>
                                                   <div class="product-card__content mt-16">
                                                        <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                                            <a href="product-details.php" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
+                                                            <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $dispre; ?>" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
                                                        </h6>
                                                        <div class="mt-8">
                                                             <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
@@ -205,9 +209,6 @@ $product_num = $product_rs->num_rows;
                                                                  <span class="text-muted fw-normal fs-6 ms-1">Quantity / <?php echo $batchdata["batch_qty"]; ?> Available</span>
                                                             </span>
                                                             <span class="sellp-dism text-dark fw-bold fs-5">
-                                                                 <?php
-                                                                 $dispre = $disdetails["discount_pre"];
-                                                                 $sellprice = $batchdata["selling_price"] - ($batchdata["selling_price"] * $dispre / 100); ?>
                                                                  Rs <?php echo  $sellprice; ?>
                                                             </span>
                                                             <span class="dismp"><?php echo $disdetails["discount_pre"]; ?>% discount</span>
@@ -238,13 +239,16 @@ $product_num = $product_rs->num_rows;
                                    }
                                    ?>
                                    <div class="col-6 col-md-4">
+                                        <?php
+                                        $dispre = $disdetails["discount_pre"];
+                                        $sellprice = $batchdata["selling_price"] - ($batchdata["selling_price"] * $dispre / 100); ?>
                                         <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                             <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
+                                             <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $dispre; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
                                                   <img src="admin-panel/<?php echo $picturepath; ?>" alt="" class="w-auto max-w-unset">
                                              </a>
                                              <div class="product-card__content mt-16">
                                                   <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                                       <a href="product-details.php" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
+                                                       <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $dispre; ?>" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
                                                   </h6>
                                                   <div class="mt-8">
                                                        <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
@@ -263,9 +267,6 @@ $product_num = $product_rs->num_rows;
                                                             <span class="text-muted fw-normal fs-6 ms-1">Quantity / <?php echo $batchdata["batch_qty"]; ?> Available</span>
                                                        </span>
                                                        <span class="sellp-dism text-dark fw-bold fs-5">
-                                                            <?php
-                                                            $dispre = $disdetails["discount_pre"];
-                                                            $sellprice = $batchdata["selling_price"] - ($batchdata["selling_price"] * $dispre / 100); ?>
                                                             Rs <?php echo  $sellprice; ?>
                                                        </span>
                                                        <span class="dismp"><?php echo $disdetails["discount_pre"]; ?>% discount</span>
@@ -368,12 +369,12 @@ $product_num = $product_rs->num_rows;
                               ?>
                                    <div class="col-6 col-md-4">
                                         <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                             <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
+                                             <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
                                                   <img src="admin-panel/<?php echo $picturepath; ?>" alt="" class="w-auto max-w-unset">
                                              </a>
                                              <div class="product-card__content mt-16">
                                                   <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                                       <a href="product-details.php" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
+                                                       <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
                                                   </h6>
                                                   <div class="mt-8">
                                                        <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
@@ -394,7 +395,7 @@ $product_num = $product_rs->num_rows;
                                                        </span>
                                                   </div>
 
-                                                  <a href="cart.html" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium">
+                                                  <a onclick="adtocart(<?= $batchdata['selling_price'] ?>, <?= 0 ?>, <?= $batchdata['id'] ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium">
                                                        Add To Cart <i class="ph ph-shopping-cart"></i>
                                                   </a>
                                              </div>
@@ -416,12 +417,12 @@ $product_num = $product_rs->num_rows;
                               ?>
                               <div class="col-6 col-md-4">
                                    <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                        <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
+                                        <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
                                              <img src="admin-panel/<?php echo $picturepath; ?>" alt="" class="w-auto max-w-unset">
                                         </a>
                                         <div class="product-card__content mt-16">
                                              <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                                  <a href="product-details.php" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
+                                                  <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
                                              </h6>
                                              <div class="mt-8">
                                                   <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
@@ -442,7 +443,7 @@ $product_num = $product_rs->num_rows;
                                                   </span>
                                              </div>
 
-                                             <a href="cart.html" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium">
+                                             <a onclick="adtocart(<?= $batchdata['selling_price'] ?>, <?= 0 ?>, <?= $batchdata['id'] ?>);"  class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium">
                                                   Add To Cart <i class="ph ph-shopping-cart"></i>
                                              </a>
                                         </div>
