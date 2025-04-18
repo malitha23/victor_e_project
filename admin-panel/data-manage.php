@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["a"])) {
+if (isset($_SESSION["a"])) {
   include "db.php";
   // $uemail = $_SESSION["a"]["username"];
   // $query = "SELECT * FROM `admin` WHERE `username` = ?";
