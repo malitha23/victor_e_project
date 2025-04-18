@@ -91,9 +91,17 @@
           </a>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" href="display.php" aria-expanded="false">
+          <a class="sidebar-link" href="data-manage.php" aria-expanded="false">
             <span>
               <i class="fa fa-desktop" aria-hidden="true"></i>
+            </span>
+            <span class="hide-menu">Manage Data</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="display.php" aria-expanded="false">
+            <span>
+              <i class="fa fa-database" aria-hidden="true"></i>
             </span>
             <span class="hide-menu">Manage display</span>
           </a>

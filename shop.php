@@ -142,7 +142,7 @@
 
     <!-- ========================= Breadcrumb Start =============================== -->
     <div class="breadcrumb mb-0 py-26 bg-main-two-50">
-        <div class="container container-lg">
+        <div class="container-fluid px-md-3">
             <div class="breadcrumb-wrapper flex-between flex-wrap gap-16">
                 <h6 class="mb-0">Shop</h6>
                 <ul class="flex-align gap-8 flex-wrap">
@@ -166,7 +166,7 @@
     <input type="number" value="0" readonly hidden id="subcatagoryset" />
     <!-- =============================== Shop Section Start ======================================== -->
     <section class="shop py-80">
-        <div class="container container-lg">
+        <div class="container-fluid px-md-3">
             <div class="row">
 
                 <!-- Sidebar Start -->
@@ -177,8 +177,9 @@
                         </button>
 
                         <!-- Brand List Container -->
-                        <div class="shop-sidebar__box border border-gray-100 rounded-8 p-3 mb-4">
-                            <h6 class="text-xl border-bottom border-gray-100 pb-2 mb-3">Product Brands</h6>
+                        <div class="border border-gray-100 rounded-8 p-4 mb-4 shadow-sm">
+                            <h6 class="text-xl mb-3 fw-bold">Product Brands</h6>
+                            <hr>
                             <ul class="list-unstyled max-h-540 overflow-y-auto scroll-sm" id="brandList">
                                 <?php
                                 $brand = Database::Search("SELECT * FROM `brand` LIMIT 6");
@@ -199,8 +200,14 @@
                             </ul>
                             <b id="mgb"></b>
                             <!-- See More Button -->
-                            <div class="text-center mt-3">
-                                <button class="btn btn-primary" id="seeMoreBtn" data-offset="6">See More</button>
+                            <div class="text-center mt-1">
+                                <style>
+                                    .show-more-btn {
+                                        color: #FA6800 !important;
+                                        margin-top: -30px !important;
+                                    }
+                                </style>
+                                <span class="btn show-more-btn text-uppercase fw-bold" id="seeMoreBtn" data-offset="6">See More<i class="ps-2 bi bi-chevron-down" style="font-weight: 900 !important;"></i></span>
                             </div>
                         </div>
 
@@ -234,7 +241,8 @@
 
                         <!-- Condition Filter Section -->
                         <div class="border border-gray-100 rounded-8 p-4 mb-4 shadow-sm">
-                            <h6 class="text-xl mb-3">Product Conditions</h6>
+                            <h6 class="text-xl mb-3 fw-bold">Product Condition</h6>
+                            <hr>
                             <?php
                             $condition = Database::Search("SELECT * FROM `condition`");
                             $conditionnum = $condition->num_rows;
@@ -251,7 +259,7 @@
                             <?php
                             }
                             ?>
-                            <button onclick="check();">check condition</button>
+                            <button onclick="check();" style="display: none;">check condition</button>
                         </div>
                         <script>
 
@@ -278,9 +286,9 @@
                             }
 
                             .form-check-input:checked {
-                                background-color: #0d6efd;
+                                background-color: #FA6800;
                                 /* Bootstrap Primary Color */
-                                border-color: #0d6efd;
+                                border-color: #FA6800;
                             }
 
                             .form-check-label {
@@ -288,97 +296,33 @@
                             }
 
                             .form-check-input:checked+.form-check-label {
-                                color: #0d6efd;
+                                color: #FA6800;
+                            }
+
+                            .toc {
+                                color: #FA6800 !important;
+                            }
+
+                            .dis-back {
+                                background-image: url('assets/images/thumbs/dis-img.avif');
+                                background-size: cover;
                             }
                         </style>
 
-                        <div class="dis border border-gray-100 rounded-8 p-4 mb-4 shadow-sm">
-                            <h6 class="dis-h text-xl mb-3">Product Discount</h6>
+                        <div class="dis dis-back border border-gray-100 rounded-8 p-4 mb-4 shadow-sm">
+                            <h6 class="fw-bold text-xl mb-3 text-white">Offers</h6>
+                            <hr style="color: #fff;">
                             <div class="form-check mb-2 fade-in" style="animation: fadeIn 0.5s;">
                                 <input onclick="advancesearch();" class="dis-check form-check-input" type="checkbox" id="discount" />
-                                <label class="dis-label form-check-label" for="discount">
-                                    Only show discounted products
+                                <label class="dis-label form-check-label text-white fw-bold" for="discount">
+                                    Show Discounted Products Only
                                 </label>
                             </div>
                         </div>
-                        <style>
-                            /* Animation Keyframes */
-                            @keyframes disColorChange {
-                                0% {
-                                    color: #00b894;
-                                    text-shadow: 0 0 8px #ff7675;
-                                }
 
-                                33% {
-                                    color: navy;
-                                    text-shadow: 0 0 8px #0984e3;
-                                }
-
-                                66% {
-                                    color: #00b894;
-                                    text-shadow: 0 0 8px #00cec9;
-                                }
-
-                                100% {
-                                    color: #e17055;
-                                    text-shadow: 0 0 8px #d63031;
-                                }
-                            }
-
-                            @keyframes disFadeIn {
-                                0% {
-                                    opacity: 0;
-                                    transform: translateY(-20px);
-                                }
-
-                                100% {
-                                    opacity: 1;
-                                    transform: translateY(0);
-                                }
-                            }
-
-                            /* Applying Animations */
-                            .dis {
-                                animation: disFadeIn 0.7s ease-out;
-                                border-color: #e0e0e0;
-                                background: linear-gradient(145deg, #ffffff, #f0f0f0);
-                                border-radius: 12px;
-                                padding: 20px;
-                                transition: all 0.4s ease;
-                                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                            }
-
-                            .dis:hover {
-                                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-                                transform: translateY(-4px);
-                            }
-
-                            .dis-h {
-                                animation: disColorChange 4s infinite alternate;
-                                font-weight: 600;
-                                text-transform: uppercase;
-                                letter-spacing: 0.5px;
-                            }
-
-                            .dis-check {
-                                transition: all 0.3s;
-                                cursor: pointer;
-                            }
-
-                            .dis-label {
-                                transition: color 0.3s, text-shadow 0.3s;
-                                cursor: pointer;
-                            }
-
-                            .dis-check:checked+.dis-label {
-                                color: #0d6efd;
-                                font-weight: bold;
-                                text-shadow: 0 0 5px #00b894, 0 0 8px #0984e3;
-                            }
-                        </style>
 
                         <div class="border border-gray-100 rounded-8 p-32 mb-32">
-                            <h6 class="text-xl border-bottom border-gray-100 pb-24 mb-24">Filter by Price</h6>
+                            <h6 class="text-xl border-bottom border-gray-100 pb-24 mb-24 fw-bold">Filter by Price</h6>
                             <div class="row">
                                 <div class="flex-align gap-16" style="margin-top: 10px !important;">
                                     <input oninput="advancesearch();" type="number" id="minprice" class="common-input" placeholder="From" value="">
@@ -391,8 +335,8 @@
                         </div>
 
 
-                        <div class="shop-sidebar__box rounded-8 p-5">
-                            <img src="assets/images/thumbs/advertise-img1.png" alt="">
+                        <div class="shop-sidebar__box rounded-8 p-1">
+                            <img src="assets/images/thumbs/advertise-img1.png" style="border-radius: 10px !important;" class="border border-1" alt="">
                         </div>
                     </div>
                 </div>
@@ -405,7 +349,7 @@
                         <span class="text-gray-900">Showing 1-20 of 85 result</span>
                         <div class="position-relative flex-align gap-16 flex-wrap">
                             <div class="list-grid-btns flex-align gap-16">
-                                <button type="button" class="w-44 h-44 flex-center border border-gray-100 rounded-6 text-2xl list-btn">
+                                <button type="button" style="display: none;" class="w-44 h-44 flex-center border border-gray-100 rounded-6 text-2xl list-btn">
                                     <i class="ph-bold ph-list-dashes"></i>
                                 </button>
                                 <button type="button" class="w-44 h-44 flex-center border border-main-600 text-white bg-main-600 rounded-6 text-2xl grid-btn">
@@ -415,7 +359,7 @@
                             <div class="position-relative text-gray-500 flex-align gap-4 text-14">
                                 <label for="sorting" class="text-inherit flex-shrink-0">Sort by:</label>
                                 <select onchange="advancesearch();" class="form-control common-input px-14 py-14 text-inherit rounded-6 w-auto" id="sorting">
-                                    <option value="sort" selected>Sort by</option>
+                                    <option value="sort" selected>Default</option>
                                     <option value="Popular">Popular</option>
                                     <option value="Latest">Latest</option>
                                     <option value="Trending">Trending</option>
@@ -464,7 +408,7 @@
                                     $picturepath = 'assets/images/thumbs/product-two-img2.png';
                                 }
                             ?>
-                                <div class="col-6 col-md-4">
+                                <div class="col-6 col-md-4 mt-3">
                                     <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
                                         <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative product-thumb-container">
                                             <img src="admin-panel/<?php echo $picturepath; ?>" alt="" class="product-thumb-img">
@@ -566,7 +510,7 @@
 
     <!-- ========================== Shipping Section Start ============================ -->
     <section class="shipping mb-24" id="shipping">
-        <div class="container container-lg">
+        <div class="container-fluid px-md-3">
             <div class="row gy-4">
                 <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="400">
                     <div class="shipping-item flex-align gap-16 rounded-16 bg-main-50 hover-bg-main-100 transition-2">

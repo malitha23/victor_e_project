@@ -33,7 +33,7 @@
 
 <!-- ======================= Middle Header Two Start ========================= -->
 <header class="header-middle style-two bg-color-neutral" style="padding-top: 20px !important; padding-bottom: 20px !important;">
-    <div class="container container-lg">
+    <div class="container-fluid">
         <nav class="header-inner flex-between">
             <!-- Logo Start -->
             <div class="logo">
@@ -92,7 +92,7 @@
 
 <!-- ==================== Header Two Start Here ==================== -->
 <header class="header bg-white border-bottom border-gray-100">
-    <div class="container container-lg">
+    <div class="container-fluid ">
         <nav class="header-inner d-flex justify-content-between gap-8">
             <div class="flex-align menu-category-wrapper">
 
