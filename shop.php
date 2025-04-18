@@ -410,12 +410,12 @@
                             ?>
                                 <div class="col-6 col-md-4 mt-3">
                                     <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                        <a href="product-details.php" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative product-thumb-container">
+                                        <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative product-thumb-container">
                                             <img src="admin-panel/<?php echo $picturepath; ?>" alt="" class="product-thumb-img">
                                         </a>
                                         <div class="product-card__content mt-16">
                                             <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                                <a href="product-details.php" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
+                                                <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
                                             </h6>
 
                                             <div class="mt-8">
