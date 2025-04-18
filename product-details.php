@@ -83,7 +83,7 @@ if ($batch_id > 0) {
 
                                     <div class="product-details__thumb-slider border border-gray-100 rounded-16">
                                         <?php
-                                        $picture =  Database::Search("SELECT * FROM `picture`");
+                                        $picture =  Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $productdata["id"] . "' ");
                                         $picturenum = $picture->num_rows;
                                         for ($i = 0; $i < $picturenum; $i++) {
                                             $picturedata = $picture->fetch_assoc();
@@ -101,7 +101,7 @@ if ($batch_id > 0) {
                                     <div class="mt-24">
                                         <div class="product-details__images-slider">
                                             <?php
-                                            $picture =  Database::Search("SELECT * FROM `picture`");
+                                            $picture =  Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $productdata["id"] . "'");
                                             $picturenum = $picture->num_rows;
                                             for ($i = 0; $i < $picturenum; $i++) {
                                                 $picturedata = $picture->fetch_assoc();
