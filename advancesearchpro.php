@@ -185,12 +185,12 @@ $product_num = $product_rs->num_rows;
                                              $sellprice = $batchdata["selling_price"] - ($batchdata["selling_price"] * $dispre / 100);
                                              ?>
                                              <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                                  <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $dispre; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
+                                                  <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $disdetails["id"]; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
                                                        <img src="admin-panel/<?php echo $picturepath; ?>" alt="" class="w-auto max-w-unset">
                                                   </a>
                                                   <div class="product-card__content mt-16">
                                                        <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                                            <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $dispre; ?>" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
+                                                            <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $disdetails["id"]; ?>" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
                                                        </h6>
                                                        <div class="mt-8">
                                                             <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
@@ -243,12 +243,12 @@ $product_num = $product_rs->num_rows;
                                         $dispre = $disdetails["discount_pre"];
                                         $sellprice = $batchdata["selling_price"] - ($batchdata["selling_price"] * $dispre / 100); ?>
                                         <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                             <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $dispre; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
+                                             <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $disdetails["id"]; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
                                                   <img src="admin-panel/<?php echo $picturepath; ?>" alt="" class="w-auto max-w-unset">
                                              </a>
                                              <div class="product-card__content mt-16">
                                                   <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                                       <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $dispre; ?>" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
+                                                       <a href="product-details.php?batch_id=<?php echo $batchdata['id']; ?>&discount_id=<?php echo $disdetails["id"]; ?>" class="link text-line-2"><?php echo $productdata["title"]; ?></a>
                                                   </h6>
                                                   <div class="mt-8">
                                                        <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
