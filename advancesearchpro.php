@@ -214,7 +214,7 @@ $product_num = $product_rs->num_rows;
                                                             <span class="dismq"><?php echo  $disdetails["qty"]; ?> Available for discount</span>
                                                        </div>
 
-                                                       <a href="cart.html" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium">
+                                                       <a onclick="adtocart(<?= $batchdata['selling_price'] ?>, <?= $disdetails['discount_pre'] ?>, <?= $batchdata['id'] ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium">
                                                             Add To Cart <i class="ph ph-shopping-cart"></i>
                                                        </a>
                                                   </div>
@@ -272,7 +272,7 @@ $product_num = $product_rs->num_rows;
                                                        <span class="dismq"><?php echo  $disdetails["qty"]; ?> Available for discount</span>
                                                   </div>
 
-                                                  <a href="cart.html" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium">
+                                                  <a onclick="adtocart(<?= $batchdata['selling_price'] ?>, <?= $disdetails['discount_pre'] ?>, <?= $batchdata['id'] ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium">
                                                        Add To Cart <i class="ph ph-shopping-cart"></i>
                                                   </a>
                                              </div>
