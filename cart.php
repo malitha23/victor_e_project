@@ -211,7 +211,7 @@ if ($carto > 0) {
 
                     </div>
                     <div class="col-xl-3 col-lg-4">
-                        <div class="cart-sidebar border border-gray-100 rounded-8 px-24 py-40">
+                        <div id="sutotive" class="cart-sidebar border border-gray-100 rounded-8 px-24 py-40">
                             <h6 class="text-xl mb-32">Cart Totals</h6>
                             <?php
                             $deliveryfee = 0.0;
