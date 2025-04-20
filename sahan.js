@@ -714,12 +714,7 @@ function cartdelete(cartid) {
         confirmButtonColor: "#d33",
         cancelButtonColor: "#3085d6",
         confirmButtonText: "Yes, Delete",
-        cancelButtonText: "Cancel",
-        input: "text",
-        inputPlaceholder: "Type 'DELETE' to confirm",
-        inputValidator: (value) => {
-            return value !== "DELETE" ? "You must type 'DELETE' to confirm!" : null;
-        }
+        cancelButtonText: "Cancel"
     }).then((result) => {
         if (result.isConfirmed) {
             Swal.fire({
@@ -736,27 +731,28 @@ function cartdelete(cartid) {
                 method: "POST",
                 body: formData
             })
-                .then(response => response.text())
-                .then(data => {
-                    Swal.close(); // Close loading alert
+            .then(response => response.text())
+            .then(data => {
+                Swal.close(); // Close loading alert
 
-                    if (data.includes("successfully")) {
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: "The item has been removed from your cart.",
-                            icon: "success",
-                            confirmButtonColor: "#ff6600"
-                        }).then(() => {
-                            location.reload(); // Refresh the cart page
-                        });
-                    } else {
-                        Swal.fire("Error", data, "error");
-                    }
-                })
-                .catch(error => Swal.fire("Error", "Something went wrong!", "error"));
+                if (data.includes("successfully")) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "The item has been removed from your cart.",
+                        icon: "success",
+                        confirmButtonColor: "#ff6600"
+                    }).then(() => {
+                        location.reload(); // Refresh the cart page
+                    });
+                } else {
+                    Swal.fire("Error", data, "error");
+                }
+            })
+            .catch(error => Swal.fire("Error", "Something went wrong!", "error"));
         }
     });
 }
+
 function lordcity() {
     var disid = document.getElementById("district").value;
     var req = new XMLHttpRequest();
