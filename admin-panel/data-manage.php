@@ -185,11 +185,16 @@ if (isset($_SESSION["a"])) {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                    <?php
+                                    $gruop = Databases::Search("SELECT * FROM `group`");
+                                    $gruopn = $gruop->num_rows;
+                                     for ($i = 1; $i <=  $gruopn; $i++) { 
+                                      $gruopd = $gruop->fetch_assoc();
+                                      ?>
                                       <tr class="table-row-selectable">
                                         <td><input type="checkbox" class="row-checkbox"></td>
                                         <td class="px-md-3 px-lg-5">group_name <?= $i ?></td>
-                                        <td class="px-md-3 px-lg-5">root_group > group_name <?= $i ?></td>
+                                        <td class="px-md-3 px-lg-5">root_group > <?php echo $gruopd["group_name"] ?> <?= $i ?></td>
                                       </tr>
                                     <?php } ?>
                                   </tbody>
