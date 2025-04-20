@@ -718,10 +718,20 @@ if ($batch_id > 0) {
                                         }
                                     }
                                 </script>
-                                <a onclick="adtocart(<?= $price ?>, <?= $discount_percentage ?>, <?= $batch_id ?>);" class="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-48">
+                                <a onclick="beaddtocart(<?= $price ?>, <?= $discount_percentage ?>, <?= $batch_id ?>);" class="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-48">
                                     <i class="ph ph-shopping-cart-simple text-lg"></i>
                                     Add To Cart
                                 </a>
+                                <script>
+                                    function beaddtocart (price,dispre,batch_id){
+                                        var qty = document.getElementById("stock").value;
+                                        alert(qty);
+                                        for (let index = 0; index < qty; index++) {
+                                            alert(index);
+                                            adtocart(price,dispre,batch_id);
+                                        }
+                                    }
+                                </script>
                                 <a href="#" class="btn btn-outline-main rounded-8 py-16 fw-normal mt-16 w-100" style="display: none;">
                                     Buy Now
                                 </a>
