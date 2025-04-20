@@ -251,7 +251,7 @@ if ($batch_id > 0) {
                                                 } else {
                                                     $dis = (($batchdata["batch_price"] - $batchdata["selling_price"]) / $batchdata["batch_price"]) * 100
                                                 ?>
-                                                    <i  class="ph-fill ph-seal-percent text-xl"></i>
+                                                    <i class="ph-fill ph-seal-percent text-xl"></i>
                                                     <?php echo $dis; ?>%
                                                 <?php
                                                 }
@@ -622,25 +622,6 @@ if ($batch_id > 0) {
                                             <i class="ph ph-plus"></i>
                                         </button>
                                     </div>
-
-                                    <script>
-                                        // Decrease the quantity
-                                        function decreaseQty() {
-                                            let stock = document.getElementById("stock");
-                                            if (stock.value > 1) {
-                                                stock.value--;
-                                            }
-                                        }
-
-                                        // Increase the quantity
-                                        function increaseQty() {
-                                            let stock = document.getElementById("stock");
-                                            if (stock.value < stock.max) {
-                                                stock.value++;
-                                            }
-                                        }
-                                    </script>
-
                                 </div>
                                 <div class="mb-32">
                                     <?php
@@ -677,7 +658,9 @@ if ($batch_id > 0) {
                                     ?>
                                     <div class="flex-between flex-wrap gap-8 border-bottom border-gray-100 pb-16 mb-16">
                                         <span class="text-gray-500">Price</span>
-                                        <h6 class="text-lg mb-0">RS <?php echo $price; ?></h6>
+                                        <h6 id="sellprice" class="text-lg mb-0">RS <?php echo $price; ?></h6>
+                                        <input id="iprice" type="hidden" value="<?php echo $price; ?>"/>
+                                        <input type="hidden" id="price" value="<?php echo $finalPricePerItem; ?>">
                                     </div>
                                     <div class="flex-between flex-wrap gap-8">
                                         <span class="text-gray-500" style="color: #FA6400 !important;">Discount -</span>
@@ -685,15 +668,56 @@ if ($batch_id > 0) {
                                     </div>
                                     <div class="flex-between flex-wrap gap-8" style="margin-top: 15px;">
                                         <span class="text-gray-500">Shipping +</span>
-                                        <h6 class="text-lg mb-0">RS <?php echo ($deliveryfee + $weigdeliveryfee); ?></h6>
+                                        <h6 id="shipin" class="text-lg mb-0">RS <?php echo ($deliveryfee + $weigdeliveryfee); ?></h6>
                                     </div>
                                     <a href="account.php" class="small text-decoration-underline text-secondary-emphasis">Please sign in or register to calculate the exact cost.</a>
                                     <div class="flex-between flex-wrap gap-8" style="margin-top: 15px;">
                                         <span class="text-gray-500">Total</span>
-                                        <h6 class="text-lg mb-0">RS <?php echo $finalPricePerItem + $deliveryfee + $weigdeliveryfee; ?></h6>
+                                        <h6 id="fprice" class="text-lg mb-0">RS <?php echo $finalPricePerItem + $deliveryfee + $weigdeliveryfee; ?></h6>
                                     </div>
                                 </div>
+                                <script>
+                                    function decreaseQty() {
+                                        let stock = document.getElementById("stock");
+                                        let currentQty = parseInt(stock.value);
+                                        //  alert("hi");
+                                        if (currentQty > 1) {
+                                            currentQty--;
+                                            stock.value = currentQty;
 
+                                            let price = parseFloat(document.getElementById("price").value);
+                                            let iprice = document.getElementById("iprice").value;
+                                            let sellprice = document.getElementById("sellprice").innerText;
+                                            let spin = parseFloat(document.getElementById("shipin").textContent.replace(/[^\d.]/g, ''));
+                                            let tprice = currentQty * price;
+                                            let ttprice = tprice + spin;
+                                            var mol = Math.floor(iprice * (currentQty)); // simulate intdiv
+                                            document.getElementById("sellprice").innerText = `RS ${mol.toFixed(2)}`;
+                                            document.getElementById("fprice").innerHTML = `RS ${ttprice.toFixed(2)}`;
+                                        }
+                                    }
+
+                                    function increaseQty() {
+                                        let stock = document.getElementById("stock");
+                                        let currentQty = parseInt(stock.value);
+                                        let maxQty = parseInt(stock.max);
+
+                                        if (currentQty < maxQty) {
+                                            currentQty++;
+                                            stock.value = currentQty;
+
+                                            let price = parseFloat(document.getElementById("price").value);
+                                            let iprice = document.getElementById("iprice").value;
+                                            let sellprice = document.getElementById("sellprice").innerText;
+                                            let spin = parseFloat(document.getElementById("shipin").textContent.replace(/[^\d.]/g, ''));
+                                            let tprice = currentQty * price;
+                                            let ttprice = tprice + spin;
+                                            var mol = Math.floor(iprice * (currentQty)); // simulate intdiv
+                                            document.getElementById("sellprice").innerText = `RS ${mol.toFixed(2)}`;
+                                            document.getElementById("fprice").innerHTML = `RS ${ttprice.toFixed(2)}`;
+                                        }
+                                    }
+                                </script>
                                 <a onclick="adtocart(<?= $price ?>, <?= $discount_percentage ?>, <?= $batch_id ?>);" class="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-48">
                                     <i class="ph ph-shopping-cart-simple text-lg"></i>
                                     Add To Cart
