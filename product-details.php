@@ -725,9 +725,7 @@ if ($batch_id > 0) {
                                 <script>
                                     function beaddtocart (price,dispre,batch_id){
                                         var qty = document.getElementById("stock").value;
-                                        alert(qty);
                                         for (let index = 0; index < qty; index++) {
-                                            alert(index);
                                             adtocart(price,dispre,batch_id);
                                         }
                                     }
