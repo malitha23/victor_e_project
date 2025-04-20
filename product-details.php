@@ -523,7 +523,7 @@ if ($batch_id > 0) {
                                     function decreaseQty() {
                                         let stock = document.getElementById("stock");
                                         let currentQty = parseInt(stock.value);
-                                      //  alert("hi");
+                                        //  alert("hi");
                                         if (currentQty > 1) {
                                             currentQty--;
                                             stock.value = currentQty;
@@ -790,8 +790,9 @@ if ($batch_id > 0) {
                                                 <span class="text-heading text-md fw-semibold ">Rs <?php echo $b1d["selling_price"] ?> <span class="text-gray-500 fw-normal">/Qty</span>
                                                     <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $b1d["selling_price"] + 10; ?></span>
                                             </div>
-                                            <a href="cart.php" class="product-card__cart btn bg-main-50 text-main-600 hover-bg-main-600 hover-text-white py-11 px-24 rounded-pill flex-align gap-8 mt-24 w-100 justify-content-center">
-                                                Add To Cart <i class="ph ph-shopping-cart"></i>
+                                            <a onclick="adtocart(<?= $b1d["selling_price"]; ?>, <?= 0 ?>, <?= $b1d["id"] ?>);" class="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-48">
+                                                <i class="ph ph-shopping-cart-simple text-lg"></i>
+                                                Add To Cart
                                             </a>
                                         </div>
                                     </div>
