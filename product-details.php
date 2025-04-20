@@ -502,8 +502,9 @@ if ($batch_id > 0) {
                                     ?>
                                     <div class="flex-between flex-wrap gap-8 border-bottom border-gray-100 pb-16 mb-16">
                                         <span class="text-gray-500">Price</span>
-                                        <h6 class="text-lg mb-0">RS <?php echo $price; ?></h6>
+                                        <h6 id="sellprice" class="text-lg mb-0">RS <?php echo $price; ?></h6>
                                     </div>
+                                    <input id="iprice" type="hidden" value="<?php echo $price;  ?>"/>
                                     <input type="hidden" id="price" value="<?php echo $finalPricePerItem; ?>">
                                     <div class="flex-between flex-wrap gap-8">
                                         <span class="text-gray-500" style="color: #FA6400 !important;">Discount -</span>
@@ -529,10 +530,13 @@ if ($batch_id > 0) {
                                             stock.value = currentQty;
 
                                             let price = parseFloat(document.getElementById("price").value);
+                                            let iprice = document.getElementById("iprice").value;
+                                            let sellprice = document.getElementById("sellprice").innerText;
                                             let spin = parseFloat(document.getElementById("shipin").textContent.replace(/[^\d.]/g, ''));
                                             let tprice = currentQty * price;
                                             let ttprice = tprice + spin;
-
+                                            var mol = Math.floor(iprice * (currentQty)); // simulate intdiv
+                                            document.getElementById("sellprice").innerText = `RS ${mol.toFixed(2)}`;
                                             document.getElementById("fprice").innerHTML = `RS ${ttprice.toFixed(2)}`;
                                         }
                                     }
@@ -547,10 +551,13 @@ if ($batch_id > 0) {
                                             stock.value = currentQty;
 
                                             let price = parseFloat(document.getElementById("price").value);
+                                            let iprice = document.getElementById("iprice").value;
+                                            let sellprice = document.getElementById("sellprice").innerText;
                                             let spin = parseFloat(document.getElementById("shipin").textContent.replace(/[^\d.]/g, ''));
                                             let tprice = currentQty * price;
                                             let ttprice = tprice + spin;
-
+                                            var mol = Math.floor(iprice * (currentQty)); // simulate intdiv
+                                            document.getElementById("sellprice").innerText = `RS ${mol.toFixed(2)}`;
                                             document.getElementById("fprice").innerHTML = `RS ${ttprice.toFixed(2)}`;
                                         }
                                     }
