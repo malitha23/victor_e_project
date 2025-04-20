@@ -523,7 +523,7 @@ if ($batch_id > 0) {
                                     function decreaseQty() {
                                         let stock = document.getElementById("stock");
                                         let currentQty = parseInt(stock.value);
-                                        alert("hi");
+                                      //  alert("hi");
                                         if (currentQty > 1) {
                                             currentQty--;
                                             stock.value = currentQty;
