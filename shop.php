@@ -346,7 +346,11 @@
                 <div class="col-lg-9">
                     <!-- Top Start -->
                     <div class="flex-between gap-16 flex-wrap mb-40 ">
-                        <span class="text-gray-900">Showing 1-20 of 85 result</span>
+                        <?php
+                        $batchm = Database::Search("SELECT * FROM `batch`");
+                        $batchnumm = $batchm->num_rows;
+                        ?>
+                        <span class="text-gray-900">Showing 1-20 of <?php echo  $batchnumm; ?> result</span>
                         <div class="position-relative flex-align gap-16 flex-wrap">
                             <div class="list-grid-btns flex-align gap-16">
                                 <button type="button" style="display: none;" class="w-44 h-44 flex-center border border-gray-100 rounded-6 text-2xl list-btn">
