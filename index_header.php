@@ -98,7 +98,7 @@
                     <a href="cart.php" class="flex-align flex-column gap-8 item-hover-two">
                         <span class="text-2xl text-white d-flex position-relative me-6 mt-6 item-hover__text">
                             <i class="ph ph-shopping-cart-simple text-white"></i>
-                            <span class="w-16 h-16 flex-center rounded-circle bg-main-two-600 text-white text-xs position-absolute top-n6 end-n4">2</span>
+                            <span class="w-16 h-16 flex-center rounded-circle bg-main-two-600 text-white text-xs position-absolute top-n6 end-n4"><?php echo $ccn; ?></span>
                         </span>
                         <span class="text-md text-white item-hover__text d-none d-lg-flex">Cart</span>
                     </a>
