@@ -245,13 +245,13 @@ if ($batch_id > 0) {
                                                 <?php
                                                 if ($discount_percentage > 0) {
                                                 ?>
-                                                    <i class="ph-fill ph-seal-percent text-xl"></i>
-                                                    -<?php echo $discount_percentage; ?>%
+                                                    <i hidden class="ph-fill ph-seal-percent text-xl"></i>
+                                                    -<?php $discount_percentage; ?>
                                                 <?php
                                                 } else {
                                                     $dis = (($batchdata["batch_price"] - $batchdata["selling_price"]) / $batchdata["batch_price"]) * 100
                                                 ?>
-                                                    <i class="ph-fill ph-seal-percent text-xl"></i>
+                                                    <i  class="ph-fill ph-seal-percent text-xl"></i>
                                                     <?php echo $dis; ?>%
                                                 <?php
                                                 }
