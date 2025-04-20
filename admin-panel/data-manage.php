@@ -81,11 +81,18 @@ if (isset($_SESSION["a"])) {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                    <?php
+                                    $scat = Databases::search("SELECT * FROM `sub_category`");
+                                    $scatnum = $scat->num_rows;
+                                     for ($i = 1; $i <= $scatnum; $i++) {
+                                      $scatdata = $scat->fetch_assoc();
+                                      $mcat = Databases::Search("SELECT * FROM `category` WHERE `id`='".$scatdata["category_id"]."' ");
+                                      $mcatd = $mcat->fetch_assoc();
+                                       ?>
                                       <tr class="table-row-selectable">
                                         <td><input type="checkbox" class="row-checkbox"></td>
                                         <td class="px-md-3 px-lg-5">category_name <?= $i ?></td>
-                                        <td class="px-md-3 px-lg-5">main_cat_name > cat_name <?= $i ?></td>
+                                        <td class="px-md-3 px-lg-5"><?php echo $mcatd["name"] ?> > <?php echo  $scatdata["name"] ?><?= $i ?></td>
                                       </tr>
                                     <?php } ?>
                                   </tbody>
