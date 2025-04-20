@@ -65,10 +65,14 @@
                             </span>
                         </button>
                         <?php
-                        try{
-                            $cc = Database::Search("SELECT * FROM `cart` WHERE `user_email`='".$_SESSION["user_vec"]["email"]."' ");
-                            $ccn = $cc->num_row;
-                        }catch{
+                       if(isset($_SESSION["user_vec"]["email"])){
+                            try{
+                                $cc = Database::Search("SELECT * FROM `cart` WHERE `user_email`='".$_SESSION["user_vec"]["email"]."' ");
+                                $ccn = $cc->num_row;
+                            }catch{
+                                $ccn = ".."; 
+                            }
+                        }else{
                             $ccn = ".."; 
                         }
                          ?>
