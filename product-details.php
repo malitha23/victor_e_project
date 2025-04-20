@@ -133,58 +133,52 @@ if ($batch_id > 0) {
                             <div class="col-xl-6">
                                 <div class="product-details__content">
 
-                                    <div class="flex-center mb-24 flex-wrap gap-16 bg-color-one rounded-8 py-16 px-24 position-relative z-1">
-                                        <img src="assets/images/bg/details-offer-bg.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 z-n1">
-                                        <div class="flex-align gap-16">
-                                            <span class="text-white text-sm">Special Offer:</span>
-                                        </div>
+                                    <?php
+                                    if ($discount_id == 0) {
+                                        $discount_percentage  = 0;
+                                    } else {
+                                        // Fetch discount details based on discount_id
+                                        $discount_query = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `id`='$discount_id'");
+                                        if ($discount_query->num_rows > 0) {
+                                            $discount_data = $discount_query->fetch_assoc();
 
-                                        <?php
-                                        if ($discount_id == 0) {
-                                            $discount_percentage  = 0;
-                                            echo '<h5 class="text-white text-center">NOT Available Offer or Discount</h5>';
-                                        } else {
-                                            // Fetch discount details based on discount_id
-                                            $discount_query = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `id`='$discount_id'");
-                                            if ($discount_query->num_rows > 0) {
-                                                $discount_data = $discount_query->fetch_assoc();
+                                            // Fetch related discount group details
+                                            $disgroup_query = Database::Search("SELECT * FROM `discount_group` WHERE `id`='" . $discount_data["discount_group_id"] . "'");
+                                            $disgroup_data = $disgroup_query->fetch_assoc();
 
-                                                // Fetch related discount group details
-                                                $disgroup_query = Database::Search("SELECT * FROM `discount_group` WHERE `id`='" . $discount_data["discount_group_id"] . "'");
-                                                $disgroup_data = $disgroup_query->fetch_assoc();
+                                            // Fetch date range details
+                                            $daterange_query = Database::Search("SELECT * FROM `discount_date_range` WHERE `id`='" . $discount_data["discount_date_range_id"] . "'");
+                                            $daterange_data = $daterange_query->fetch_assoc();
 
-                                                // Fetch date range details
-                                                $daterange_query = Database::Search("SELECT * FROM `discount_date_range` WHERE `id`='" . $discount_data["discount_date_range_id"] . "'");
-                                                $daterange_data = $daterange_query->fetch_assoc();
+                                            if ($disgroup_data && $daterange_data) {
+                                                $offer_start_date = $daterange_data["start_date"];
+                                                $offer_end_date = $daterange_data["end_date"];
+                                                $offer_title = $disgroup_data["title"];
+                                                $offer_description = $disgroup_data["description"];
+                                                $discount_percentage = $discount_data["discount_pre"]; // %
 
-                                                if ($disgroup_data && $daterange_data) {
-                                                    $offer_start_date = $daterange_data["start_date"];
-                                                    $offer_end_date = $daterange_data["end_date"];
-                                                    $offer_title = $disgroup_data["title"];
-                                                    $offer_description = $disgroup_data["description"];
-                                                    $discount_percentage = $discount_data["discount_pre"]; // %
+                                    ?>
+                                                <div class="flex-center mb-24 flex-wrap gap-16 bg-color-one rounded-8 py-16 px-24 position-relative z-1">
+                                                    <img src="assets/images/bg/details-offer-bg.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 z-n1">
+                                                    <div class="flex-align gap-16">
+                                                        <span class="text-white text-sm">Special Offer:</span>
+                                                    </div>
+                                                    <div class="countdown" id="countdown11">
+                                                        <ul class="countdown-list flex-align flex-wrap">
+                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="days"></span></li>
+                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="hours"></span></li>
+                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="minutes"></span></li>
+                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="seconds"></span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <span class="text-white text-xs">Remains until the end of the offer</span>
+                                                </div>
+                                    <?php
 
-                                                    echo "<h5 class='text-white'>$offer_title - $discount_percentage% OFF</h5>";
-                                                    echo "<p class='text-white'>$offer_description</p>";
-                                                } else {
-                                                    echo "<h5 class='text-white'>Discount details not found.</h5>";
-                                                }
-                                            } else {
-                                                echo "<h5 class='text-white'>No discount available.</h5>";
                                             }
                                         }
-                                        ?>
-                                        <h5 class="text-white-50">offer end date :<?php echo isset($offer_end_date) ? $offer_end_date : ''; ?></h5>
-                                        <div class="countdown" id="countdown11" data-end-time="<?php echo isset($offer_end_date) ? $offer_end_date : ''; ?>">
-                                            <ul class="countdown-list flex-align flex-wrap">
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="days"></span></li>
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="hours"></span></li>
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="minutes"></span></li>
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="seconds"></span></li>
-                                            </ul>
-                                        </div>
-                                        <span class="text-white text-xs">Remains until the end of the offer</span>
-                                    </div>
+                                    }
+                                    ?>
 
                                     <script>
                                         document.addEventListener("DOMContentLoaded", function() {
@@ -233,10 +227,60 @@ if ($batch_id > 0) {
                                             <span class="text-sm fw-medium text-gray-500"><?php echo $inqtysell; ?> SOLD</span>
                                         </div>
                                         <span class="text-sm fw-medium text-gray-500">|</span>
-                                        <span class="text-gray-900"> <span class="text-gray-400">batch_code:</span><?php echo $batchdata["batch_code"] ?> </span>
+                                        <span class="text-gray-900"> <span class="text-gray-400">SKU:</span><?php echo $batchdata["batch_code"] ?> </span>
                                     </div>
-                                    <span class="text-gray-700 border-top border-gray-100 d-block"></span>
+
+                                    <?php
+                                    // Calculate discounted price
+                                    $price = $batchdata["selling_price"];
+                                    $discountpre = $discount_percentage;
+                                    $discountAmount = ($price * $discountpre) / 100;
+                                    $discount_due = $batchdata["selling_price"] * (1 - $discount_percentage / 100);
+                                    ?>
+
+                                    <span class="mt-32 pt-32 text-gray-700 border-top border-gray-100 d-block"></span>
+                                    <div class="my-32 flex-align gap-16 flex-wrap" style="margin-top: 0px !important;">
+                                        <div class="flex-align gap-8">
+                                            <div class="flex-align gap-8 text-main-two-600">
+                                                <i class="ph-fill ph-seal-percent text-xl"></i>
+                                                -<?php echo $discount_percentage; ?>%
+                                            </div>
+                                            <h6 class="mb-0">Rs <?php echo number_format($discountAmount, 2); ?></h6>
+                                        </div>
+                                        <div class="flex-align gap-8">
+                                            <span class="text-gray-700">Regular Price</span>
+                                            <h6 class="text-xl text-gray-400 mb-0 fw-medium">Rs <?php echo number_format($batchdata["selling_price"], 2); ?></h6>
+                                        </div>
+                                    </div>
                                     <div class="my-32 flex-align gap-16 flex-wrap">
+                                        <div class="row d-flex justify-content-center">
+                                            <style>
+                                                .ob {
+                                                    background-color: rgb(255, 199, 199);
+                                                }
+
+                                                .rs {
+                                                    border-radius: 15px 0 0 15px;
+                                                    box-shadow: 0 4px 6px rgba(255, 0, 0, 0.1);
+                                                    /* bottom shadow */
+                                                }
+
+                                                .re {
+                                                    border-radius: 0 15px 15px 0;
+                                                    padding: 15px 30px 15px 0px !important;
+                                                    box-shadow: 4px 0 6px rgba(255, 0, 0, 0.1);
+                                                    /* right shadow */
+                                                }
+                                            </style>
+                                            <div class="col-4 ob rs"><img src="assets/images/thumbs/price-drop.png" class="img-fluid" alt=""></div>
+                                            <div class="col-auto ob re">
+                                                <div class="small text-black fw-bold">Special Price : </div>
+                                                <div class="fw-bold h3 text-black pb-0 mb-0 ap">Rs 43.50</div>
+                                                <div class="small text-success fw-bold">70% OFF</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="my-32 flex-align gap-16 flex-wrap" style="display: none;">
                                         <div class="flex-align gap-8">
                                             <div class="flex-align gap-8 text-main-two-600 discount-popup">
                                                 <?php echo $discount_percentage; ?>%
@@ -335,13 +379,13 @@ if ($batch_id > 0) {
 
                                     <div class="my-32 flex-align flex-wrap gap-12">
                                         <a class="px-12 py-8 text-sm rounded-8 flex-align gap-8 text-main-600 border border-gray-200 hover-border-main-600 hover-text-main-600">
-                                            Special Tags
+                                            Guest Checkout
                                         </a>
                                         <a class="px-12 py-8 text-sm rounded-8 flex-align gap-8 text-main-600 border border-gray-200 hover-border-main-600 hover-text-main-600">
-                                            Special Tags
+                                            IslandWild Delivery
                                         </a>
                                         <a class="px-12 py-8 text-sm rounded-8 flex-align gap-8 text-main-600 border border-gray-200 hover-border-main-600 hover-text-main-600">
-                                            Special Tags
+                                            Best Prices
                                         </a>
                                     </div>
 
@@ -391,7 +435,18 @@ if ($batch_id > 0) {
                                         <span class="text-xl d-flex text-main-600">
                                             <i class="ph ph-map-pin"></i>
                                         </span>
-                                        <div class="border-0 px-8 rounded-4 py-10 text-dark"><?php echo  $ud["fname"] . " " . $ud["lname"] ?></div>
+                                        <?php
+                                        if (!empty($ud["fname"]) && !empty($ud["lname"])) {
+                                        ?>
+                                            <div class="border-0 px-8 rounded-4 py-10 text-dark"><?php echo  $ud["fname"] . " " . $ud["lname"] ?></div>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <div class="border-0 px-8 rounded-4 py-10 text-dark"><a href="account.php" class="text-success text-decoration-underline small">Click Here To Update Your Profile Details.</a></div>
+                                        <?php
+                                        }
+                                        ?>
+
                                     </div>
                                 </div>
                                 <div class="mb-32">
@@ -465,22 +520,19 @@ if ($batch_id > 0) {
                                     ?>
                                     <div class="flex-between flex-wrap gap-8 border-bottom border-gray-100 pb-16 mb-16">
                                         <span class="text-gray-500">Price</span>
-                                        <h6 class="text-lg mb-0"><?php echo $price; ?></h6>
+                                        <h6 class="text-lg mb-0">RS <?php echo $price; ?></h6>
                                     </div>
                                     <div class="flex-between flex-wrap gap-8">
-                                        <span class="text-gray-500">Shipping</span>
-                                        <h6 class="text-lg mb-0">From <?php echo $deliveryfee; ?></h6>
+                                        <span class="text-gray-500" style="color: #FA6400 !important;">Discount -</span>
+                                        <h6 class="text-lg mb-0" style="color: #FA6400 !important;">RS <?php echo $discountAmount; ?></h6>
                                     </div>
-                                    <div class="flex-between flex-wrap gap-8">
-                                        <span class="text-gray-500">Additional Shipping cost for waght</span>
-                                        <h6 class="text-lg mb-0">From <?php echo $weigdeliveryfee; ?></h6>
+                                    <div class="flex-between flex-wrap gap-8" style="margin-top: 15px;">
+                                        <span class="text-gray-500">Shipping +</span>
+                                        <h6 class="text-lg mb-0">RS <?php echo ($deliveryfee + $weigdeliveryfee); ?></h6>
                                     </div>
-                                    <div class="flex-between flex-wrap gap-8">
-                                        <span class="text-gray-500">Discount</span>
-                                        <h6 class="text-lg mb-0">RS.<?php echo $discountAmount; ?></h6>
-                                    </div>
-                                    <div class="flex-between flex-wrap gap-8">
-                                        <span class="text-gray-500">Final price</span>
+                                    <a href="account.php" class="small text-decoration-underline text-secondary-emphasis">Update your shipping information to calculate the exact cost.</a>
+                                    <div class="flex-between flex-wrap gap-8" style="margin-top: 15px;">
+                                        <span class="text-gray-500">Total</span>
                                         <h6 class="text-lg mb-0">RS <?php echo $finalPricePerItem + $deliveryfee + $weigdeliveryfee; ?></h6>
                                     </div>
                                 </div>
@@ -489,7 +541,7 @@ if ($batch_id > 0) {
                                     <i class="ph ph-shopping-cart-simple text-lg"></i>
                                     Add To Cart
                                 </a>
-                                <a href="#" class="btn btn-outline-main rounded-8 py-16 fw-normal mt-16 w-100">
+                                <a href="#" class="btn btn-outline-main rounded-8 py-16 fw-normal mt-16 w-100" style="display: none;">
                                     Buy Now
                                 </a>
 
@@ -506,131 +558,114 @@ if ($batch_id > 0) {
                         <?php
                         } else {
                         ?>
-                            <div class="welcome-section text-center p-4 bg-light rounded shadow">
-                                <span class="text-primary fw-bold">Welcome to Vicstore – The Ultimate Multi-Vendor Shopping Experience! 🛍️🚀</span>
-                                <p class="text-dark fs-5">
-                                    At <strong>Vicstore</strong>, we connect buyers with top sellers to bring you
-                                    <strong>high-quality products at the best prices</strong>. Whether you're shopping for
-                                    <em>electronics, household essentials, vehicle spare parts, or fresh food items</em>,
-                                    we have everything you need under one roof!
-                                </p>
+                            <div class="product-details__sidebar py-40 px-32 border border-gray-100 rounded-16">
+                                
+                                <div class="mb-32">
+                                    <label for="stock" class="text-lg mb-8 text-heading fw-semibold d-block">Total Stock: <?php echo $batchdata["batch_qty"]; ?></label>
+                                    <span class="text-xl d-flex">
+                                        <i class="ph ph-location"></i>
+                                    </span>
+                                    <div class="d-flex rounded-4 overflow-hidden">
+                                        <button type="button" class="quantity__minus flex-shrink-0 h-48 w-48 text-neutral-600 bg-gray-50 flex-center hover-bg-main-600 hover-text-white" onclick="decreaseQty()">
+                                            <i class="ph ph-minus"></i>
+                                        </button>
 
-                                <div class="features d-flex justify-content-center gap-4 flex-wrap mt-3">
-                                    <div class="feature-item text-center p-3 border rounded bg-white shadow-sm">
-                                        <h6 class="text-success">✅ Multi-Vendor Marketplace</h6>
-                                        <p>Wide selection from verified sellers</p>
+                                        <input type="number" class="quantity__input flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-16" max="<?php echo $batchdata['batch_qty']; ?>" id="stock" value="1" min="1">
+
+                                        <button type="button" class="quantity__plus flex-shrink-0 h-48 w-48 text-neutral-600 bg-gray-50 flex-center hover-bg-main-600 hover-text-white" onclick="increaseQty()">
+                                            <i class="ph ph-plus"></i>
+                                        </button>
                                     </div>
-                                    <div class="feature-item text-center p-3 border rounded bg-white shadow-sm">
-                                        <h6 class="text-danger">✅ Exclusive Discounts</h6>
-                                        <p>Shop and save with unbeatable deals</p>
+
+                                    <script>
+                                        // Decrease the quantity
+                                        function decreaseQty() {
+                                            let stock = document.getElementById("stock");
+                                            if (stock.value > 1) {
+                                                stock.value--;
+                                            }
+                                        }
+
+                                        // Increase the quantity
+                                        function increaseQty() {
+                                            let stock = document.getElementById("stock");
+                                            if (stock.value < stock.max) {
+                                                stock.value++;
+                                            }
+                                        }
+                                    </script>
+
+                                </div>
+                                <div class="mb-32">
+                                    <?php
+
+                                    if ($productdata["weight"] > 0) {
+                                        $product_weight = $productdata["weight"];
+                                        $dw = Database::Search("SELECT * FROM `weight`");
+                                        $dwn = $dw->num_rows;
+                                        for ($i = 0; $i < $dwn; $i++) {
+                                            $dwd = $dw->fetch_assoc();
+                                            if ($dwd["weight"] == $product_weight) {
+                                                $final_product_weight = $dwd["weight"];
+                                                $dfw = Database::Search("SELECT * FROM `delivery_fee_for_weight` WHERE `weight_id`='" . $dwd["id"] . "' ");
+                                                $dfwn = $dfw->num_rows;
+                                                if ($dfwn == 1) {
+                                                    $dfwd = $dfw->fetch_assoc();
+                                                    $weigdeliveryfee = $dfwd["fee"];
+                                                } else {
+                                                    $weigdeliveryfee = 0;
+                                                }
+                                            } else {
+                                                $weigdeliveryfee = 0;
+                                            }
+                                        }
+                                    } else {
+                                        $weigdeliveryfee = 0;
+                                    }
+
+
+                                    $price = $batchdata["selling_price"];
+                                    $discountpre = $discount_percentage;
+                                    $discountAmount = ($price * $discountpre) / 100;
+                                    $finalPricePerItem = $price - $discountAmount;
+                                    ?>
+                                    <div class="flex-between flex-wrap gap-8 border-bottom border-gray-100 pb-16 mb-16">
+                                        <span class="text-gray-500">Price</span>
+                                        <h6 class="text-lg mb-0">RS <?php echo $price; ?></h6>
                                     </div>
-                                    <div class="feature-item text-center p-3 border rounded bg-white shadow-sm">
-                                        <h6 class="text-warning">✅ Fast & Secure Shopping</h6>
-                                        <p>Safe transactions and speedy delivery</p>
+                                    <div class="flex-between flex-wrap gap-8">
+                                        <span class="text-gray-500" style="color: #FA6400 !important;">Discount -</span>
+                                        <h6 class="text-lg mb-0" style="color: #FA6400 !important;">RS <?php echo $discountAmount; ?></h6>
                                     </div>
-                                    <div class="feature-item text-center p-3 border rounded bg-white shadow-sm">
-                                        <h6 class="text-info">✅ 24/7 Customer Support</h6>
-                                        <p>We're here to help anytime</p>
+                                    <div class="flex-between flex-wrap gap-8" style="margin-top: 15px;">
+                                        <span class="text-gray-500">Shipping +</span>
+                                        <h6 class="text-lg mb-0">RS <?php echo ($deliveryfee + $weigdeliveryfee); ?></h6>
+                                    </div>
+                                    <a href="account.php" class="small text-decoration-underline text-secondary-emphasis">Please sign in or register to calculate the exact cost.</a>
+                                    <div class="flex-between flex-wrap gap-8" style="margin-top: 15px;">
+                                        <span class="text-gray-500">Total</span>
+                                        <h6 class="text-lg mb-0">RS <?php echo $finalPricePerItem + $deliveryfee + $weigdeliveryfee; ?></h6>
                                     </div>
                                 </div>
 
-                                <div class="mt-4">
-                                    <a href="shop.php" class="btn btn-primary btn-lg fw-semibold px-4 py-2">🛒 Start Shopping</a>
-                                    <a href="contact.php" class="btn btn-outline-secondary btn-lg fw-semibold px-4 py-2">📞 Contact Us</a>
+                                <a onclick="adtocart(<?= $price ?>, <?= $discount_percentage ?>, <?= $batch_id ?>);" class="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-48">
+                                    <i class="ph ph-shopping-cart-simple text-lg"></i>
+                                    Add To Cart
+                                </a>
+                                <a href="#" class="btn btn-outline-main rounded-8 py-16 fw-normal mt-16 w-100" style="display: none;">
+                                    Buy Now
+                                </a>
+
+                                <div class="mt-32">
+                                    <div class="px-16 py-8 bg-main-50 rounded-8 flex-between gap-24 mb-14">
+                                        <span class="w-32 h-32 bg-white text-main-600 rounded-circle flex-center text-xl flex-shrink-0">
+                                            <i class="ph-fill ph-identification-card"></i>
+                                        </span>
+                                        <span class="text-sm text-neutral-600 text-start"><span class="fw-semibold">Guest Checkout</span> is available.</span>
+                                    </div>
                                 </div>
+
                             </div>
-
-                            <a href="register.php" class="best-button flex-center">
-                                Register now
-                            </a>
-
-                            <style>
-                                /* Base Button Styles */
-                                .best-button {
-                                    display: inline-block;
-                                    padding: 14px 40px;
-                                    font-size: 18px;
-                                    font-weight: bold;
-                                    text-transform: uppercase;
-                                    color: #fff;
-                                    text-decoration: none;
-                                    border-radius: 50px;
-                                    background: linear-gradient(45deg, #ff416c, #ff4b2b);
-                                    position: relative;
-                                    overflow: hidden;
-                                    transition: all 0.4s ease-in-out;
-                                    box-shadow: 0 10px 20px rgba(255, 75, 43, 0.4);
-                                    border: 2px solid transparent;
-                                }
-
-                                /* Glow Effect */
-                                .best-button::before {
-                                    content: "";
-                                    position: absolute;
-                                    top: -50%;
-                                    left: -50%;
-                                    width: 200%;
-                                    height: 200%;
-                                    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, transparent 70%);
-                                    transition: all 0.5s ease-in-out;
-                                    opacity: 0;
-                                }
-
-                                /* Hover Effects */
-                                .best-button:hover {
-                                    transform: scale(1.1);
-                                    box-shadow: 0 15px 30px rgba(255, 75, 43, 0.6);
-                                    border-color: #fff;
-                                }
-
-                                /* Activate Glow on Hover */
-                                .best-button:hover::before {
-                                    opacity: 1;
-                                    top: -30%;
-                                    left: -30%;
-                                }
-
-                                /* Pulse Animation */
-                                @keyframes pulse {
-                                    0% {
-                                        transform: scale(1);
-                                        box-shadow: 0 10px 20px rgba(255, 75, 43, 0.4);
-                                    }
-
-                                    50% {
-                                        transform: scale(1.05);
-                                        box-shadow: 0 15px 30px rgba(255, 75, 43, 0.6);
-                                    }
-
-                                    100% {
-                                        transform: scale(1);
-                                        box-shadow: 0 10px 20px rgba(255, 75, 43, 0.4);
-                                    }
-                                }
-
-                                .best-button {
-                                    animation: pulse 2s infinite;
-                                }
-
-                                /* Shimmer Effect */
-                                .best-button::after {
-                                    content: "";
-                                    position: absolute;
-                                    top: 0;
-                                    left: -100%;
-                                    width: 150%;
-                                    height: 100%;
-                                    background: linear-gradient(120deg,
-                                            transparent 30%,
-                                            rgba(255, 255, 255, 0.3) 50%,
-                                            transparent 70%);
-                                    transition: all 0.4s ease-in-out;
-                                }
-
-                                .best-button:hover::after {
-                                    left: 100%;
-                                }
-                            </style>
 
                         <?php
                         }
@@ -733,7 +768,7 @@ if ($batch_id > 0) {
                                         </h6>
                                         <div class="product-card__content mt-12">
                                             <div class="product-card__price mb-8">
-                                                <span class="text-heading text-md fw-semibold ">Rs <?php echo $b1d["selling_price"] ?> <span class="text-gray-500 fw-normal">/Qty</span> <?php echo $b1d["batch_qty"]; ?>Available</span>
+                                                <span class="text-heading text-md fw-semibold ">Rs <?php echo $b1d["selling_price"] ?> <span class="text-gray-500 fw-normal">/Qty</span> 
                                                 <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $b1d["selling_price"] + 10; ?></span>
                                             </div>
                                             <a href="cart.php" class="product-card__cart btn bg-main-50 text-main-600 hover-bg-main-600 hover-text-white py-11 px-24 rounded-pill flex-align gap-8 mt-24 w-100 justify-content-center">
