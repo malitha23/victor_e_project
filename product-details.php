@@ -242,44 +242,62 @@ if ($batch_id > 0) {
                                     <div class="my-32 flex-align gap-16 flex-wrap" style="margin-top: 0px !important;">
                                         <div class="flex-align gap-8">
                                             <div class="flex-align gap-8 text-main-two-600">
-                                                <i class="ph-fill ph-seal-percent text-xl"></i>
-                                                -<?php echo $discount_percentage; ?>%
+                                                <?php
+                                                if ($discount_percentage > 0) {
+                                                ?>
+                                                    <i class="ph-fill ph-seal-percent text-xl"></i>
+                                                    -<?php echo $discount_percentage; ?>%
+                                                <?php
+                                                } else {
+                                                    $dis = (($batchdata["batch_price"] - $batchdata["selling_price"]) / $batchdata["batch_price"]) * 100
+                                                ?>
+                                                    <i class="ph-fill ph-seal-percent text-xl"></i>
+                                                    <?php echo $dis; ?>%
+                                                <?php
+                                                }
+                                                ?>
                                             </div>
-                                            <h6 class="mb-0">Rs <?php echo number_format($discountAmount, 2); ?></h6>
+                                            <h6 class="mb-0">Rs <?php echo number_format($batchdata["selling_price"], 2); ?></h6>
                                         </div>
                                         <div class="flex-align gap-8">
                                             <span class="text-gray-700">Regular Price</span>
-                                            <h6 class="text-xl text-gray-400 mb-0 fw-medium">Rs <?php echo number_format($batchdata["selling_price"], 2); ?></h6>
+                                            <h6 class="text-xl text-gray-400 mb-0 fw-medium">Rs <?php echo number_format($batchdata["batch_price"], 2); ?></h6>
                                         </div>
                                     </div>
-                                    <div class="my-32 flex-align gap-16 flex-wrap">
-                                        <div class="row d-flex justify-content-center">
-                                            <style>
-                                                .ob {
-                                                    background-color: rgb(255, 199, 199);
-                                                }
+                                    <?php
+                                    if ($discount_percentage > 0) {
+                                    ?>
+                                        <div class="my-32 flex-align gap-16 flex-wrap">
+                                            <div class="row d-flex justify-content-center">
+                                                <style>
+                                                    .ob {
+                                                        background-color: rgb(255, 199, 199);
+                                                    }
 
-                                                .rs {
-                                                    border-radius: 15px 0 0 15px;
-                                                    box-shadow: 0 4px 6px rgba(255, 0, 0, 0.1);
-                                                    /* bottom shadow */
-                                                }
+                                                    .rs {
+                                                        border-radius: 15px 0 0 15px;
+                                                        box-shadow: 0 4px 6px rgba(255, 0, 0, 0.1);
+                                                        /* bottom shadow */
+                                                    }
 
-                                                .re {
-                                                    border-radius: 0 15px 15px 0;
-                                                    padding: 15px 30px 15px 0px !important;
-                                                    box-shadow: 4px 0 6px rgba(255, 0, 0, 0.1);
-                                                    /* right shadow */
-                                                }
-                                            </style>
-                                            <div class="col-4 ob rs"><img src="assets/images/thumbs/price-drop.png" class="img-fluid" alt=""></div>
-                                            <div class="col-auto ob re">
-                                                <div class="small text-black fw-bold">Special Price : </div>
-                                                <div class="fw-bold h3 text-black pb-0 mb-0 ap">Rs 43.50</div>
-                                                <div class="small text-success fw-bold">70% OFF</div>
+                                                    .re {
+                                                        border-radius: 0 15px 15px 0;
+                                                        padding: 15px 30px 15px 0px !important;
+                                                        box-shadow: 4px 0 6px rgba(255, 0, 0, 0.1);
+                                                        /* right shadow */
+                                                    }
+                                                </style>
+                                                <div class="col-4 ob rs"><img src="assets/images/thumbs/price-drop.png" class="img-fluid" alt=""></div>
+                                                <div class="col-auto ob re">
+                                                    <div class="small text-black fw-bold">Special Price : </div>
+                                                    <div class="fw-bold h3 text-black pb-0 mb-0 ap">Rs <?php echo $discount_due; ?></div>
+                                                    <div class="small text-success fw-bold"><?php echo $discount_percentage; ?>% OFF</div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    <?php
+                                    }
+                                    ?>
                                     <div class="my-32 flex-align gap-16 flex-wrap" style="display: none;">
                                         <div class="flex-align gap-8">
                                             <div class="flex-align gap-8 text-main-two-600 discount-popup">
@@ -375,6 +393,8 @@ if ($batch_id > 0) {
                                             <h6 class="text-2xl text-white fw-bold">Rs. <?php echo number_format($lastprice, 2); ?></h6>
                                         </div>
                                     </div>
+
+
 
 
                                     <div class="my-32 flex-align flex-wrap gap-12">
