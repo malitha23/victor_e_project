@@ -138,12 +138,12 @@ if (isset($_SESSION["a"])) {
                                     $brand = Databases::Search("SELECT * FROM `brand`");
                                     $brandn = $brand->num_rows;
                                      for ($i = 1; $i <= $brandn; $i++) { 
-                                      $brand = $brand->fetch_assoc();
+                                      $brandd = $brand->fetch_assoc();
                                       ?>
                                       <tr class="table-row-selectable">
                                         <td><input type="checkbox" class="row-checkbox"></td>
                                         <td class="px-md-3 px-lg-5">brand_name <?= $i ?></td>
-                                        <td class="px-md-3 px-lg-5">parent_brand > <?php echo $brand["name"]; ?> <?= $i ?></td>
+                                        <td class="px-md-3 px-lg-5">parent_brand > <?php echo $brandd["name"]; ?> <?= $i ?></td>
                                       </tr>
                                     <?php } ?>
                                   </tbody>
