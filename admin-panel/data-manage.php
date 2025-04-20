@@ -134,7 +134,10 @@ if (isset($_SESSION["a"])) {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <?php for ($i = 1; $i <= 5; $i++) { ?>
+                                    <?php
+                                    $brand = Databases::Search("SELECT * FROM `brand`");
+                                    
+                                     for ($i = 1; $i <= 5; $i++) { ?>
                                       <tr class="table-row-selectable">
                                         <td><input type="checkbox" class="row-checkbox"></td>
                                         <td class="px-md-3 px-lg-5">brand_name <?= $i ?></td>
