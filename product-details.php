@@ -466,24 +466,6 @@ if ($batch_id > 0) {
                                         </button>
                                     </div>
 
-                                    <script>
-                                        // Decrease the quantity
-                                        function decreaseQty() {
-                                            let stock = document.getElementById("stock");
-                                            if (stock.value > 1) {
-                                                stock.value--;
-                                            }
-                                        }
-
-                                        // Increase the quantity
-                                        function increaseQty() {
-                                            let stock = document.getElementById("stock");
-                                            if (stock.value < stock.max) {
-                                                stock.value++;
-                                            }
-                                        }
-                                    </script>
-
                                 </div>
                                 <div class="mb-32">
                                     <?php
@@ -522,20 +504,57 @@ if ($batch_id > 0) {
                                         <span class="text-gray-500">Price</span>
                                         <h6 class="text-lg mb-0">RS <?php echo $price; ?></h6>
                                     </div>
+                                    <input type="hidden" id="price" value="<?php echo $finalPricePerItem; ?>">
                                     <div class="flex-between flex-wrap gap-8">
                                         <span class="text-gray-500" style="color: #FA6400 !important;">Discount -</span>
                                         <h6 class="text-lg mb-0" style="color: #FA6400 !important;">RS <?php echo $discountAmount; ?></h6>
                                     </div>
                                     <div class="flex-between flex-wrap gap-8" style="margin-top: 15px;">
                                         <span class="text-gray-500">Shipping +</span>
-                                        <h6 class="text-lg mb-0">RS <?php echo ($deliveryfee + $weigdeliveryfee); ?></h6>
+                                        <h6 id="shipin" class="text-lg mb-0">RS <?php echo ($deliveryfee + $weigdeliveryfee); ?></h6>
                                     </div>
                                     <a href="account.php" class="small text-decoration-underline text-secondary-emphasis">Update your shipping information to calculate the exact cost.</a>
                                     <div class="flex-between flex-wrap gap-8" style="margin-top: 15px;">
                                         <span class="text-gray-500">Total</span>
-                                        <h6 class="text-lg mb-0">RS <?php echo $finalPricePerItem + $deliveryfee + $weigdeliveryfee; ?></h6>
+                                        <h6 id="fprice" class="text-lg mb-0">RS <?php echo $finalPricePerItem + $deliveryfee + $weigdeliveryfee; ?></h6>
                                     </div>
                                 </div>
+                                <script>
+                                    function decreaseQty() {
+                                        let stock = document.getElementById("stock");
+                                        let currentQty = parseInt(stock.value);
+                                        alert("hi");
+                                        if (currentQty > 1) {
+                                            currentQty--;
+                                            stock.value = currentQty;
+
+                                            let price = parseFloat(document.getElementById("price").value);
+                                            let spin = parseFloat(document.getElementById("shipin").textContent.replace(/[^\d.]/g, ''));
+                                            let tprice = currentQty * price;
+                                            let ttprice = tprice + spin;
+
+                                            document.getElementById("fprice").innerHTML = `RS ${ttprice.toFixed(2)}`;
+                                        }
+                                    }
+
+                                    function increaseQty() {
+                                        let stock = document.getElementById("stock");
+                                        let currentQty = parseInt(stock.value);
+                                        let maxQty = parseInt(stock.max);
+
+                                        if (currentQty < maxQty) {
+                                            currentQty++;
+                                            stock.value = currentQty;
+
+                                            let price = parseFloat(document.getElementById("price").value);
+                                            let spin = parseFloat(document.getElementById("shipin").textContent.replace(/[^\d.]/g, ''));
+                                            let tprice = currentQty * price;
+                                            let ttprice = tprice + spin;
+
+                                            document.getElementById("fprice").innerHTML = `RS ${ttprice.toFixed(2)}`;
+                                        }
+                                    }
+                                </script>
 
                                 <a onclick="adtocart(<?= $price ?>, <?= $discount_percentage ?>, <?= $batch_id ?>);" class="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-48">
                                     <i class="ph ph-shopping-cart-simple text-lg"></i>
@@ -559,7 +578,7 @@ if ($batch_id > 0) {
                         } else {
                         ?>
                             <div class="product-details__sidebar py-40 px-32 border border-gray-100 rounded-16">
-                                
+
                                 <div class="mb-32">
                                     <label for="stock" class="text-lg mb-8 text-heading fw-semibold d-block">Total Stock: <?php echo $batchdata["batch_qty"]; ?></label>
                                     <span class="text-xl d-flex">
@@ -768,8 +787,8 @@ if ($batch_id > 0) {
                                         </h6>
                                         <div class="product-card__content mt-12">
                                             <div class="product-card__price mb-8">
-                                                <span class="text-heading text-md fw-semibold ">Rs <?php echo $b1d["selling_price"] ?> <span class="text-gray-500 fw-normal">/Qty</span> 
-                                                <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $b1d["selling_price"] + 10; ?></span>
+                                                <span class="text-heading text-md fw-semibold ">Rs <?php echo $b1d["selling_price"] ?> <span class="text-gray-500 fw-normal">/Qty</span>
+                                                    <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $b1d["selling_price"] + 10; ?></span>
                                             </div>
                                             <a href="cart.php" class="product-card__cart btn bg-main-50 text-main-600 hover-bg-main-600 hover-text-white py-11 px-24 rounded-pill flex-align gap-8 mt-24 w-100 justify-content-center">
                                                 Add To Cart <i class="ph ph-shopping-cart"></i>
