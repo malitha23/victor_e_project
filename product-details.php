@@ -778,12 +778,12 @@ if ($batch_id > 0) {
                             ?>
                             <div>
                                 <div class="product-card h-100 p-8 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                    <a href="product-details.php" class="product-card__thumb flex-center">
+                                    <a href="product-details.php?batch_id=<?php echo $b1d['id']; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center">
                                         <img src="<?php echo $path; ?>" alt="">
                                     </a>
                                     <div class="product-card__content p-sm-2 w-100 mt-0">
                                         <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                            <a href="product-details.php" class="link text-line-2"><?php echo $pr["title"] ?></a>
+                                            <a href="product-details.php?batch_id=<?php echo $b1d['id']; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2"><?php echo $pr["title"] ?></a>
                                         </h6>
                                         <div class="product-card__content mt-12">
                                             <div class="product-card__price mb-8">
