@@ -88,8 +88,8 @@ if (isset($_SESSION["a"])) {
                                       $gruopd = $gruop->fetch_assoc();
                                     ?>
                                       <tr class="table-row-selectable">
-                                        <td><input type="checkbox" class="row-checkbox"></td>
-                                        <td class="px-md-3 px-lg-5"><?php echo $gruopd["group_name"] ?></td>
+                                        <td><input id="grcheck<?php echo $i ?>" type="checkbox" class="row-checkbox"></td>
+                                        <td id="groupname<?php echo $i ?>" class="px-md-3 px-lg-5"><?php echo $gruopd["group_name"] ?></td>
                                         <td class="px-md-3 px-lg-5"><?php echo $gruopd["group_name"] ?></td>
                                       </tr>
                                     <?php } ?>
@@ -99,7 +99,7 @@ if (isset($_SESSION["a"])) {
                             </div>
 
                             <div class="col-12 text-end mt-4">
-                              <button class="btn rounded-1 fw-bold x col-md-2">
+                              <button onclick="deletegroup(<?php echo $gruopn ?>);" class="btn rounded-1 fw-bold x col-md-2">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i> DELETE
                               </button>
                             </div>
@@ -110,6 +110,45 @@ if (isset($_SESSION["a"])) {
                   </section>
                 </div>
               </div>
+              <script>
+                function deletegroup(total) {
+                  const selectedGroups = [];
+
+                  for (let i = 1; i <= total; i++) {
+                    const checkbox = document.getElementById(`grcheck${i}`);
+                    if (checkbox && checkbox.checked) {
+                      const groupName = document.getElementById(`groupname${i}`).innerText.trim();
+                      selectedGroups.push(groupName);
+                    }
+                  }
+
+                  if (selectedGroups.length === 0) {
+                    alert("Please select at least one group to delete.");
+                    return;
+                  }
+
+                  if (!confirm("Are you sure you want to delete the selected groups?")) {
+                    return;
+                  }
+
+                  const formData = new FormData();
+                  formData.append("groups", JSON.stringify(selectedGroups));
+
+                  fetch("process/groupdelete.php", {
+                      method: "POST",
+                      body: formData
+                    })
+                    .then(res => res.text())
+                    .then(data => {
+                      alert(data);
+                      location.reload(); // Refresh page after deletion
+                    })
+                    .catch(err => {
+                      console.error(err);
+                      alert("An error occurred while deleting groups.");
+                    });
+                }
+              </script>
 
               <!-- CATEGORIES SECTION -->
               <div class="col-auto py-4 mt-4 mb-3 border shadow">
