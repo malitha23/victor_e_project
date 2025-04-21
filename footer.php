@@ -214,29 +214,30 @@
 
         <div class="col-md-3 mb-4 mb-md-0">
           <h3 class="">Links</h3>
-          <ul class="list-unstyled tweets footer-link" style="padding-right:20px;">
-            <li class="d-flex justify-content-start"><a href="">Home</a></li>
-            <li class="d-flex justify-content-start"><a href="">Shop</a></li>
-            <li class="d-flex justify-content-start"><a href="">Contact</a></li>
+          <ul class="list-unstyled  footer-link" style="padding-right:20px;">
+            <li class="d-flex justify-content-start fst-normal" style="margin-bottom: 20px;"><a href="index.php">Home</a></li>
+            <li class="d-flex justify-content-start fst-normal" style="margin-bottom: 20px;"><a href="shop.php">Shop</a></li>
+            <li class="d-flex justify-content-start fst-normal" style="margin-bottom: 20px;"><a href="account.php">Profile</a></li>
+            <li class="d-flex justify-content-start fst-normal" style="margin-bottom: 20px;"><a href="contact.php">Contact</a></li>
           </ul>
         </div>
 
         <div class="col-md mb-4 mb-md-0">
           <h3>Why Choose Us</h3>
-          <ul class="list-unstyled tweets" style="padding-right:20px;">
-            <li class="d-flex">
+          <ul class="list-unstyled " style="padding-right:20px;">
+            <li class="d-flex" style="margin-bottom: 20px;">
 
               <div class="mr-4"><i class="bi bi-cursor-fill"></i>&nbsp;&nbsp;</div>
-              <div>&nbsp;&nbsp;Choose Vicstore for top-quality products, unbeatable service, secure payments, and customer satisfaction.</div>
+              <div class="fst-normal">&nbsp;&nbsp;Choose Vicstore for top-quality products, unbeatable service, secure payments, and customer satisfaction.</div>
             </li>
-            <li class="d-flex">
+            <li class="d-flex" style="margin-bottom: 20px;">
 
               <div class="mr-4"><i class="bi bi-cursor-fill"></i>&nbsp;&nbsp;</div>
-              <div>&nbsp;&nbsp;Vicstore offers reliable, high-quality items, fast delivery, and exceptional customer service every time.</div>
+              <div class="fst-normal">&nbsp;&nbsp;Vicstore offers reliable, high-quality items, fast delivery, and exceptional customer service every time.</div>
             </li>
-            <li class="d-flex">
+            <li class="d-flex" style="margin-bottom: 20px;">
               <div class="mr-4"><i class="bi bi-cursor-fill"></i>&nbsp;&nbsp;</div>
-              <div>&nbsp;&nbsp;Experience seamless shopping at Vicstore with secure payments, 24/7 support, and exclusive offers.</div>
+              <div class="fst-normal">&nbsp;&nbsp;Experience seamless shopping at Vicstore with secure payments, 24/7 support, and exclusive offers.</div>
             </li>
           </ul>
         </div>

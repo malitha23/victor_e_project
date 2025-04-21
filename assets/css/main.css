@@ -232,6 +232,10 @@
     --font-6xl: 3.75rem;
 }
 
+.hh-font {
+    font-family: var(--heading-font) !important;
+}
+
 /* ========================= Variable Css End ======================== */
 /* ============================ Mixins Css Start ============================ */
 /* Media Breakpoint for Each Device Start */

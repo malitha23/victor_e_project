@@ -41,6 +41,7 @@ include_once "connection.php";
     <?php require_once "index_header.php"; ?>
 
     <!-- ============================ Banner Section start =============================== -->
+
     <div class="banner-two">
         <div class="container container-lg">
             <div class="banner-two-wrapper d-flex align-items-start">
@@ -100,6 +101,7 @@ include_once "connection.php";
                 <div class="banner-item-two-wrapper rounded-24 overflow-hidden position-relative arrow-center flex-grow-1 mb-0">
                     <img src="assets/images/bg/banner-two-bg.png" alt="" class="banner-img position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 z-n1 object-fit-cover rounded-24">
                     <div class="banner-item-two__slider">
+                        
                         <?php
                         $slider = Database::Search("SELECT * FROM `main_slider`");
                         $slidernum = $slider->num_rows;
@@ -218,10 +220,10 @@ include_once "connection.php";
                     <div class="deal-week-box rounded-16 overflow-hidden flex-between position-relative z-1 mb-24">
                         <img src="assets/images/bg/week-deal-bg.png" alt="" class="position-absolute inset-block-start-0 inset-block-start-0 w-100 h-100 z-n1 object-fit-cover">
                         <div class="d-lg-block d-none ps-32 flex-shrink-0" data-aos="zoom-in">
-                            <img src="assets/images/thumbs/week-deal-img1.png" alt="">
+                            <img src="assets/images/thumbs/Adobe Express - file (2).jpg" style="border-radius: 10px;" alt="">
                         </div>
                         <div class="deal-week-box__content px-sm-4 d-block w-100 text-center">
-                            <h6 class="mb-20 wow bounceIn fw-bolder"><?php echo $offers_details["description"] ?></h6>
+                            <h6 class="mb-20 wow bounceIn"><?php echo strip_tags($offers_details["description"]); ?></h6>
                             <?php
                             $phgd = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `discount_group_id`='" . $offers_details["id"] . "' ");
                             $phgdd = $phgd->fetch_assoc();
@@ -244,19 +246,19 @@ include_once "connection.php";
                                     </li>
                                 </ul>
                             </div>
-
-                            <script>
-                                document.addEventListener("DOMContentLoaded", function() {
-                                    initializeCountdown("countdown<?php echo $i; ?>", "<?php echo $phdatedeta["end_date"] ?>");
-                                });
-                            </script>
-
                         </div>
                         <div class="d-lg-block d-none flex-shrink-0 pe-xl-5" data-aos="zoom-in">
                             <div class="me-xxl-5">
-                                <img src="assets/images/thumbs/week-deal-img2.png" alt="">
+                                <img src="assets/images/thumbs/Adobe Express - file (3).jpg" alt="">
                             </div>
                         </div>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                initializeCountdown("countdown<?php echo $i; ?>", "<?php echo $phdatedeta["end_date"] ?>");
+                            });
+                        </script>
+
                     </div>
 
                     <div class="deals-week-slider arrow-style-two">
@@ -275,7 +277,7 @@ include_once "connection.php";
                                 <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
                                     <a href="product-details.php?batch_id=<?php echo $dpro_data['batch_id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
                                         <span class="product-card__badge bg-main-600 px-8 py-4 text-sm text-white position-absolute inset-inline-start-0 inset-block-start-0">
-                                            <?php echo  $dpro_data["discount_pre"]; ?> % Off
+                                            <?php echo  $dpro_data["discount_pre"]; ?>% Off
                                         </span>
                                         <?php
                                         $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bad["product_id"] . "' ");
@@ -295,13 +297,13 @@ include_once "connection.php";
                                             border-radius: 8px;
                                         }
                                     </style>
-                                    <div class="product-card__content mt-16">
+                                    <div class="product-card__content mt-16 w-100">
                                         <h6 class="title text-lg fw-semibold mt-12 mb-8">
                                             <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"]; ?></a>
                                         </h6>
                                         <div class="mt-8">
                                             <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-label="Basic example" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="progress-bar bg-tertiary-600 rounded-pill" style="width: 35%"></div>
+                                                <div class="progress-bar bg-tertiary-600 rounded-pill" style="width: 35%; background-color: rgb(250,104,0) !important;"></div>
                                             </div>
                                             <span class="text-gray-900 text-xs fw-medium mt-8">Sold: 18/35</span>
                                         </div>
@@ -314,7 +316,8 @@ include_once "connection.php";
                                             $discountpercentage = $dpro_data["discount_pre"];
                                             $nowprice = $sprice - ($sprice * $discountpercentage / 100);
                                             ?>
-                                            <span class="text-heading text-md fw-semibold ">Rs <?php echo $nowprice; ?> <span class="text-gray-500 fw-normal">/Qty<?php echo $dpro_data["qty"] ?>Available for Discount</span> </span>
+                                            <span class="text-heading text-md fw-semibold ">Rs <?php echo $nowprice; ?> <span class="text-gray-500 fw-normal">/Qty</span> </span>
+                                            <div class="col-12 small" style="color: rgb(255, 143, 68);">Only <?php echo $dpro_data["qty"] ?> items left at this special price!</div>
                                         </div>
 
                                         <a onclick="adtocart(<?= $sprice ?>, <?= $discountpercentage ?>, <?= $batch_id ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
@@ -393,7 +396,6 @@ include_once "connection.php";
                                 <img src="assets/images/bg/deal-bg.png" alt="Background Image" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100">
                                 <div class="py-xl-4">
                                     <h5 class="mb-4 fw-semibold"><?php echo $topd["title"] ?></h5>
-                                    <p class="text-muted"><?php echo $topd["description"] ?></p>
                                     <a href="shop.php" class="btn text-heading border-neutral-600 hover-bg-neutral-600 hover-text-white py-16 px-24 d-inline-flex align-items-center rounded-pill gap-8 fw-medium">
                                         Shop Now <i class="ph ph-shopping-cart text-xl d-flex"></i>
                                     </a>
@@ -410,7 +412,6 @@ include_once "connection.php";
                                 <div class="py-xl-4">
                                     <h6 class="mb-4 fw-semibold">Polaroid Now+ Gen 2 - White</h6>
                                     <h5 class="mb-40 fw-semibold">Fresh Vegetables</h5>
-                                    <p class="text-muted">Shop top-quality products from trusted sellers. Explore unbeatable deals on electronics, fresh produce, and more—all in one place!</p>
                                     <a href="cart.php" class="btn text-heading border-neutral-600 hover-bg-neutral-600 hover-text-white py-16 px-24 d-inline-flex align-items-center rounded-pill gap-8 fw-medium">
                                         Shop Now <i class="ph ph-shopping-cart text-xl d-flex"></i>
                                     </a>
@@ -418,7 +419,7 @@ include_once "connection.php";
 
                                 <!-- Promotional Image -->
                                 <div class="d-md-block d-none mt-36">
-                                    <img src="assets/images/thumbs/deal-img.png" alt="Promotion">
+                                    <img src="assets/images/thumbs/3d-illustration-laptop-with-shopping-basket-paper-bags-online-shopping-e-commerce-concept-min.jpg" class="img-fluid shadow" style="width: 303px; height: 213px; object-fit: cover; border-radius: 10px !important;" alt="Promotion">
                                 </div>
                             <?php
                             }
@@ -483,7 +484,7 @@ include_once "connection.php";
                                         </a>
 
                                         <!-- CONTENT AREA -->
-                                        <div class="product-card__content mt-16">
+                                        <div class="product-card__content mt-16 w-100">
                                             <h6 class="title text-lg fw-semibold mt-12 mb-8">
                                                 <a href="product-details.php?batch_id=<?php echo $tbatchd["id"]; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2" tabindex="0"><?php echo htmlspecialchars($tproductd["title"]); ?></a>
                                             </h6>
@@ -614,7 +615,7 @@ include_once "connection.php";
                             ?>
                         </div>
 
-                        
+
 
 
                     </div>
@@ -640,8 +641,8 @@ include_once "connection.php";
 
                 <div class="popular-products-box rounded-16 overflow-hidden flex-between position-relative z-1 mb-24">
                     <img src="assets/images/bg/expensive-offer-bg.png" alt="" class="position-absolute inset-block-start-0 inset-block-start-0 w-100 h-100 z-n1">
-                    <div class="d-lg-block d-none ps-32" data-aos="zoom-in" data-aos-duration="800">
-                        <img src="assets/images/thumbs/expensive-offer1.png" alt="">
+                    <div class="d-lg-block d-none " data-aos="zoom-in" data-aos-duration="800">
+                        <img src="assets/images/thumbs/34545.jpg" alt="">
                     </div>
                     <div class="popular-products-box__content px-sm-4 d-block w-100 text-center py-20">
                         <div class="flex-align gap-16 justify-content-center" data-aos="zoom-in" data-aos-duration="800">
@@ -649,7 +650,7 @@ include_once "connection.php";
                         </div>
                     </div>
                     <div class="d-lg-block d-none" data-aos="zoom-in" data-aos-duration="800">
-                        <img src="assets/images/thumbs/expensive-offer2.png" alt="">
+                        <img src="assets/images/thumbs/23454.jpg" alt="">
                     </div>
                 </div>
 
@@ -804,48 +805,9 @@ include_once "connection.php";
                 <?php
                 }
                 ?>
+
             </div>
-            <style>
-                .top-brand__slider {
-                    display: flex;
-                    overflow-x: auto;
-                    scroll-behavior: smooth;
-                    padding: 20px 0;
-                    gap: 20px;
-                }
 
-                .top-brand__wrapper {
-                    text-align: center;
-                    transition: transform 0.3s ease-in-out;
-                }
-
-                .top-brand__wrapper:hover {
-                    transform: scale(1.1);
-                }
-
-                .top-brand__item {
-                    width: 100px;
-                    height: 100px;
-                    background: white;
-                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 50%;
-                    transition: all 0.3s ease-in-out;
-                }
-
-                .top-brand__item:hover {
-                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-                }
-
-                .brand-name {
-                    display: block;
-                    margin-top: 10px;
-                    font-weight: bold;
-                    font-size: 14px;
-                }
-            </style>
         </div>
     </div>
     </div>
