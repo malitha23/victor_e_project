@@ -101,7 +101,7 @@ include_once "connection.php";
                 <div class="banner-item-two-wrapper rounded-24 overflow-hidden position-relative arrow-center flex-grow-1 mb-0">
                     <img src="assets/images/bg/banner-two-bg.png" alt="" class="banner-img position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 z-n1 object-fit-cover rounded-24">
                     <div class="banner-item-two__slider">
-                        
+
                         <?php
                         $slider = Database::Search("SELECT * FROM `main_slider`");
                         $slidernum = $slider->num_rows;
@@ -545,7 +545,7 @@ include_once "connection.php";
                         </div>
 
                         <style>
-                            .product-image{
+                            .product-image {
                                 width: 100%;
                                 height: 140px;
                             }
@@ -633,7 +633,30 @@ include_once "connection.php";
         </div>
     </section>
 
+    <!-- Custom Div -->
+    <section>
+        <div class="container-fluid">
+            <div class="row">
 
+                <a href="file-1.php">
+                    <div class=""></div>
+                </a>
+
+                <a href="file-2.php">
+                    <div class=""></div>
+                </a>
+
+                <a href="file-3.php">
+                    <div class=""></div>
+                </a>
+
+                <a href="file-4.php">
+                    <div class=""></div>
+                </a>
+
+            </div>
+        </div>
+    </section>
 
 
     <!-- ========================= Popular Categories Start ================================ -->

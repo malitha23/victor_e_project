@@ -504,7 +504,7 @@ if ($batch_id > 0) {
                                         <span class="text-gray-500">Price</span>
                                         <h6 id="sellprice" class="text-lg mb-0">RS <?php echo $price; ?></h6>
                                     </div>
-                                    <input id="iprice" type="hidden" value="<?php echo $price;  ?>"/>
+                                    <input id="iprice" type="hidden" value="<?php echo $price;  ?>" />
                                     <input type="hidden" id="price" value="<?php echo $finalPricePerItem; ?>">
                                     <div class="flex-between flex-wrap gap-8">
                                         <span class="text-gray-500" style="color: #FA6400 !important;">Discount -</span>
