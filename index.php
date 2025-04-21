@@ -544,6 +544,13 @@ include_once "connection.php";
                             </div>
                         </div>
 
+                        <style>
+                            .product-image{
+                                width: 100%;
+                                height: 140px;
+                            }
+                        </style>
+
                         <div class="row gy-4 featured-product-slider">
                             <?php
                             $bach = Database::Search("SELECT * FROM `batch`");
