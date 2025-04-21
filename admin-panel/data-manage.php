@@ -180,9 +180,9 @@ if (isset($_SESSION["a"])) {
                                       $mcatd = $mcat->fetch_assoc();
                                     ?>
                                       <tr class="table-row-selectable">
-                                        <td><input type="checkbox" class="row-checkbox"></td>
-                                        <td class="px-md-3 px-lg-5"><?php echo  $scatdata["name"] ?></td>
-                                        <td class="px-md-3 px-lg-5"><?php echo $mcatd["name"] ?> > <?php echo  $scatdata["name"] ?></td>
+                                        <td><input id="catceck<?php echo $i ?>" type="checkbox" class="row-checkbox"></td>
+                                        <td id="subcat<?php echo $i ?>" class="px-md-3 px-lg-5"><?php echo  $scatdata["name"] ?></td>
+                                        <td id="cat<?php echo $i ?>" class="px-md-3 px-lg-5"><?php echo $mcatd["name"] ?> > <?php echo  $scatdata["name"] ?></td>
                                       </tr>
                                     <?php } ?>
                                   </tbody>
@@ -191,7 +191,7 @@ if (isset($_SESSION["a"])) {
                             </div>
 
                             <div class="col-12 text-end mt-4">
-                              <button class="btn rounded-1 fw-bold x col-md-2">
+                              <button onclick="deletecat(<?php echo  $scatnum; ?>);" class="btn rounded-1 fw-bold x col-md-2">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i> DELETE
                               </button>
                             </div>
@@ -202,6 +202,40 @@ if (isset($_SESSION["a"])) {
                   </section>
                 </div>
               </div>
+
+              <script>
+                function deletecat(num) {
+                  let selectedSubCats = [];
+
+                  for (let i = 1; i <= num; i++) {
+                    let checkbox = document.getElementById("catceck" + i);
+                    if (checkbox && checkbox.checked) {
+                      let subcat = document.getElementById("subcat" + i).textContent.trim();
+                      selectedSubCats.push(subcat);
+                    }
+                  }
+
+                  if (selectedSubCats.length === 0) {
+                    alert("Please select at least one sub-category to delete.");
+                    return;
+                  }
+
+                  const formData = new FormData();
+                  formData.append("subcats", JSON.stringify(selectedSubCats));
+
+                  const xhr = new XMLHttpRequest();
+                  xhr.open("POST", "process/deletecat.php", true);
+                  xhr.onload = function() {
+                    if (xhr.status === 200) {
+                      alert(xhr.responseText);
+                      location.reload();
+                    } else {
+                      alert("Error deleting sub-categories.");
+                    }
+                  };
+                  xhr.send(formData);
+                }
+              </script>
 
               <!-- SUB CATEGORIES SECTION -->
               <div class="col-auto py-4 mt-4 mb-3 border shadow">
