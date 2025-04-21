@@ -245,8 +245,8 @@ if (isset($_SESSION["a"])) {
                                       $brandd = $brand->fetch_assoc();
                                     ?>
                                       <tr class="table-row-selectable">
-                                        <td><input type="checkbox" class="row-checkbox"></td>
-                                        <td class="px-md-3 px-lg-5"><?php echo $brandd["name"]; ?></td>
+                                        <td><input id="brandcheck<?php echo $i; ?>" type="checkbox" class="row-checkbox"></td>
+                                        <td id="brandname<?php echo $i; ?>" value="<?php echo $brandd["name"]; ?>" class="px-md-3 px-lg-5"><?php echo $brandd["name"]; ?></td>
                                         <td class="px-md-3 px-lg-5"><?php echo $brandd["name"]; ?></td>
                                       </tr>
                                     <?php } ?>
@@ -256,10 +256,44 @@ if (isset($_SESSION["a"])) {
                             </div>
 
                             <div class="col-12 text-end mt-4">
-                              <button class="btn rounded-1 fw-bold x col-md-2">
+                              <button onclick="brandelete(<?php echo $brandn ?>);" class="btn rounded-1 fw-bold x col-md-2">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i> DELETE
                               </button>
                             </div>
+                            <script>
+                              function brandelete(num) {
+                                let selectedBrands = [];
+
+                                for (let index = 1; index <= num; index++) {
+                                  const checkbox = document.getElementById("brandcheck" + index);
+                                  if (checkbox && checkbox.checked) {
+                                    const brandName = document.getElementById("brandname" + index).textContent.trim();
+                                    selectedBrands.push(brandName);
+                                  }
+                                }
+
+                                if (selectedBrands.length === 0) {
+                                  alert("Please select at least one brand to delete.");
+                                  return;
+                                }
+
+                                const formData = new FormData();
+                                formData.append("brands", JSON.stringify(selectedBrands));
+
+                                const xhr = new XMLHttpRequest();
+                                xhr.open("POST", "process/branddelete.php", true);
+                                xhr.onload = function() {
+                                  if (xhr.status === 200) {
+                                    alert(xhr.responseText);
+                                    location.reload();
+                                  } else {
+                                    alert("Error deleting brand(s).");
+                                  }
+                                };
+                                xhr.send(formData);
+                              }
+                            </script>
+
                           </div>
                         </div>
                       </div>
