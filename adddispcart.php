@@ -30,7 +30,13 @@ if (isset($_SESSION["user_vec"])) {
                          if ($cn == 1) {
                               $cd = $c->fetch_assoc();
                               $qty = $cd["qty"];
-                              Database::IUD("UPDATE `cart` SET `qty` = '" . $qty . "' WHERE (`id` = '" . $cd["id"] . "');");
+                              $b = Database::Search("SELECT * FROM `batch` WHERE `id`='".$batch_id."' ");
+                              $bd = $b->fetch_assoc();
+                              if($bd["batch_qty"] < $qty++){
+                                   echo("The qty is too large.");
+                                   exit();
+                              }
+                              Database::IUD("UPDATE `cart` SET `qty` = '" . $qty++ . "' WHERE (`id` = '" . $cd["id"] . "');");
                               echo "cart is update";
                          } else {
                               Database::IUD("INSERT INTO `cart` (`qty`, `user_email`, `batch_id`, `discount`) 
@@ -43,7 +49,13 @@ if (isset($_SESSION["user_vec"])) {
                          if ($cn == 1) {
                               $cd = $c->fetch_assoc();
                               $qty = $cd["qty"];
-                              Database::IUD("UPDATE `cart` SET `qty` = '" . $qty . "',`discount`='" . $discount . "' WHERE (`id` = '" . $cd["id"] . "');");
+                              $b = Database::Search("SELECT * FROM `batch` WHERE `id`='".$batch_id."' ");
+                              $bd = $b->fetch_assoc();
+                              if($bd["batch_qty"] < $qty++){
+                                   echo("The qty is too large.");
+                                   exit();
+                              }
+                              Database::IUD("UPDATE `cart` SET `qty` = '" . $qty++ . "',`discount`='" . $discount . "' WHERE (`id` = '" . $cd["id"] . "');");
                               echo "cart is update";
                          } else {
                               Database::IUD("INSERT INTO `cart` (`qty`, `user_email`, `batch_id`, `discount`) 
