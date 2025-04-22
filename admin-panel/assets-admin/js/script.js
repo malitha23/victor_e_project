@@ -113,6 +113,30 @@ function list_town() {
 
 }
 
+function list_dfee() {
+
+    var did = document.getElementById("dfd_id").value;
+
+    var r = new XMLHttpRequest();
+    var form = new FormData();
+    form.append("did", did);
+
+    r.onreadystatechange = function () {
+        if (r.readyState == 4 && r.status == 200) {
+            if (r.responseText == "Error") {
+                document.getElementById("df-table").value = null;
+            } else if (r.responseText == "Please select a ditsrict.") {
+                document.getElementById("df-table").value = null;
+            } else {
+                document.getElementById("df-table").innerHTML = r.responseText;
+            }
+        }
+    }
+    r.open("POST", "process/changecity.php", true);
+    r.send(form);
+
+}
+
 // add town columns
 var town_col_count = 0;
 function add_town_col() {

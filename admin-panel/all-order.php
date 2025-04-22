@@ -93,7 +93,7 @@ if (isset($_SESSION["a"])) {
                                                                     <?php
                                                                     }
                                                                     ?>
-                                                                    <div><b>Rejister Date Time : </b> <?php echo $cuserdata["date"]; ?></div>
+                                                                    <div><b>Registered Date Time : </b> <?php echo $cuserdata["date"]; ?></div>
                                                                     <div><b>invoice Date Time : </b> <b><?php echo $invoicedata["date_time"] ?></b></div>
                                                                     <div><b>Order Date Time : </b> <b><?php echo $orderdata["date_time"] ?></b></div>
                                                                 </div>

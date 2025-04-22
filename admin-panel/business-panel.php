@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["a"])) {
+if (isset($_SESSION["a"])) {
     include "db.php";
     $uemail = $_SESSION["a"]["username"];
     $query = "SELECT * FROM `admin` WHERE `username` = ?";
@@ -26,7 +26,7 @@ if (!isset($_SESSION["a"])) {
 
         </head>
 
-        <body onload="change_branch()">
+        <body>
             <!--  Body Wrapper -->
             <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
                 <?php
@@ -161,7 +161,7 @@ if (!isset($_SESSION["a"])) {
                                             </div>
                                             <div class="col-6 col-md-4 py-1">
                                                 <button
-                                                    class="btn btn-lg btn-light-danger border-danger border-opacity-25 rounded-0-5 text-dark-emphasis fw-100 fs-4" onclick="add_town_col();">ADD</button>
+                                                    class="btn btn-lg btn-light-danger border-danger border-opacity-25 rounded-0-5 text-dark-emphasis fw-100 fs-4" onclick="add_town_col();">ADD NEW</button>
                                             </div>
                                             <div class="col-12">
                                                 <div class="row" id="town_col">
@@ -208,53 +208,7 @@ if (!isset($_SESSION["a"])) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-8 mb-2 d-none">
-                                <div class="row d-flex flex-row justify-content-center align-items-center h-100">
-                                    <div class="col-12 shadow p-3 py-4">
-                                        <div class="row">
-                                            <div class="col-6 col-md-4">
-                                                <div class="form-floating mb-3">
-                                                    <select class="form-select rounded-0" id="ad_id" onchange="list_town();" aria-label="Floating label select example">
-                                                        <option selected value="0" selected>Select a district</option>
-                                                        <?php
-                                                        $district_q1 = Databases::search("SELECT * FROM `distric` ");
-                                                        while ($district1 = $district_q1->fetch_assoc()) {
-                                                        ?>
-                                                            <option value="<?php echo $district1['distric_id'] ?>">
-                                                                <?php echo $district1['name'] ?>
-                                                            </option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                    <label for="c_id">District</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-md-4">
-                                                <div class="form-floating mb-3">
-                                                    <select class="form-select rounded-0" id="at_id" aria-label="Floating label select example">
 
-                                                    </select>
-                                                    <label for="c_id">Town</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-md-4 py-1">
-                                                <button class="btn btn-lg btn-light-danger border-danger border-opacity-25 rounded-0-5 text-dark-emphasis fw-100 fs-4" onclick="add_town_col();">ADD</button>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="row" id="town_col">
-
-                                                </div>
-                                            </div>
-                                            <input type="number" value="" hidden id="num" />
-                                            <div class="col-12 text-end">
-                                                <button onclick="savecities();" class="btn rounded-0-5 fw-bold x"><i class="fa fa-check"></i>
-                                                    SAVE</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- shipping cost -->
@@ -274,34 +228,16 @@ if (!isset($_SESSION["a"])) {
                             <div class="col-12 col-md-8 order-md-1">
                                 <div class="row d-flex flex-row justify-content-center align-items-center h-100">
                                     <div class="col-12 shadow p-3 py-4">
-                                        <div class="row">
-                                            <div hidden class="col-6 col-md-4">
+                                        <div class="row d-flex justify-content-center">
+                                            <div class="col-6 ">
                                                 <div class="form-floating mb-3">
-                                                    <select class="form-select rounded-0" id="c_id" onchange="list_dprice();" aria-label="Floating label select example">
-                                                        <option selected value="0" selected>Select a city</option>
+                                                    <select class="form-select rounded-0" id="dfd_id" onchange="list_dfee();" aria-label="Floating label select example">
+                                                        <option selected value="-1" selected>Select a District</option>
                                                         <?php
-                                                        $district_q = DatabaseS::search("SELECT * FROM `city` ");
+                                                        $district_q = Databases::search("SELECT * FROM `distric`");
                                                         while ($district = $district_q->fetch_assoc()) {
                                                         ?>
-                                                            <option value="<?php echo $district['city_id'] ?>">
-                                                                <?php echo $district['name'] ?>
-                                                            </option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                    <label for="c_id">FROM</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-md-4">
-                                                <div class="form-floating mb-3">
-                                                    <select class="form-select rounded-0" id="c_id2" onchange="list_dprice();" aria-label="Floating label select example">
-                                                        <option selected value="0" selected>Select a district</option>
-                                                        <?php
-                                                        $district_q = Databases::search("SELECT * FROM `city`");
-                                                        while ($district = $district_q->fetch_assoc()) {
-                                                        ?>
-                                                            <option value="<?php echo $district['city_id'] ?>">
+                                                            <option value="<?php echo $district['distric_id'] ?>">
                                                                 <?php echo $district['name'] ?>
                                                             </option>
                                                         <?php
@@ -311,13 +247,25 @@ if (!isset($_SESSION["a"])) {
                                                     <label for="c_id2">TO</label>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="form-floating mb-3">
-                                                    <input type="number" class="form-control rounded-0" id="d_price" value="" placeholder="charges">
-                                                    <label for="d_price">Delivery charges</label>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 d-flex justify-content-center">
+                                                <div class="table-responsive bg-white border">
+                                                    <table class="table mb-0 table-bordered">
+                                                        <thead>
+                                                            <tr style="background-color: azure;">
+                                                                <th></th>
+                                                                <th>CITY</th>
+                                                                <th>DELIVERY FEE (Rs) </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="df-table">
+                                                            
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
-                                            <div class="col-12 text-end">
+                                            <div class="col-12 text-end mt-4">
                                                 <button class="btn rounded-0-5 fw-bold x" onclick="update_dprice();"><i class="fa fa-check"></i>
                                                     SAVE</button>
                                             </div>

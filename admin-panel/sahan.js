@@ -665,144 +665,168 @@ function saveUpdate(x) {
 
 function savecities() {
      var distric = document.getElementById("ad_id").value;
-     var count = document.getElementById("num").value;
-     if (count > 0) {
+     var inputs = document.querySelectorAll("#town_col input");
+     var cities = [];
 
-
-          var cities = [];
-          x = 0;
-          y = 0;
-          for (let index = 0; index < count; index++) {
-               x = x + 1;
-               var tcValue = document.getElementById("tc_" + x).value;
-               cities[y] = tcValue;
-               y = y + 1;
+     // Check for empty fields
+     for (let input of inputs) {
+          let val = input.value.trim();
+          if (val === "") {
+               alert("Please fill out all city name fields before saving.");
+               return; // Stop the function
           }
-          var length = cities.length;
-          var form = new FormData;
-          form.append("length", length);
-          form.append("distric", distric);
-          m = 1;
-          z = 0;
-          for (let index = 0; index < length; index++) {
-               form.append("city" + m, cities[z]);
-               m = m + 1;
-               z = z + 1;
-          }
-          var req = new XMLHttpRequest();
-
-          // Show a loading alert before sending the request
-          Swal.fire({
-               title: 'Please wait...',
-               text: 'Adding city...',
-               allowOutsideClick: false,
-               didOpen: () => {
-                    Swal.showLoading();
-               }
-          });
-
-          req.onreadystatechange = function () {
-               if (req.readyState === 4) {
-                    Swal.close(); // Close the loading alert when the request is complete
-
-                    if (req.status === 200) {
-                         if (req.responseText == 1) {
-                              Swal.fire({
-                                   title: 'City Added',
-                                   text: 'City added successfully!',
-                                   icon: 'success',
-                                   showClass: {
-                                        popup: 'animate__animated animate__fadeInDown'
-                                   },
-                                   hideClass: {
-                                        popup: 'animate__animated animate__fadeOutUp'
-                                   }
-                              }).then(() => {
-                                   location.reload(); // Reload the page after the user clicks "OK"
-                              });
-                         } else {
-                              Swal.fire({
-                                   title: 'Error!',
-                                   text: req.responseText,
-                                   icon: 'error',
-                                   showClass: {
-                                        popup: 'animate__animated animate__fadeInDown'
-                                   },
-                                   hideClass: {
-                                        popup: 'animate__animated animate__fadeOutUp'
-                                   }
-                              });
-                         }
-                    } else {
-                         Swal.fire({
-                              title: 'Error!',
-                              text: 'Something went wrong. Please try again.',
-                              icon: 'error'
-                         });
-                    }
-               }
-          };
-
-          req.open("POST", "process/Savecity.php", true);
-          req.send(form);
-
-     } else {
-          alert("type city name..press the add button");
+          cities.push(val);
      }
-}
-function update_dprice() {
-     var tocity = document.getElementById("c_id2").value;
-     var d_price = document.getElementById("d_price").value;
+
+     if (cities.length === 0) {
+          alert("Please add at least one city before saving.");
+          return;
+     }
 
      var form = new FormData();
-     form.append("tocity", tocity);
-     form.append("d_price", d_price);
+     form.append("distric", distric);
+     form.append("length", cities.length);
 
+     cities.forEach((city, index) => {
+          form.append("city" + (index + 1), city);
+     });
+
+     // Send AJAX request
      var req = new XMLHttpRequest();
-
-     // Show a loading alert before sending the request
      Swal.fire({
           title: 'Please wait...',
-          text: 'Adding delivery fee...',
+          text: 'Adding city...',
           allowOutsideClick: false,
           didOpen: () => {
                Swal.showLoading();
           }
      });
 
-     req.open("POST", "process/addeliveryfee.php", true);
-
      req.onreadystatechange = function () {
           if (req.readyState === 4) {
-               Swal.close(); // Close the loading alert once request is complete
-
+               Swal.close();
                if (req.status === 200) {
-                    Swal.fire({
-                         title: 'Delivery Fee Added Status',
-                         text: req.responseText,
-                         icon: 'success',
-                         showClass: {
-                              popup: 'animate__animated animate__fadeInDown'
-                         },
-                         hideClass: {
-                              popup: 'animate__animated animate__fadeOutUp'
-                         }
-                    }).then(() => {
-                         location.reload(); // Reload the page after user clicks "OK"
-                    });
+                    if (req.responseText == "1") {
+                         Swal.fire({
+                              title: 'Success!',
+                              text: 'City added successfully!',
+                              icon: 'success'
+                         }).then(() => {
+                              location.reload();
+                         });
+                    } else {
+                         Swal.fire({
+                              title: 'Error!',
+                              text: req.responseText,
+                              icon: 'error'
+                         });
+                    }
                } else {
                     Swal.fire({
                          title: 'Error!',
-                         text: 'Failed to add delivery fee. Please try again.',
+                         text: 'Something went wrong. Please try again.',
                          icon: 'error'
                     });
                }
           }
      };
 
+     req.open("POST", "process/Savecity.php", true);
      req.send(form);
-
 }
+
+function update_dprice() {
+     var table = document.getElementById("df-table");
+     var rows = table.getElementsByTagName("tr");
+     var formData = new FormData();
+     var hasChanges = false;
+
+     if (rows.length == 0) {
+          Swal.fire({
+               title: 'No Cities in the List',
+               text: 'Please add cities or select a district first.',
+               icon: 'error'
+          });
+          return;
+     }
+
+     for (var i = 0; i < rows.length; i++) {
+          var input = rows[i].getElementsByTagName("input")[0];
+          var id = input.id;
+          var value = input.value.trim();
+          var original = input.getAttribute("data-original").trim();
+
+          // Only add to FormData if the value has changed
+          if (value !== original) {
+               if (value === "") {
+                    Swal.fire({
+                         title: 'Some Fees are Empty.',
+                         text: 'Please fill in all input fields.',
+                         icon: 'error'
+                    });
+                    return;
+               }
+
+               formData.append(id, value);
+               hasChanges = true;
+          }
+     }
+
+     if (!hasChanges) {
+          Swal.fire({
+               title: 'No Changes Detected',
+               text: 'You have not made any changes.',
+               icon: 'info'
+          });
+          return;
+     }
+
+     var xhr = new XMLHttpRequest();
+     xhr.open("POST", "process/change-d-fee.php", true);
+
+     Swal.fire({
+          title: 'Please wait...',
+          text: 'Saving data...',
+          allowOutsideClick: false,
+          didOpen: () => {
+               Swal.showLoading();
+          }
+     });
+
+     xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+               Swal.close();
+
+               if (xhr.status === 200) {
+                    if (xhr.responseText == "1") {
+                         Swal.fire({
+                              title: 'Success!',
+                              text: 'City fees updated successfully!',
+                              icon: 'success'
+                         }).then(() => {
+                              location.reload();
+                         });
+                    } else {
+                         Swal.fire({
+                              title: 'Error!',
+                              text: xhr.responseText,
+                              icon: 'error'
+                         });
+                    }
+               } else {
+                    Swal.fire({
+                         title: 'Error',
+                         text: 'Something went wrong. Please try again.',
+                         icon: 'error'
+                    });
+               }
+          }
+     };
+
+     xhr.send(formData);
+}
+
+
 function change_emailN() {
      var email = document.getElementById("contact_email").value;
      var mobile = document.getElementById("contact_mobile").value;

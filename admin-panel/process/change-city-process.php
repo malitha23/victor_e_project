@@ -23,7 +23,7 @@ INNER JOIN distric ON distric.distric_id=city_has_distric.distric_distric_id WHE
 
                 while ($data = $qs->fetch_assoc()) {
 ?>
-                    <option value="<?php echo $data['city_id'] ?>">
+                    <option value="<?php echo $data['city_id'] ?>" >
                         <?php echo $data['city_name'] ?>
                     </option>
 <?php
