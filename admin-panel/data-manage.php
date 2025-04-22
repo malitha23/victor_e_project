@@ -60,6 +60,57 @@ if (isset($_SESSION["a"])) {
                 }
               </style>
 
+              <!-- GROUPS SECTION -->
+              <div class="col-auto py-4 mt-4 mb-3 border shadow">
+                <div class="row">
+                  <section>
+                    <div class="gradient-custom-1 h-100">
+                      <div class="mask d-flex align-items-center h-100">
+                        <div class="container">
+                          <div class="row justify-content-center">
+                            <div class="col-12 text-center fw-bolder h4 mb-3">GROUPS</div>
+
+                            <div class="col-12 d-flex justify-content-center">
+                              <div class="table-responsive bg-white border" style="max-height: 500px; overflow-y: auto;">
+                                <table class="table mb-0 table-bordered">
+                                  <thead>
+                                    <tr style="background-color: azure;">
+                                      <th></th>
+                                      <th>NAME</th>
+                                      <th>ROOT</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <?php
+                                    $gruop = Databases::Search("SELECT * FROM `group`");
+                                    $gruopn = $gruop->num_rows;
+                                    for ($i = 1; $i <=  $gruopn; $i++) {
+                                      $gruopd = $gruop->fetch_assoc();
+                                    ?>
+                                      <tr class="table-row-selectable">
+                                        <td><input type="checkbox" class="row-checkbox"></td>
+                                        <td class="px-md-3 px-lg-5"><?php echo $gruopd["group_name"] ?></td>
+                                        <td class="px-md-3 px-lg-5"><?php echo $gruopd["group_name"] ?></td>
+                                      </tr>
+                                    <?php } ?>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+
+                            <div class="col-12 text-end mt-4">
+                              <button class="btn rounded-1 fw-bold x col-md-2">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i> DELETE
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+
               <!-- CATEGORIES SECTION -->
               <div class="col-auto py-4 mt-4 mb-3 border shadow">
                 <div class="row">
@@ -71,7 +122,7 @@ if (isset($_SESSION["a"])) {
                             <div class="col-12 text-center fw-bolder h4 mb-3">CATEGORIES</div>
 
                             <div class="col-12 d-flex justify-content-center">
-                              <div class="table-responsive bg-white border">
+                              <div class="table-responsive bg-white border" style="max-height: 500px; overflow-y: auto;">
                                 <table class="table mb-0 table-bordered">
                                   <thead>
                                     <tr style="background-color: azure;">
@@ -84,15 +135,68 @@ if (isset($_SESSION["a"])) {
                                     <?php
                                     $scat = Databases::search("SELECT * FROM `sub_category`");
                                     $scatnum = $scat->num_rows;
-                                     for ($i = 1; $i <= $scatnum; $i++) {
+                                    for ($i = 1; $i <= $scatnum; $i++) {
                                       $scatdata = $scat->fetch_assoc();
-                                      $mcat = Databases::Search("SELECT * FROM `category` WHERE `id`='".$scatdata["category_id"]."' ");
+                                      $mcat = Databases::Search("SELECT * FROM `category` WHERE `id`='" . $scatdata["category_id"] . "' ");
                                       $mcatd = $mcat->fetch_assoc();
-                                       ?>
+                                    ?>
                                       <tr class="table-row-selectable">
                                         <td><input type="checkbox" class="row-checkbox"></td>
-                                        <td class="px-md-3 px-lg-5">category_name <?= $i ?></td>
-                                        <td class="px-md-3 px-lg-5"><?php echo $mcatd["name"] ?> > <?php echo  $scatdata["name"] ?><?= $i ?></td>
+                                        <td class="px-md-3 px-lg-5"><?php echo  $scatdata["name"] ?></td>
+                                        <td class="px-md-3 px-lg-5"><?php echo $mcatd["name"] ?> > <?php echo  $scatdata["name"] ?></td>
+                                      </tr>
+                                    <?php } ?>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+
+                            <div class="col-12 text-end mt-4">
+                              <button class="btn rounded-1 fw-bold x col-md-2">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i> DELETE
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+
+              <!-- SUB CATEGORIES SECTION -->
+              <div class="col-auto py-4 mt-4 mb-3 border shadow">
+                <div class="row">
+                  <section>
+                    <div class="gradient-custom-1 h-100">
+                      <div class="mask d-flex align-items-center h-100">
+                        <div class="container">
+                          <div class="row justify-content-center">
+                            <div class="col-12 text-center fw-bolder h4 mb-3">SUB CATEGORIES</div>
+
+                            <div class="col-12 d-flex justify-content-center">
+                              <div class="table-responsive bg-white border" style="max-height: 500px; overflow-y: auto;">
+                                <table class="table mb-0 table-bordered">
+                                  <thead>
+                                    <tr style="background-color: azure;">
+                                      <th></th>
+                                      <th>NAME</th>
+                                      <th>ROOT</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <?php
+                                    $scat = Databases::search("SELECT * FROM `sub_category`");
+                                    $scatnum = $scat->num_rows;
+                                    for ($i = 1; $i <= $scatnum; $i++) {
+                                      $scatdata = $scat->fetch_assoc();
+                                      $mcat = Databases::Search("SELECT * FROM `category` WHERE `id`='" . $scatdata["category_id"] . "' ");
+                                      $mcatd = $mcat->fetch_assoc();
+                                    ?>
+                                      <tr class="table-row-selectable">
+                                        <td><input type="checkbox" class="row-checkbox"></td>
+                                        <td class="px-md-3 px-lg-5"><?php echo  $scatdata["name"] ?></td>
+                                        <td class="px-md-3 px-lg-5"><?php echo $mcatd["name"] ?> > <?php echo  $scatdata["name"] ?> > Sub Category</td>
                                       </tr>
                                     <?php } ?>
                                   </tbody>
@@ -125,7 +229,7 @@ if (isset($_SESSION["a"])) {
 
                             <div class="col-12 d-flex justify-content-center">
                               <div class="table-responsive bg-white border">
-                                <table class="table mb-0 table-bordered">
+                                <table class="table mb-0 table-bordered" style="max-height: 500px; overflow-y: auto;">
                                   <thead>
                                     <tr style="background-color: azure;">
                                       <th></th>
@@ -137,64 +241,13 @@ if (isset($_SESSION["a"])) {
                                     <?php
                                     $brand = Databases::Search("SELECT * FROM `brand`");
                                     $brandn = $brand->num_rows;
-                                     for ($i = 1; $i <= $brandn; $i++) { 
+                                    for ($i = 1; $i <= $brandn; $i++) {
                                       $brandd = $brand->fetch_assoc();
-                                      ?>
+                                    ?>
                                       <tr class="table-row-selectable">
                                         <td><input type="checkbox" class="row-checkbox"></td>
-                                        <td class="px-md-3 px-lg-5">brand_name <?= $i ?></td>
-                                        <td class="px-md-3 px-lg-5">parent_brand > <?php echo $brandd["name"]; ?> <?= $i ?></td>
-                                      </tr>
-                                    <?php } ?>
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-
-                            <div class="col-12 text-end mt-4">
-                              <button class="btn rounded-1 fw-bold x col-md-2">
-                                <i class="fa fa-trash-o" aria-hidden="true"></i> DELETE
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                </div>
-              </div>
-
-              <!-- GROUPS SECTION -->
-              <div class="col-auto py-4 mt-4 mb-3 border shadow">
-                <div class="row">
-                  <section>
-                    <div class="gradient-custom-1 h-100">
-                      <div class="mask d-flex align-items-center h-100">
-                        <div class="container">
-                          <div class="row justify-content-center">
-                            <div class="col-12 text-center fw-bolder h4 mb-3">GROUPS</div>
-
-                            <div class="col-12 d-flex justify-content-center">
-                              <div class="table-responsive bg-white border">
-                                <table class="table mb-0 table-bordered">
-                                  <thead>
-                                    <tr style="background-color: azure;">
-                                      <th></th>
-                                      <th>NAME</th>
-                                      <th>ROOT</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <?php
-                                    $gruop = Databases::Search("SELECT * FROM `group`");
-                                    $gruopn = $gruop->num_rows;
-                                     for ($i = 1; $i <=  $gruopn; $i++) { 
-                                      $gruopd = $gruop->fetch_assoc();
-                                      ?>
-                                      <tr class="table-row-selectable">
-                                        <td><input type="checkbox" class="row-checkbox"></td>
-                                        <td class="px-md-3 px-lg-5">group_name <?= $i ?></td>
-                                        <td class="px-md-3 px-lg-5">root_group > <?php echo $gruopd["group_name"] ?> <?= $i ?></td>
+                                        <td class="px-md-3 px-lg-5"><?php echo $brandd["name"]; ?></td>
+                                        <td class="px-md-3 px-lg-5"><?php echo $brandd["name"]; ?></td>
                                       </tr>
                                     <?php } ?>
                                   </tbody>

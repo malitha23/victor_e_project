@@ -695,7 +695,7 @@ include_once "connection.php";
                         <div class="col-xxl-3 col-xl-4 col-sm-6 col-xs-6 wow bounceIn">
                             <div class="product-card h-100 d-flex flex-column gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
                                 <a href="shop.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
-                                    <img src="admin-panel/<?php echo $category_data["image_path"]; ?>" data-src="<?php echo $category_data['image_path']; ?>" alt="" class="lazyload img-fluid" loading="lazy" style="width: 63px; height: 80px; object-fit: cover;">
+                                    <img src="admin-panel/process/<?php echo $category_data["image_path"]; ?>" data-src="<?php echo $category_data['image_path']; ?>" alt="" class="lazyload img-fluid" loading="lazy" style="width: 63px; height: 80px; object-fit: cover;">
                                 </a>
                                 <div class="product-card__content flex-grow-1">
                                     <h6 class="title text-lg fw-semibold mb-12">
@@ -749,7 +749,7 @@ include_once "connection.php";
                         <div class="col-xxl-3 col-lg-4 col-sm-6 wow bounceIn">
                             <div class="vendor-card text-center px-16 pb-24">
                                 <div class="">
-                                    <img src="admin-panel/<?php echo $gd["image_path"]; ?>" alt="" class="vendor-card__logo m-12" style="width: 66px; height: 64px;">
+                                    <img src="admin-panel/process/<?php echo $gd["image_path"]; ?>" alt="" class="vendor-card__logo m-12" style="width: 66px; height: 64px;">
                                     <h6 class="title mt-32 text-lg"><?php echo $gd["group_name"]; ?></h6>
                                 </div>
                                 <div class="position-relative slick-arrows-style-three">
@@ -825,10 +825,10 @@ include_once "connection.php";
                 $brandnum = $brand->num_rows;
                 for ($i = 0; $i < $brandnum; $i++) {
                     $branddata = $brand->fetch_assoc();
-                    $bimgpath = empty($branddata["img_path"]) ? "assets/images/thumbs/top-brand-img1.png" : "admin-panel/" . $branddata["img_path"];
+                    $bimgpath = empty($branddata["img_path"]) ? "assets/images/thumbs/top-brand-img1.png" : "admin-panel/process/" . $branddata["img_path"];
                 ?>
                     <div class="top-brand__wrapper" data-aos="fade-up" data-aos-delay="<?php echo $i * 100; ?>">
-                        <div class="top-brand__item flex-center rounded-8 transition-1 px-8">
+                        <div class="top-brand__item flex-center rounded-8 transition-1 px-8" style="width: 100px; height: 100px; object-fit: contain;">
                             <img src="<?php echo $bimgpath; ?>" alt="<?php echo $branddata["name"]; ?>">
                         </div>
                     </div>

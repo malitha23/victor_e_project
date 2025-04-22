@@ -250,7 +250,7 @@ if (isset($_SESSION["a"])) {
                                         </div>
                                         <div class="row">
                                             <div class="col-12 d-flex justify-content-center">
-                                                <div class="table-responsive bg-white border">
+                                                <div class="table-responsive bg-white border" style="max-height: 500px; overflow-y: auto;">
                                                     <table class="table mb-0 table-bordered">
                                                         <thead>
                                                             <tr style="background-color: azure;">
