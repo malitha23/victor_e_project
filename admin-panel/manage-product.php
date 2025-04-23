@@ -627,7 +627,7 @@ if (isset($_SESSION["a"])) {
                 </div>
             </div>
 
-            <script src="https://cdn.tiny.cloud/1/v6ya2mxbd70fn22v774qp5fw78t114ccnejem2vy8oriyj04/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+            <script src="https://cdn.tiny.cloud/1/723hsc796jwdbccgl2cjvmqzh651t875e476ph2334nnlnhu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
             <script>
                 // Wait for the document to be ready
@@ -635,7 +635,7 @@ if (isset($_SESSION["a"])) {
                     // Initialize TinyMCE with API key
                     tinymce.init({
                         selector: 'textarea',
-                        apiKey: 'v6ya2mxbd70fn22v774qp5fw78t114ccnejem2vy8oriyj04', // Replace 'YOUR_API_KEY_HERE' with your actual API key
+                        apiKey: '723hsc796jwdbccgl2cjvmqzh651t875e476ph2334nnlnhu', // Replace 'YOUR_API_KEY_HERE' with your actual API key
                         plugins: 'autosave autolink lists link',
                         toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link',
                         menubar: false,

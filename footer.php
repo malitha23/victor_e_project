@@ -187,9 +187,13 @@
             <p class="mb-4">At Vicstore, we ensure the best quality items, offering reliability, excellence, and customer satisfaction.</p>
           </div>
           <div>
-            <ul class="list-unstyled quick-info mb-4 mt-5">
-              <li><a href="#" class="d-flex align-items-center"><i class="bi bi-telephone-fill"></i>&nbsp;&nbsp; +1 291 3912 329</a></li>
-              <li><a href="#" class="d-flex align-items-center"><i class="bi bi-envelope-at-fill"></i>&nbsp;&nbsp; info@gmail.com</a></li>
+          <ul class="list-unstyled quick-info mb-4 mt-5">
+              <?php
+              $contact_d = Database::Search("SELECT * FROM `contact`");
+              $con = $contact_d->fetch_assoc();
+              ?>
+              <li><a href="tel:<?php echo $con['mobile']; ?>" class="d-flex align-items-center"><i class="bi bi-telephone-fill"></i>&nbsp;&nbsp;<?php echo $con['mobile']; ?></a></li>
+              <li><a href="mailto:<?php echo $con['email']; ?>" class="d-flex align-items-center"><i class="bi bi-envelope-at-fill"></i>&nbsp;&nbsp; <?php echo $con['email']; ?></a></li>
             </ul>
           </div>
         </div>
@@ -246,7 +250,7 @@
           <div class="py-5 footer-menu-wrap d-md-flex align-items-center">
             <p class="mb-0 text-center text-md-start">
               2025 Designed & Developed by
-              <a href="https://codyzea.com/" class="developer-name">CODY ZEA SOFTWARE SOLUTIONS</a>, &nbsp;&nbsp;All rights reserved.
+              <a href="https://codyzea.co.nz/" class="developer-name">CODY ZEA SOFTWARE SOLUTIONS</a>, &nbsp;&nbsp;All rights reserved.
             </p>
           </div>
         </div>

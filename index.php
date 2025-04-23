@@ -99,33 +99,90 @@ include_once "connection.php";
                 </div>
 
                 <div class="banner-item-two-wrapper rounded-24 overflow-hidden position-relative arrow-center flex-grow-1 mb-0">
-                    <img src="assets/images/bg/banner-two-bg.png" alt="" class="banner-img position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 z-n1 object-fit-cover rounded-24">
-                    <div class="banner-item-two__slider">
 
-                        <?php
-                        $slider = Database::Search("SELECT * FROM `main_slider`");
-                        $slidernum = $slider->num_rows;
-                        for ($mains = 0; $mains < $slidernum; $mains++) {
-                            $sliderd = $slider->fetch_assoc();
-                            $fg = "assets/images/thumbs/banner-two-img.png";
-                        ?>
-                            <div class="banner-item-two">
-                                <div class="banner-item-two__content">
-                                    <span class="text-white mb-8 h6 wow bounceInDown"><?php echo $sliderd["title"]; ?></span>
-                                    <h2 class="banner-item-two__title bounce text-white wow bounceInLeft"><?php echo $sliderd["description"]; ?></h2>
-                                    <a href="shop.php" class="btn btn-outline-white d-inline-flex align-items-center rounded-pill gap-8 mt-48 wow bounceInUp">
-                                        Shop Now<span class="icon text-xl d-flex"><i class="ph ph-shopping-cart-simple"></i> </span>
-                                    </a>
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                        <!-- Carousel indicators -->
+                        <div class="carousel-indicators">
+                            <?php
+                            $slider = Database::Search("SELECT * FROM `main_slider`");
+                            $slidernum = $slider->num_rows;
+                            for ($bb = 0; $bb < $slidernum; $bb++) {
+                                if ($bb == 0) {
+                            ?>
+                                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                <?php
+                                } else {
+                                ?>
+                                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="<?php echo $bb; ?>" aria-label="Slide <?php echo $bb; ?>"></button>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </div>
+
+                        <!-- Carousel items -->
+                        <div class="carousel-inner">
+
+                            <?php
+                            $slider->data_seek(0);
+                            for ($mains = 0; $mains < $slidernum; $mains++) {
+                                $sliderd = $slider->fetch_assoc();
+                                $fg = "assets/images/thumbs/banner-two-img.png";
+                            ?>
+                                <div class="carousel-item <?php if ($mains == 0) {
+                                                                echo "active";
+                                                            } ?>">
+                                    <div class="d-flex align-items-center w-100 min-vh-50 p-4 slide-bg" style="background-image: url('assets/images/bg/banner-two-bg.png'); background-size: cover; background-position: center;">
+                                        <div class="container">
+                                            <div class="row align-items-center text-white px-5">
+                                                <div class="order-1 order-md-0 col-md-6 text-center text-md-start d-flex justify-content-center justify-content-md-start mb-68 mb-md-0">
+                                                    <div class="banner-item-two__content ">
+                                                        <span class="text-white mb-8 h6  bounceInDown"><?php echo $sliderd["title"]; ?></span>
+                                                        <h2 class="banner-item-two__title bounce text-white  bounceInLeft"><?php echo $sliderd["description"]; ?></h2>
+                                                        <a href="shop.php" class="btn btn-outline-white d-inline-flex align-items-center rounded-pill gap-8 mt-12 bounceInUp" style="z-index: 2;">
+                                                            Shop Now<span class="icon text-xl d-flex"><i class="ph ph-shopping-cart-simple"></i> </span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class=" col-md-6 text-center order-0 order-md-1" style="padding: 50px 0 50px 0;">
+                                                    <img src="<?php echo "admin-panel/process/" . $sliderd["sub_path"]; ?>" class="img-fluid" style="width: 90%; border-radius: 15px;" alt="Banner Image">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="banner-item-two__thumb position-absolute bottom-0 wow bounceInUp" style="margin-bottom: 40px;" data-wow-duration="1s" data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-perspective="5000" data-tilt-scale="1.06">
-                                    <img src="<?php echo "admin-panel/process/" . $sliderd["sub_path"]; ?>" class="b-20" alt="">
-                                </div>
-                            </div>
-                        <?php
-                        }
-                        ?>
+                            <?php
+                            }
+                            ?>
+
+                        </div>
+
+                        <style>
+                            .cb {
+                                background-color: transparent !important;
+                                color: #fff !important;
+                                font-size: 900 !important;
+                            }
+                        </style>
+
+                        <!-- Carousel controls -->
+                        <button class="carousel-control-prev " type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon cb" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next " type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                            <span class="carousel-control-next-icon cb" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                 </div>
+
+
+                <!-- Slider Script -->
+
+
+
+
             </div>
         </div>
     </div>
@@ -154,10 +211,10 @@ include_once "connection.php";
                     }
                 ?>
                     <div class="col-lg-4 col-sm-6" data-aos="fade-up" data-aos-duration="600">
-                        <div class="position-relative rounded-16 overflow-hidden z-1 p-32 hand">
-                            <img src="<?php echo $bimgA ?>" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 object-fit-cover z-n1">
-                            <div class="flex-between flex-wrap gap-16">
-                                <div class="">
+                        <div class="position-relative rounded-16 overflow-hidden z-1 p-32">
+                            <img src="<?php echo $bimgA; ?>" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 object-fit-cover z-n1">
+                            <div class="flex-between flex-wrap ">
+                                <div class="col-6 col-md-7">
                                     <span class="text-heading text-sm mb-8"><?php echo $adverdata["title"] ?></span>
                                     <h6 class="mb-0"><?php echo $adverdata["description"] ?></h6>
                                     <a href="shop.php" class="d-inline-flex align-items-center gap-8 mt-16 text-heading text-md fw-medium border border-top-0 border-end-0 border-start-0 border-gray-900 hover-text-main-two-600 hover-border-main-two-600">
@@ -165,27 +222,13 @@ include_once "connection.php";
                                         <span class="icon text-md d-flex"><i class="ph ph-plus"></i></span>
                                     </a>
                                 </div>
-                                <div class="pe-xxl-4">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <img src="<?php echo $adimgpath ?>" alt="Ad Image" class="img-fluid business-ad-img b-10 shadow-none" style="width: 100px !important; height: 100px !important;">
-                                        </div>
-                                    </div>
+                                <div class="col-6 col-md-3 d-flex justify-content-end pe-xxl-4">
+                                    <img src="<?php echo $adimgpath ?>" style="border-radius: 15px;" alt="">
                                 </div>
-                                <style>
-                                    .business-ad-img {
-                                        max-width: 100%;
-                                        height: 250px;
-                                        /* Set a fixed height or adjust as needed */
-                                        object-fit: cover;
-                                        /* Ensures image maintains aspect ratio and fills the area */
-                                        border: 1px solid #dee2e6;
-                                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                                    }
-                                </style>
                             </div>
                         </div>
                     </div>
+
                 <?php
                 }
                 ?>
@@ -202,7 +245,7 @@ include_once "connection.php";
         $offers_details = $offers->fetch_assoc();
     ?>
 
-        <section class="deals-weeek pt-80 overflow-hidden">
+        <section class="deals-weeek pt-80 overflow-hidden" id="parent_countdown<?php echo $i; ?>">
             <div class="container container-lg">
                 <div class="border border-gray-100 p-24 rounded-16">
                     <div class="section-heading mb-24">
@@ -297,7 +340,7 @@ include_once "connection.php";
                                             border-radius: 8px;
                                         }
                                     </style>
-                                    <div class="product-card__content mt-16 w-100">
+                                    <div class="product-card__content mt-16 w-100 col-4">
                                         <h6 class="title text-lg fw-semibold mt-12 mb-8">
                                             <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"]; ?></a>
                                         </h6>
@@ -410,8 +453,8 @@ include_once "connection.php";
                             ?>
                                 <img src="assets/images/bg/deal-bg.png" alt="Background Image" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100">
                                 <div class="py-xl-4">
-                                    <h6 class="mb-4 fw-semibold">Polaroid Now+ Gen 2 - White</h6>
-                                    <h5 class="mb-40 fw-semibold">Fresh Vegetables</h5>
+                                    <h6 class="mb-4 fw-semibold">Customer Favorites</h6>
+                                    <h5 class="mb-40 fw-semibold">Hot Picks Just for You</h5>
                                     <a href="cart.php" class="btn text-heading border-neutral-600 hover-bg-neutral-600 hover-text-white py-16 px-24 d-inline-flex align-items-center rounded-pill gap-8 fw-medium">
                                         Shop Now <i class="ph ph-shopping-cart text-xl d-flex"></i>
                                     </a>
@@ -522,7 +565,7 @@ include_once "connection.php";
 
 
     <!-- ========================= New Products Start ================================ -->
-    <section class="featured-products overflow-hidden">
+    <section class="featured-products overflow-hidden pt-80">
         <div class="container container-lg">
             <div class="row g-4 flex-wrap-reverse">
                 <div class="col-xxl-8">
@@ -634,29 +677,104 @@ include_once "connection.php";
     </section>
 
     <!-- Custom Div -->
+    <!-- AOS CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
     <section>
-        <div class="container-fluid">
+        <div class="container-fluid mt-80">
+
+        <div class="row justify-content-center g-5 px-20 py-5" data-aos="fade-up" data-aos-duration="1000" id="aboutUsContainer"></div>
+
+            <script>
+                const aboutUsSections = [{
+                        title1: "Who We Are",
+                        title2: "Creative team from Lanka",
+                        image: "assets/images/man-with-beer-svgrepo-com.svg",
+                        href: "file-1.php"
+                    },
+                    {
+                        title1: "What We Do",
+                        title2: "Building online store platforms",
+                        image: "assets/images/man-with-beer-svgrepo-com.svg",
+                        href: "file-2.php"
+                    },
+                    {
+                        title1: "Our Mission",
+                        title2: "Empowering Lankan businesses",
+                        image: "assets/images/man-with-beer-svgrepo-com.svg",
+                        href: "file-3.php"
+                    },
+                    {
+                        title1: "Why Choose Us",
+                        title2: "Trusted by locals, built global",
+                        image: "assets/images/man-with-beer-svgrepo-com.svg",
+                        href: "file-4.php"
+                    },
+                    {
+                        title1: "Our Vision",
+                        title2: "Smart commerce for everyone",
+                        image: "assets/images/man-with-beer-svgrepo-com.svg",
+                        href: "file-5.php"
+                    }
+                ];
+
+                const aboutUsContainer = document.getElementById("aboutUsContainer");
+
+                aboutUsSections.forEach(section => {
+                    aboutUsContainer.innerHTML += `
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <a href="${section.href}" class="text-decoration-none text-dark">
+          <div class="card h-100 shadow-sm hover-pop text-center c-card p-5">
             <div class="row">
-
-                <a href="file-1.php">
-                    <div class=""></div>
-                </a>
-
-                <a href="file-2.php">
-                    <div class=""></div>
-                </a>
-
-                <a href="file-3.php">
-                    <div class=""></div>
-                </a>
-
-                <a href="file-4.php">
-                    <div class=""></div>
-                </a>
-
+              <div class="col-12 d-flex justify-content-center p-5">
+                <img src="${section.image}" width="100px" style="margin-top: 20px;" alt="${section.title1}">
+              </div>
             </div>
+            <div class="card-body">
+              <span class="text-heading text-sm mb-8">${section.title1}</span>
+              <h6 class="mb-0">${section.title2}</h6>
+              <div class="col-12">
+              <a href="${section.href}" class="d-inline-flex align-items-center mt-16 text-heading text-md fw-medium border border-top-0 border-end-0 border-start-0 border-gray-900 hover-text-main-two-600 hover-border-main-two-600">
+                View More
+                <span class="icon text-md d-flex"><i class="ph ph-plus"></i></span>
+              </a>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    `;
+                });
+            </script>
+
         </div>
     </section>
+
+    <!-- AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+
+    <!-- Hover Animation CSS -->
+    <style>
+        .hover-pop {
+            transition: transform 0.3s ease;
+        }
+
+        .hover-pop:hover {
+            transform: scale(1.05);
+        }
+
+        .c-card {
+            background-image: url("assets/images/bgbgbg.jpg") !important;
+            background-position: center !important;
+            background-size: cover !important;
+            /* background-color: #CAD6FF !important; */
+            border-radius: 15px !important;
+        }
+    </style>
+
 
 
     <!-- ========================= Popular Categories Start ================================ -->
@@ -693,18 +811,18 @@ include_once "connection.php";
                         $category_data = $category->fetch_assoc();
                     ?>
                         <div class="col-xxl-3 col-xl-4 col-sm-6 col-xs-6 wow bounceIn">
-                            <div class="product-card h-100 d-flex flex-column gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                <a href="shop.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
-                                    <img src="admin-panel/process/<?php echo $category_data["image_path"]; ?>" data-src="<?php echo $category_data['image_path']; ?>" alt="" class="lazyload img-fluid" loading="lazy" style="width: 63px; height: 80px; object-fit: cover;">
+                            <div class="product-card h-100 d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2 d-flex justify-content-start align-items-center">
+                                <a href="product-details.php" class="product-card__thumb flex-center h-unset rounded-8 bg-white position-relative w-unset flex-shrink-0" tabindex="0">
+
+                                    <img src="admin-panel/process/<?php echo $category_data["image_path"]; ?>" data-src="<?php echo $category_data['image_path']; ?>" alt="" class="lazyload img-fluid w-auto max-w-unset" loading="lazy" style="width: 100%; height: 120px; object-fit: cover; border-radius: 15px; background-position-y: top;">
                                 </a>
                                 <div class="product-card__content flex-grow-1">
                                     <h6 class="title text-lg fw-semibold mb-12">
                                         <a href="shop.php" class="link text-line-2" tabindex="0"><?php echo $category_data["name"]; ?></a>
                                     </h6>
-
                                     <?php
                                     // Fetch subcategories for the current category
-                                    $subcategory = Database::Search("SELECT * FROM `sub_category` WHERE `category_id` = '" . $category_data["id"] . "'");
+                                    $subcategory = Database::Search("SELECT * FROM `sub_category` WHERE `category_id` = '" . $category_data["id"] . "' LIMIT 3");
                                     $subcategory_num = $subcategory->num_rows;
 
                                     for ($j = 0; $j < $subcategory_num; $j++) {
@@ -722,6 +840,7 @@ include_once "connection.php";
                                 </div>
                             </div>
                         </div>
+
                     <?php
                     }
                     ?>
@@ -736,12 +855,12 @@ include_once "connection.php";
 
 
     <!-- =========================== Top Vendor Section Start ========================== -->
-    <section class="top-vendor py-80 overflow-hidden">
+    <section class="top-vendor pt-80 overflow-hidden">
         <div class="container container-lg">
             <div class="p-24 rounded-16">
                 <div class="row gy-4 vendor-card-wrapper d-flex justify-content-center">
                     <?php
-                    $g = Database::Search("SELECT * FROM `group`");
+                    $g = Database::Search("SELECT * FROM `group` LIMIT 6");
                     $gn = $g->num_rows;
                     for ($i = 0; $i < $gn; $i++) {
                         $gd = $g->fetch_assoc();
@@ -749,7 +868,7 @@ include_once "connection.php";
                         <div class="col-xxl-3 col-lg-4 col-sm-6 wow bounceIn">
                             <div class="vendor-card text-center px-16 pb-24">
                                 <div class="">
-                                    <img src="admin-panel/process/<?php echo $gd["image_path"]; ?>" alt="" class="vendor-card__logo m-12" style="width: 66px; height: 64px;">
+                                    <img src="admin-panel/process/<?php echo $gd["image_path"]; ?>" alt="" class="vendor-card__logo m-12" style="width: 66px; height: 64px; border-radius: 15px;">
                                     <h6 class="title mt-32 text-lg"><?php echo $gd["group_name"]; ?></h6>
                                 </div>
                                 <div class="position-relative slick-arrows-style-three">
@@ -809,7 +928,7 @@ include_once "connection.php";
     <!-- ================================== Day Sale Section End =================================== -->
 
     <!-- ============================== Top Brand Section Start ==================================== -->
-    <div class="top-brand py-80">
+    <div class="top-brand pt-40 pb-80">
         <div class="container container-lg">
             <div class="p-24 rounded-16">
                 <div class="section-heading mb-24">
@@ -844,7 +963,7 @@ include_once "connection.php";
     <!-- ============================== Top Brand Section End ==================================== -->
 
     <!-- ========================== Shipping Section Start ============================ -->
-    <section class="shipping mb-80" id="shipping">
+    <section class="shipping my-80" id="shipping">
         <div class="container container-lg">
             <div class="row gy-4">
                 <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="400">
@@ -921,6 +1040,7 @@ include_once "connection.php";
                     const countdownElement = document.querySelector(`#${elementId}`);
                     if (countdownElement) {
                         countdownElement.style.display = "none";
+                        document.getElementById("parent_" + elementId).style.display = "none";
                     }
                     clearInterval(interval);
                 }

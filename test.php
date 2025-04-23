@@ -1,861 +1,972 @@
 <?php
-session_start();
-include 'connection.php'; // Include your database connection
-
-// Get product details from URL parameters
-$batch_id = isset($_GET['batch_id']) ? intval($_GET['batch_id']) : 0;
-$discount_id = isset($_GET['discount_id']) ? intval($_GET['discount_id']) : 0;
-if ($batch_id > 0) {
-    $batch = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $batch_id . "' ");
-    $batchdata = $batch->fetch_assoc();
-    $product = Database::Search("SELECT * FROM `product` WHERE `id`='" . $batchdata["product_id"] . "' ");
-    $productdata = $product->fetch_assoc();
-    $pic1 = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $productdata["id"] . "' AND `name`='Image 1' ");
-    $pic_d1 = $pic1->fetch_assoc();
-    if (empty($pic_d1["path"])) {
-        $picture1 = "assets/images/thumbs/product-details-two-thumb1.png";
-    } else {
-        $picture1 = $pic_d1["path"];
-    }
-    $pic2 = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $productdata["id"] . "' AND `name`='Image 2' ");
-    $pic_d2 = $pic2->fetch_assoc();
-    if (empty($pic_d2["path"])) {
-        $picture2 = "assets/images/thumbs/product-details-two-thumb1.png";
-    } else {
-        $picture2 = $pic_d2["path"];
-    }
-    $pic3 = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $productdata["id"] . "' AND `name`='Image 3' ");
-    $pic_d3 = $pic3->fetch_assoc();
-    if (empty($pic_d3["path"])) {
-        $picture3 = "assets/images/thumbs/product-details-two-thumb1.png";
-    } else {
-        $picture3 = $pic_d3["path"];
-    }
+include_once "connection.php";
 ?>
+<!DOCTYPE html>
+<html lang="en" class="color-two font-exo">
 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title -->
+    <title>replace_title</title>
+    <!-- Favicon -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!-- select 2 -->
+    <link rel="stylesheet" href="assets/css/select2.min.css">
+    <!-- Slick -->
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <!-- Jquery Ui -->
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <!-- animate -->
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <!-- AOS Animation -->
+    <link rel="stylesheet" href="assets/css/aos.css">
+    <!-- Main css -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
 
-    <!DOCTYPE html>
-    <html lang="en" class="color-two font-exo">
+<body>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Title -->
-        <title>replace_title</title>
-        <!-- Favicon -->
-        <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+    <!--==================== Preloader Start ====================-->
+    <!-- <div class="preloader">
+        <img src="assets/images/icon/preloader.gif" alt="">
+    </div> -->
+    <!--==================== Preloader End ====================-->
 
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-        <!-- select 2 -->
-        <link rel="stylesheet" href="assets/css/select2.min.css">
-        <!-- Slick -->
-        <link rel="stylesheet" href="assets/css/slick.css">
-        <!-- Jquery Ui -->
-        <link rel="stylesheet" href="assets/css/jquery-ui.css">
-        <!-- animate -->
-        <link rel="stylesheet" href="assets/css/animate.css">
-        <!-- AOS Animation -->
-        <link rel="stylesheet" href="assets/css/aos.css">
-        <!-- Main css -->
-        <link rel="stylesheet" href="assets/css/main.css">
-    </head>
+    <?php require_once "index_header.php"; ?>
 
-    <body>
+    <!-- ============================ Banner Section start =============================== -->
 
-        <!--==================== Preloader Start ====================-->
-        <div class="preloader">
-            <img src="assets/images/icon/preloader.gif" alt="">
-        </div>
-        <!--==================== Preloader End ====================-->
+    <div class="banner-two">
+        <div class="container container-lg">
+            <div class="banner-two-wrapper d-flex align-items-start">
 
-        <?php require_once "shop_header.php"; ?>
+                <div class="w-265 d-lg-block d-none flex-shrink-0">
+                    <div class="responsive-dropdown style-two common-dropdown nav-submenu p-0 submenus-submenu-wrapper shadow-none border border-gray-100 position-relative border-top-0">
+                        <button type="button" class="close-responsive-dropdown rounded-circle text-xl position-absolute inset-inline-end-0 inset-block-start-0 mt-4 me-8 d-lg-none d-flex"> <i class="ph ph-x"></i> </button>
 
-        <!-- ========================== Product Details Two Start =========================== -->
-        <section class="product-details py-80">
-            <div class="container container-lg">
-                <div class="row gy-4">
-                    <div class="col-xl-9">
-                        <div class="row gy-4">
-                            <div class="col-xl-6">
-                                <div class="product-details__left">
+                        <div class="logo px-16 d-lg-none d-block">
+                            <a href="index.php" class="link">
+                                <img src="assets/images/logo/logo.png" alt="Logo">
+                            </a>
+                        </div>
 
-                                    <div class="product-details__thumb-slider border border-gray-100 rounded-16">
-                                        <?php
-                                        $picture =  Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $productdata["id"] . "' ");
-                                        $picturenum = $picture->num_rows;
-                                        for ($i = 0; $i < $picturenum; $i++) {
-                                            $picturedata = $picture->fetch_assoc();
-                                        ?>
-                                            <div class="">
-                                                <div class="product-details__thumb flex-center h-100">
-                                                    <img src="admin-panel/<?php echo $picturedata["path"] ?>" alt="">
-                                                </div>
-                                            </div>
-                                        <?php
-                                        }
-                                        ?>
-                                    </div>
-
-                                    <div class="mt-24">
-                                        <div class="product-details__images-slider">
-                                            <?php
-                                            $picture =  Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $productdata["id"] . "'");
-                                            $picturenum = $picture->num_rows;
-                                            for ($i = 0; $i < $picturenum; $i++) {
-                                                $picturedata = $picture->fetch_assoc();
-                                                if (empty($picturedata["path"])) {
-                                            ?>
-                                                    <div>
-                                                        <div class="max-w-120 max-h-120 h-100 flex-center border border-gray-100 rounded-16 p-8">
-                                                            <img src="assets/images/thumbs/product-details-two-thumb2.png" alt="">
-                                                        </div>
-                                                    </div>
-                                                <?php
-                                                } else {
-                                                ?>
-                                                    <div>
-                                                        <div class="max-w-120 max-h-120 h-100 flex-center border border-gray-100 rounded-16 p-8">
-                                                            <img src="admin-panel/<?php echo $picturedata["path"] ?>" alt="">
-                                                        </div>
-                                                    </div>
-                                                <?php
-                                                }
-                                                ?>
-                                            <?php
-                                            }
-                                            ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="product-details__content">
-
-                                    <!-- <div class="flex-center mb-24 flex-wrap gap-16 bg-color-one rounded-8 py-16 px-24 position-relative z-1" style="display: none;">
-                                        <img src="assets/images/bg/details-offer-bg.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 z-n1">
-                                        <div class="flex-align gap-16">
-                                            <span class="text-white text-sm">Special Offer:</span>
-                                        </div>
-                                        <div class="countdown" id="countdown11">
-                                            <ul class="countdown-list flex-align flex-wrap">
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="days"></span></li>
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="hours"></span></li>
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="minutes"></span></li>
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="seconds"></span></li>
-                                            </ul>
-                                        </div>
-                                        <span class="text-white text-xs">Remains untill the end of the offer</span>
-                                    </div> -->
-
-                                    <div class="flex-center mb-24 flex-wrap gap-16 bg-color-one rounded-8 py-16 px-24 position-relative z-1">
-                                        <img src="assets/images/bg/details-offer-bg.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 z-n1">
-                                        <div class="flex-align gap-16">
-                                            <span class="text-white text-sm">Special Offer:</span>
-                                        </div>
-
-                                        <?php
-                                        if ($discount_id == 0) {
-                                            $discount_percentage  = 0;
-                                            echo '<h5 class="text-white text-center">NOT Available Offer or Discount</h5>';
-                                        } else {
-                                            // Fetch discount details based on discount_id
-                                            $discount_query = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `id`='$discount_id'");
-                                            if ($discount_query->num_rows > 0) {
-                                                $discount_data = $discount_query->fetch_assoc();
-
-                                                // Fetch related discount group details
-                                                $disgroup_query = Database::Search("SELECT * FROM `discount_group` WHERE `id`='" . $discount_data["discount_group_id"] . "'");
-                                                $disgroup_data = $disgroup_query->fetch_assoc();
-
-                                                // Fetch date range details
-                                                $daterange_query = Database::Search("SELECT * FROM `discount_date_range` WHERE `id`='" . $discount_data["discount_date_range_id"] . "'");
-                                                $daterange_data = $daterange_query->fetch_assoc();
-
-                                                if ($disgroup_data && $daterange_data) {
-                                                    $offer_start_date = $daterange_data["start_date"];
-                                                    $offer_end_date = $daterange_data["end_date"];
-                                                    $offer_title = $disgroup_data["title"];
-                                                    $offer_description = $disgroup_data["description"];
-                                                    $discount_percentage = $discount_data["discount_pre"]; // %
-
-                                                    echo "<h5 class='text-white'>$offer_title - $discount_percentage% OFF</h5>";
-                                                    echo "<p class='text-white'>$offer_description</p>";
-                                                } else {
-                                                    echo "<h5 class='text-white'>Discount details not found.</h5>";
-                                                }
-                                            } else {
-                                                echo "<h5 class='text-white'>No discount available.</h5>";
-                                            }
-                                        }
-                                        ?>
-                                        <h5 class="text-white-50">offer end date :<?php echo isset($offer_end_date) ? $offer_end_date : ''; ?></h5>
-                                        <div class="countdown" id="countdown11" data-end-time="<?php echo isset($offer_end_date) ? $offer_end_date : ''; ?>">
-                                            <ul class="countdown-list flex-align flex-wrap">
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="days"></span></li>
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="hours"></span></li>
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="minutes"></span></li>
-                                                <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="seconds"></span></li>
-                                            </ul>
-                                        </div>
-                                        <span class="text-white text-xs">Remains until the end of the offer</span>
-                                    </div>
-
-                                    <script>
-                                        document.addEventListener("DOMContentLoaded", function() {
-                                            let countdownElement = document.getElementById("countdown11");
-                                            let endTime = countdownElement.getAttribute("data-end-time");
-
-                                            if (endTime) {
-                                                let countDownDate = new Date(endTime).getTime();
-                                                let x = setInterval(function() {
-                                                    let now = new Date().getTime();
-                                                    let distance = countDownDate - now;
-
-                                                    if (distance < 0) {
-                                                        clearInterval(x);
-                                                        document.querySelector(".countdown").innerHTML = "<h5>Offer Expired</h5>";
-                                                        return;
-                                                    }
-
-                                                    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                                                    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                                                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                                                    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                                                    document.querySelector(".countdown .days").innerText = days;
-                                                    document.querySelector(".countdown .hours").innerText = hours;
-                                                    document.querySelector(".countdown .minutes").innerText = minutes;
-                                                    document.querySelector(".countdown .seconds").innerText = seconds;
-                                                }, 1000);
-                                            }
-                                        });
-                                    </script>
-
-
-                                    <h5 class="mb-12"><?php echo $productdata["title"] ?></h5>
-                                    <div class="flex-align flex-wrap gap-12">
-                                        <div class="flex-align gap-12 flex-wrap">
-                                            <?php
-                                            $invoice = Database::Search("SELECT * FROM `invoice` WHERE `batch_id`='" . $batch_id . "' ");
-                                            $invoicenum = $invoice->num_rows;
-                                            $inqtysell = 0;
-                                            for ($i = 0; $i <  $invoicenum; $i++) {
-                                                $invoicedata = $invoice->fetch_assoc();
-                                                $inqtysell = $invoicedata["qty"] +  $inqtysell;
-                                            }
-                                            ?>
-                                            <span class="text-sm fw-medium text-gray-500"><?php echo $inqtysell; ?> SOLD</span>
-                                        </div>
-                                        <span class="text-sm fw-medium text-gray-500">|</span>
-                                        <span class="text-gray-900"> <span class="text-gray-400">SKU:</span><?php echo $batchdata["batch_code"] ?> </span>
-                                    </div>
-                                    <span class="mt-32 pt-32 text-gray-700 border-top border-gray-100 d-block"></span>
-                                    <div class="my-32 flex-align gap-16 flex-wrap" style="margin-top: 0px !important;">
-                                        <div class="flex-align gap-8">
-                                            <div class="flex-align gap-8 text-main-two-600 discount-popup">
-                                                <?php echo $discount_percentage; ?>%
-                                            </div>
-                                            <style>
-                                                .discount-popup {
-                                                    opacity: 0;
-                                                    transform: scale(0.8);
-                                                    animation: popupFadeIn 0.5s ease-out forwards;
-                                                }
-
-                                                @keyframes popupFadeIn {
-                                                    0% {
-                                                        opacity: 0;
-                                                        transform: scale(0.8);
-                                                    }
-
-                                                    100% {
-                                                        opacity: 1;
-                                                        transform: scale(1);
-                                                    }
-                                                }
-                                            </style>
-                                            <h6 class="mb-0 text-gray-700">Normal Price: <span class="fw-bold">Rs. <?php echo number_format($batchdata["selling_price"], 2); ?></span></h6>
-                                            <?php
-                                            // Calculate discounted price
-                                            $price = $batchdata["selling_price"];
-                                            $discountpre = $discount_percentage;
-                                            $discountAmount = ($price * $discountpre) / 100;
-                                            $discount_due = $batchdata["selling_price"] * (1 - $discount_percentage / 100);
-                                            ?>
-
-                                            <h5 class="mb-0 text-main-two-700">Discount Price: <span class="fw-bold">Rs. <?php echo number_format($discountAmount, 2); ?></span></h5>
-                                        </div>
-
-                                        <?php
-                                        // Default delivery fee
-                                        if (isset($_SESSION["user_vec"])) {
-                                            $user_row = Database::Search("SELECT * FROM `user` WHERE `email`='" . $_SESSION["user_vec"]["email"] . "' ");
-                                            $un = $user_row->num_rows;
-                                            if ($un == 1) {
-                                                $ud = $user_row->fetch_assoc();
-                                                if (!empty($ud["adress_id"])) {
-                                                    $ad = Database::Search("SELECT * FROM `address` WHERE `address_id` ='" . $ud["adress_id"] . "'");
-                                                    $add = $ad->fetch_assoc();
-                                                    $df = Database::Search("SELECT * FROM `delivery_fee` WHERE `city_city_id`='" . $add["city_city_id"] . "' ");
-                                                    $dfn = $df->num_rows;
-                                                    if ($dfn == 1) {
-                                                        $dfd = $df->fetch_assoc();
-                                                        $deliveryfee = $dfd["fee"];
-                                                    } else {
-                                                        $deliveryfee = 00.00;
-                                                    }
-                                                } else {
-                                                    $deliveryfee = 00.00;
-                                                }
-                                            }
-                                        } else {
-                                            $deliveryfee = 00.00;
-                                        }
-                                        // Default weight delivery fee
-                                        $weigdeliveryfee = 0;
-                                        if ($productdata["weight"] > 0) {
-                                            $product_weight = $productdata["weight"];
-                                            $dw = Database::Search("SELECT * FROM `weight` WHERE `weight` = '" . $product_weight . "'");
-                                            if ($dw->num_rows == 1) {
-                                                $dwd = $dw->fetch_assoc();
-                                                $dfw = Database::Search("SELECT * FROM `delivery_fee_for_weight` WHERE `weight_id`='" . $dwd["id"] . "' ");
-                                                if ($dfw->num_rows == 1) {
-                                                    $dfwd = $dfw->fetch_assoc();
-                                                    $weigdeliveryfee = $dfwd["fee"];
-                                                }
-                                            }
-                                        }
-
-                                        // Calculate final price
-                                        $lastprice = $discount_due + $deliveryfee + $weigdeliveryfee;
-                                        ?>
-
-                                        <div class="flex-align gap-8">
-                                            <span class="text-gray-700">Delivery Price:</span>
-                                            <h6 class="text-xl text-gray-400 mb-0 fw-medium">Rs. <?php echo number_format($deliveryfee, 2); ?></h6>
-                                        </div>
-
-                                        <div class="flex-align gap-8">
-                                            <span class="text-gray-700">Weight-based Additional Fee:</span>
-                                            <h6 class="text-xl text-gray-400 mb-0 fw-medium">Rs. <?php echo number_format($weigdeliveryfee, 2); ?></h6>
-                                        </div>
-
-                                        <div class="flex-align gap-8 px-16 py-8 rounded-8 bg-black">
-                                            <span class="text-white">Final Price:</span>
-                                            <h6 class="text-2xl text-white fw-bold">Rs. <?php echo number_format($lastprice, 2); ?></h6>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="my-32 flex-align flex-wrap gap-12">
-                                        <a class="px-12 py-8 text-sm rounded-8 flex-align gap-8 text-main-600 border border-gray-200 hover-border-main-600 hover-text-main-600">
-                                            Special Tags
-                                        </a>
-                                        <a class="px-12 py-8 text-sm rounded-8 flex-align gap-8 text-main-600 border border-gray-200 hover-border-main-600 hover-text-main-600">
-                                            Special Tags
-                                        </a>
-                                        <a class="px-12 py-8 text-sm rounded-8 flex-align gap-8 text-main-600 border border-gray-200 hover-border-main-600 hover-text-main-600">
-                                            Special Tags
-                                        </a>
-                                    </div>
-
-                                    <a href="https://www.whatsapp.com" class="btn btn-black flex-center gap-8 rounded-8 py-16">
-                                        <i class="ph ph-whatsapp-logo text-lg"></i>
-                                        Request More Information
+                        <ul class="responsive-dropdown__list scroll-sm p-0 py-8 overflow-y-auto">
+                            <?php
+                            $category = Database::Search("SELECT * FROM `category`");
+                            $category_num = $category->num_rows;
+                            for ($i = 0; $i < $category_num; $i++) {
+                                $category_data = $category->fetch_assoc();
+                            ?>
+                                <li class="has-submenus-submenu">
+                                    <a href="javascript:void(0)" class="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0">
+                                        <span><?php echo $category_data["name"]; ?></span>
+                                        <span class="icon text-md d-flex ms-auto"><i class="ph ph-caret-right"></i></span>
                                     </a>
 
-                                    <div class="mt-32">
-                                        <span class="fw-medium text-gray-900">100% Guarantee Safe Checkout</span>
-                                        <div class="mt-10">
-                                            <img src="assets/images/thumbs/gateway-img.png" alt="">
-                                        </div>
-                                    </div>
+                                    <div class="submenus-submenu py-16">
+                                        <h6 class="text-lg px-16 submenus-submenu__title"><?php echo $category_data["name"]; ?></h6>
+                                        <ul class="submenus-submenu__list max-h-300 overflow-y-auto scroll-sm">
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3">
-                        <?php
-                        if (isset($_SESSION["user_vec"])) {
-                            $user_row = Database::Search("SELECT * FROM `user` WHERE `email`='" . $_SESSION["user_vec"]["email"] . "' ");
-                            $un = $user_row->num_rows;
-                            if ($un == 1) {
-                                $ud = $user_row->fetch_assoc();
-                                if (!empty($ud["adress_id"])) {
-                                    $ad = Database::Search("SELECT * FROM `address` WHERE `address_id` ='" . $ud["adress_id"] . "'");
-                                    $add = $ad->fetch_assoc();
-                                    $df = Database::Search("SELECT * FROM `delivery_fee` WHERE `city_city_id`='" . $add["city_city_id"] . "' ");
-                                    $dfn = $df->num_rows;
-                                    if ($dfn == 1) {
-                                        $dfd = $df->fetch_assoc();
-                                        $deliveryfee = $dfd["fee"];
-                                    } else {
-                                        $deliveryfee = 00.00;
-                                    }
-                                } else {
-                                    $deliveryfee = 00.00;
-                                }
+                                            <?php
+                                            $subcategory = Database::Search("SELECT * FROM `sub_category` WHERE `category_id` ='" . $category_data["id"] . "' ");
+                                            $subcategory_num = $subcategory->num_rows;
+                                            for ($j = 0; $j < $subcategory_num; $j++) {
+                                                $subcategory_data = $subcategory->fetch_assoc();
+                                            ?>
+                                                <li>
+                                                    <a href="shop.php?category_id=<?php echo $category_data['id']; ?>&sub_categoryid=<?php echo $subcategory_data['id']; ?>">
+                                                        <?php echo $subcategory_data["name"]; ?>
+                                                    </a>
+                                                </li>
+                                            <?php
+                                            }
+                                            ?>
+
+                                        </ul>
+                                    </div>
+                                </li>
+                            <?php
                             }
-                        ?>
-                            <div class="product-details__sidebar py-40 px-32 border border-gray-100 rounded-16">
-                                <div class="mb-32">
-                                    <label for="delivery" class="h6 activePage mb-8 text-heading fw-semibold d-block">Delivery to</label>
-                                    <div class="flex-align border border-gray-100 rounded-4 px-16">
-                                        <span class="text-xl d-flex text-main-600">
-                                            <i class="ph ph-map-pin"></i>
-                                        </span>
-                                        <div class="border-0 px-8 rounded-4 py-10 text-dark"><?php echo  $ud["fname"] . " " . $ud["lname"] ?></div>
-                                    </div>
-                                </div>
-                                <div class="mb-32">
-                                    <label for="stock" class="text-lg mb-8 text-heading fw-semibold d-block">Total Stock: <?php echo $batchdata["batch_qty"]; ?></label>
-                                    <span class="text-xl d-flex">
-                                        <i class="ph ph-location"></i>
-                                    </span>
-                                    <div class="d-flex rounded-4 overflow-hidden">
-                                        <button type="button" class="quantity__minus flex-shrink-0 h-48 w-48 text-neutral-600 bg-gray-50 flex-center hover-bg-main-600 hover-text-white" onclick="decreaseQty()">
-                                            <i class="ph ph-minus"></i>
-                                        </button>
+                            ?>
+                        </ul>
+                    </div>
+                </div>
 
-                                        <input type="number" class="quantity__input flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-16" max="<?php echo $batchdata['batch_qty']; ?>" id="stock" value="1" min="1">
+                <div class="banner-item-two-wrapper rounded-24 overflow-hidden position-relative arrow-center flex-grow-1 mb-0">
+                    <img src="assets/images/bg/banner-two-bg.png" alt="" class="banner-img position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 z-n1 object-fit-cover rounded-24">
+                    <div class="banner-item-two__slider">
 
-                                        <button type="button" class="quantity__plus flex-shrink-0 h-48 w-48 text-neutral-600 bg-gray-50 flex-center hover-bg-main-600 hover-text-white" onclick="increaseQty()">
-                                            <i class="ph ph-plus"></i>
-                                        </button>
-                                    </div>
-
-                                    <script>
-                                        // Decrease the quantity
-                                        function decreaseQty() {
-                                            let stock = document.getElementById("stock");
-                                            if (stock.value > 1) {
-                                                stock.value--;
-                                            }
-                                        }
-
-                                        // Increase the quantity
-                                        function increaseQty() {
-                                            let stock = document.getElementById("stock");
-                                            if (stock.value < stock.max) {
-                                                stock.value++;
-                                            }
-                                        }
-                                    </script>
-
-                                </div>
-                                <div class="mb-32">
-                                    <?php
-
-                                    if ($productdata["weight"] > 0) {
-                                        $product_weight = $productdata["weight"];
-                                        $dw = Database::Search("SELECT * FROM `weight`");
-                                        $dwn = $dw->num_rows;
-                                        for ($i = 0; $i < $dwn; $i++) {
-                                            $dwd = $dw->fetch_assoc();
-                                            if ($dwd["weight"] == $product_weight) {
-                                                $final_product_weight = $dwd["weight"];
-                                                $dfw = Database::Search("SELECT * FROM `delivery_fee_for_weight` WHERE `weight_id`='" . $dwd["id"] . "' ");
-                                                $dfwn = $dfw->num_rows;
-                                                if ($dfwn == 1) {
-                                                    $dfwd = $dfw->fetch_assoc();
-                                                    $weigdeliveryfee = $dfwd["fee"];
-                                                } else {
-                                                    $weigdeliveryfee = 0;
-                                                }
-                                            } else {
-                                                $weigdeliveryfee = 0;
-                                            }
-                                        }
-                                    } else {
-                                        $weigdeliveryfee = 0;
-                                    }
-
-
-                                    $price = $batchdata["selling_price"];
-                                    $discountpre = $discount_percentage;
-                                    $discountAmount = ($price * $discountpre) / 100;
-                                    $finalPricePerItem = $price - $discountAmount;
-                                    ?>
-                                    <div class="flex-between flex-wrap gap-8 border-bottom border-gray-100 pb-16 mb-16">
-                                        <span class="text-gray-500">Price</span>
-                                        <h6 class="text-lg mb-0"><?php echo $price; ?></h6>
-                                    </div>
-                                    <div class="flex-between flex-wrap gap-8">
-                                        <span class="text-gray-500">Shipping</span>
-                                        <h6 class="text-lg mb-0">From <?php echo $deliveryfee; ?></h6>
-                                    </div>
-                                    <div class="flex-between flex-wrap gap-8">
-                                        <span class="text-gray-500">Additional Shipping cost for waght</span>
-                                        <h6 class="text-lg mb-0">From <?php echo $weigdeliveryfee; ?></h6>
-                                    </div>
-                                    <div class="flex-between flex-wrap gap-8">
-                                        <span class="text-gray-500">Discount</span>
-                                        <h6 class="text-lg mb-0">RS.<?php echo $discountAmount; ?></h6>
-                                    </div>
-                                    <div class="flex-between flex-wrap gap-8">
-                                        <span class="text-gray-500">Final price</span>
-                                        <h6 class="text-lg mb-0">RS <?php echo $finalPricePerItem + $deliveryfee + $weigdeliveryfee; ?></h6>
-                                    </div>
-                                </div>
-
-                                <a onclick="adtocart(<?= $price ?>, <?= $discount_percentage ?>, <?= $batch_id ?>);" class="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-48">
-                                    <i class="ph ph-shopping-cart-simple text-lg"></i>
-                                    Add To Cart
-                                </a>
-                                <a href="#" class="btn btn-outline-main rounded-8 py-16 fw-normal mt-16 w-100">
-                                    Buy Now
-                                </a>
-
-                                <div class="mt-32">
-                                    <div class="px-16 py-8 bg-main-50 rounded-8 flex-between gap-24 mb-14">
-                                        <span class="w-32 h-32 bg-white text-main-600 rounded-circle flex-center text-xl flex-shrink-0">
-                                            <i class="ph-fill ph-truck"></i>
-                                        </span>
-                                        <span class="text-sm text-neutral-600">Ship from <span class="fw-semibold">Vicstore</span> </span>
-                                    </div>
-                                </div>
-
-                            </div>
                         <?php
-                        } else {
+                        $slider = Database::Search("SELECT * FROM `main_slider`");
+                        $slidernum = $slider->num_rows;
+                        for ($mains = 0; $mains < $slidernum; $mains++) {
+                            $sliderd = $slider->fetch_assoc();
+                            $fg = "assets/images/thumbs/banner-two-img.png";
                         ?>
-                            <div class="welcome-section text-center p-4 bg-light rounded shadow">
-                                <span class="text-primary fw-bold">Welcome to Vicstore – The Ultimate Multi-Vendor Shopping Experience! 🛍️🚀</span>
-                                <p class="text-dark fs-5">
-                                    At <strong>Vicstore</strong>, we connect buyers with top sellers to bring you
-                                    <strong>high-quality products at the best prices</strong>. Whether you're shopping for
-                                    <em>electronics, household essentials, vehicle spare parts, or fresh food items</em>,
-                                    we have everything you need under one roof!
-                                </p>
-
-                                <div class="features d-flex justify-content-center gap-4 flex-wrap mt-3">
-                                    <div class="feature-item text-center p-3 border rounded bg-white shadow-sm">
-                                        <h6 class="text-success">✅ Multi-Vendor Marketplace</h6>
-                                        <p>Wide selection from verified sellers</p>
-                                    </div>
-                                    <div class="feature-item text-center p-3 border rounded bg-white shadow-sm">
-                                        <h6 class="text-danger">✅ Exclusive Discounts</h6>
-                                        <p>Shop and save with unbeatable deals</p>
-                                    </div>
-                                    <div class="feature-item text-center p-3 border rounded bg-white shadow-sm">
-                                        <h6 class="text-warning">✅ Fast & Secure Shopping</h6>
-                                        <p>Safe transactions and speedy delivery</p>
-                                    </div>
-                                    <div class="feature-item text-center p-3 border rounded bg-white shadow-sm">
-                                        <h6 class="text-info">✅ 24/7 Customer Support</h6>
-                                        <p>We're here to help anytime</p>
-                                    </div>
+                            <div class="banner-item-two px-md-5">
+                                <div class="banner-item-two__content">
+                                    <span class="text-white mb-8 h6 wow bounceInDown"><?php echo $sliderd["title"]; ?></span>
+                                    <h2 class="banner-item-two__title bounce text-white wow bounceInLeft"><?php echo $sliderd["description"]; ?></h2>
+                                    <a href="shop.php" class="btn btn-outline-white d-inline-flex align-items-center rounded-pill gap-8 mt-48 bounceInUp">
+                                        Shop Now<span class="icon text-xl d-flex"><i class="ph ph-shopping-cart-simple"></i> </span>
+                                    </a>
                                 </div>
-
-                                <div class="mt-4">
-                                    <a href="shop.php" class="btn btn-primary btn-lg fw-semibold px-4 py-2">🛒 Start Shopping</a>
-                                    <a href="contact.php" class="btn btn-outline-secondary btn-lg fw-semibold px-4 py-2">📞 Contact Us</a>
+                                <div class="banner-item-two__thumb position-absolute bottom-0 bounceInUp" style="margin-bottom: 40px;" >
+                                    <img src="<?php echo "admin-panel/process/" . $sliderd["sub_path"]; ?>" class="b-20" alt="">
                                 </div>
                             </div>
-
-                            <a href="register.php" class="best-button flex-center">
-                                Register now
-                            </a>
-
-                            <style>
-                                /* Base Button Styles */
-                                .best-button {
-                                    display: inline-block;
-                                    padding: 14px 40px;
-                                    font-size: 18px;
-                                    font-weight: bold;
-                                    text-transform: uppercase;
-                                    color: #fff;
-                                    text-decoration: none;
-                                    border-radius: 50px;
-                                    background: linear-gradient(45deg, #ff416c, #ff4b2b);
-                                    position: relative;
-                                    overflow: hidden;
-                                    transition: all 0.4s ease-in-out;
-                                    box-shadow: 0 10px 20px rgba(255, 75, 43, 0.4);
-                                    border: 2px solid transparent;
-                                }
-
-                                /* Glow Effect */
-                                .best-button::before {
-                                    content: "";
-                                    position: absolute;
-                                    top: -50%;
-                                    left: -50%;
-                                    width: 200%;
-                                    height: 200%;
-                                    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, transparent 70%);
-                                    transition: all 0.5s ease-in-out;
-                                    opacity: 0;
-                                }
-
-                                /* Hover Effects */
-                                .best-button:hover {
-                                    transform: scale(1.1);
-                                    box-shadow: 0 15px 30px rgba(255, 75, 43, 0.6);
-                                    border-color: #fff;
-                                }
-
-                                /* Activate Glow on Hover */
-                                .best-button:hover::before {
-                                    opacity: 1;
-                                    top: -30%;
-                                    left: -30%;
-                                }
-
-                                /* Pulse Animation */
-                                @keyframes pulse {
-                                    0% {
-                                        transform: scale(1);
-                                        box-shadow: 0 10px 20px rgba(255, 75, 43, 0.4);
-                                    }
-
-                                    50% {
-                                        transform: scale(1.05);
-                                        box-shadow: 0 15px 30px rgba(255, 75, 43, 0.6);
-                                    }
-
-                                    100% {
-                                        transform: scale(1);
-                                        box-shadow: 0 10px 20px rgba(255, 75, 43, 0.4);
-                                    }
-                                }
-
-                                .best-button {
-                                    animation: pulse 2s infinite;
-                                }
-
-                                /* Shimmer Effect */
-                                .best-button::after {
-                                    content: "";
-                                    position: absolute;
-                                    top: 0;
-                                    left: -100%;
-                                    width: 150%;
-                                    height: 100%;
-                                    background: linear-gradient(120deg,
-                                            transparent 30%,
-                                            rgba(255, 255, 255, 0.3) 50%,
-                                            transparent 70%);
-                                    transition: all 0.4s ease-in-out;
-                                }
-
-                                .best-button:hover::after {
-                                    left: 100%;
-                                }
-                            </style>
-
                         <?php
                         }
                         ?>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================ Banner Section End =============================== -->
 
-                <div class="pt-80">
-                    <div class="product-dContent border rounded-24">
-                        <div class="product-dContent__header border-bottom border-gray-100 d-flex justify-content-end flex-wrap gap-16">
-
-                            <a href="#" class="btn bg-color-one rounded-16 flex-align gap-8 text-main-600 hover-bg-main-600 hover-text-white">
-                                <img src="assets/images/icon/satisfaction-icon.png" alt="">
-                                100% Satisfaction Guaranteed
-                            </a>
-                        </div>
-                        <div class="product-dContent__box">
-                            <div class="tab-content" id="pills-tabContent">
-                                <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab" tabindex="0">
-                                    <div class="mb-40">
-                                        <h6 class="mb-24">Product Description</h6>
-                                        <?php echo $productdata["description"];  ?>
+    <!-- ============================ promotional banner Start ========================== -->
+    <section class="promotional-banner mt-32">
+        <div class="container container-lg">
+            <div class="row gy-4">
+                <?php
+                $adver = Database::Search("SELECT * FROM `advertisment`");
+                $advernum = $adver->num_rows;
+                for ($ia = 0; $ia < $advernum; $ia++) {
+                    $adverdata = $adver->fetch_assoc();
+                    if ($adverdata["add_p"] == 0) {
+                        $bimgA = "assets/images/bg/promo-bg-img1.png";
+                    } elseif ($adverdata["add_p"] == 1) {
+                        $bimgA = "assets/images/bg/promo-bg-img2.png";
+                    } else {
+                        $bimgA = "assets/images/bg/promo-bg-img3.png";
+                    }
+                    if (empty($adverdata["path"])) {
+                        $adimgpath = "assets/images/thumbs/promo-img1.png";
+                    } else {
+                        $adimgpath = "admin-panel/process/" . $adverdata["path"];
+                    }
+                ?>
+                    <div class="col-lg-4 col-sm-6" data-aos="fade-up" data-aos-duration="600">
+                        <div class="position-relative rounded-16 overflow-hidden z-1 p-32 hand">
+                            <img src="<?php echo $bimgA ?>" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 object-fit-cover z-n1">
+                            <div class="flex-between flex-wrap gap-16">
+                                <div class="">
+                                    <span class="text-heading text-sm mb-8"><?php echo $adverdata["title"] ?></span>
+                                    <h6 class="mb-0"><?php echo $adverdata["description"] ?></h6>
+                                    <a href="shop.php" class="d-inline-flex align-items-center gap-8 mt-16 text-heading text-md fw-medium border border-top-0 border-end-0 border-start-0 border-gray-900 hover-text-main-two-600 hover-border-main-two-600">
+                                        Shop Now
+                                        <span class="icon text-md d-flex"><i class="ph ph-plus"></i></span>
+                                    </a>
+                                </div>
+                                <div class="pe-xxl-4">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <img src="<?php echo $adimgpath ?>" alt="Ad Image" class="img-fluid business-ad-img b-10 shadow-none" style="width: 100px !important; height: 100px !important;">
+                                        </div>
                                     </div>
+                                </div>
+                                <style>
+                                    .business-ad-img {
+                                        max-width: 100%;
+                                        height: 250px;
+                                        /* Set a fixed height or adjust as needed */
+                                        object-fit: cover;
+                                        /* Ensures image maintains aspect ratio and fills the area */
+                                        border: 1px solid #dee2e6;
+                                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+    </section>
+    <!-- ============================ promotional banner End ========================== -->
+
+    <!-- ========================= Seasonal Offers ================================ -->
+    <?php
+    $offers = Database::Search("SELECT * FROM `discount_group` WHERE `status`='1' ");
+    $offers_num = $offers->num_rows;
+    for ($i = 0; $i < $offers_num; $i++) {
+        $offers_details = $offers->fetch_assoc();
+    ?>
+
+        <section class="deals-weeek pt-80 overflow-hidden" id="parent_countdown<?php echo $i; ?>">
+            <div class="container container-lg">
+                <div class="border border-gray-100 p-24 rounded-16">
+                    <div class="section-heading mb-24">
+                        <div class="flex-between flex-wrap gap-8">
+                            <h5 class="mb-0 wow bounceInLeft"><?php echo $offers_details["title"] ?></h5>
+                            <div class="flex-align gap-16 wow bounceInRight">
+                                <a href="shop.php" class="text-sm fw-medium text-gray-700 hover-text-main-600 hover-text-decoration-underline">View All Deals</a>
+                                <div class="flex-align gap-8">
+
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="deal-week-box rounded-16 overflow-hidden flex-between position-relative z-1 mb-24">
+                        <img src="assets/images/bg/week-deal-bg.png" alt="" class="position-absolute inset-block-start-0 inset-block-start-0 w-100 h-100 z-n1 object-fit-cover">
+                        <div class="d-lg-block d-none ps-32 flex-shrink-0" data-aos="zoom-in">
+                            <img src="assets/images/thumbs/Adobe Express - file (2).jpg" style="border-radius: 10px;" alt="">
+                        </div>
+                        <div class="deal-week-box__content px-sm-4 d-block w-100 text-center">
+                            <h6 class="mb-20 wow bounceIn"><?php echo strip_tags($offers_details["description"]); ?></h6>
+                            <?php
+                            $phgd = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `discount_group_id`='" . $offers_details["id"] . "' ");
+                            $phgdd = $phgd->fetch_assoc();
+                            $phdate = Database::Search("SELECT * FROM `discount_date_range` WHERE `id`='" . $phgdd["discount_date_range_id"] . "' ");
+                            $phdatedeta = $phdate->fetch_assoc();
+                            ?>
+                            <div class="countdown mt-20" id="countdown<?php echo $i; ?>">
+                                <ul class="countdown-list style-four flex-center flex-wrap">
+                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                        <span class="days"></span>Days
+                                    </li>
+                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                        <span class="hours"></span>Hour
+                                    </li>
+                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                        <span class="minutes"></span>Min
+                                    </li>
+                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                        <span class="seconds"></span>Sec
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="d-lg-block d-none flex-shrink-0 pe-xl-5" data-aos="zoom-in">
+                            <div class="me-xxl-5">
+                                <img src="assets/images/thumbs/Adobe Express - file (3).jpg" alt="">
+                            </div>
+                        </div>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                initializeCountdown("countdown<?php echo $i; ?>", "<?php echo $phdatedeta["end_date"] ?>");
+                            });
+                        </script>
+
+                    </div>
+
+                    <div class="deals-week-slider arrow-style-two">
+
+                        <?php
+                        $dpro = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `discount_group_id` = '" . $offers_details["id"] . "' ");
+                        $dpro_num = $dpro->num_rows;
+                        for ($i = 0; $i < $dpro_num; $i++) {
+                            $dpro_data = $dpro->fetch_assoc();
+                            $BA = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $dpro_data["batch_id"] . "' ");
+                            $bad = $BA->fetch_assoc();
+                            $discountid = $dpro_data["id"];
+                        ?>
+                            <!-- product card start -->
+                            <div data-aos="fade-up" data-aos-duration="200">
+                                <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+                                    <a href="product-details.php?batch_id=<?php echo $dpro_data['batch_id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
+                                        <span class="product-card__badge bg-main-600 px-8 py-4 text-sm text-white position-absolute inset-inline-start-0 inset-block-start-0">
+                                            <?php echo  $dpro_data["discount_pre"]; ?>% Off
+                                        </span>
+                                        <?php
+                                        $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bad["product_id"] . "' ");
+                                        $pr =  $pr->fetch_assoc();
+                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
+                                        $pic_d = $pic->fetch_assoc();
+                                        $imgSrc = empty($pic_d["path"]) ? "assets/images/thumbs/product-two-img2.png" : "admin-panel/" . $pic_d["path"];
+                                        ?>
+                                        <img src="<?php echo $imgSrc; ?>" alt="Product Image" class="product-card-img img-fluid">
+                                    </a>
+                                    <style>
+                                        .product-card-img {
+                                            width: 100%;
+                                            height: 220px;
+                                            /* You can adjust this based on your card layout */
+                                            object-fit: cover;
+                                            border-radius: 8px;
+                                        }
+                                    </style>
+                                    <div class="product-card__content mt-16 w-100 col-4" >
+                                        <h6 class="title text-lg fw-semibold mt-12 mb-8">
+                                            <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"]; ?></a>
+                                        </h6>
+                                        <div class="mt-8">
+                                            <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-label="Basic example" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar bg-tertiary-600 rounded-pill" style="width: 35%; background-color: rgb(250,104,0) !important;"></div>
+                                            </div>
+                                            <span class="text-gray-900 text-xs fw-medium mt-8">Sold: 18/35</span>
+                                        </div>
+
+                                        <div class="product-card__price my-20">
+                                            <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $bad["selling_price"]; ?></span>
+                                            <?php
+                                            $batch_id = $dpro_data["batch_id"];
+                                            $sprice = $bad["selling_price"];
+                                            $discountpercentage = $dpro_data["discount_pre"];
+                                            $nowprice = $sprice - ($sprice * $discountpercentage / 100);
+                                            ?>
+                                            <span class="text-heading text-md fw-semibold ">Rs <?php echo $nowprice; ?> <span class="text-gray-500 fw-normal">/Qty</span> </span>
+                                            <div class="col-12 small" style="color: rgb(255, 143, 68);">Only <?php echo $dpro_data["qty"] ?> items left at this special price!</div>
+                                        </div>
+
+                                        <a onclick="adtocart(<?= $sprice ?>, <?= $discountpercentage ?>, <?= $batch_id ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
+                                            Add To Cart <i class="ph ph-shopping-cart"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- product card end -->
+                        <?php
+                        }
+                        ?>
+
+                    </div>
                 </div>
             </div>
         </section>
-        <!-- ========================== Product Details Two End =========================== -->
 
-        <!-- ========================== Similar Product Start ============================= -->
-        <section class="new-arrival pb-80">
-            <div class="container container-lg">
-                <div class="section-heading">
+    <?php
+    }
+    ?>
+    <!-- ========================= Seasonal offers End ================================ -->
+
+
+    <!-- ========================= Top Selling Products Start ================================ -->
+    <section class="top-selling-products pt-80 overflow-hidden">
+        <div class="container container-lg">
+            <div class="border border-gray-100 p-24 rounded-16">
+                <div class="section-heading mb-24">
                     <div class="flex-between flex-wrap gap-8">
-                        <h5 class="mb-0">You Might Also Like</h5>
-                        <div class="flex-align gap-16">
+                        <h5 class="mb-0 wow bounceInLeft">Top Selling Products</h5>
+                        <div class="flex-align gap-16 wow bounceInRight">
+                            <a href="shop.php" class="text-sm fw-medium text-gray-700 hover-text-main-600 hover-text-decoration-underline">View All Deals</a>
                             <div class="flex-align gap-8">
-                                <button type="button" id="new-arrival-prev" class="slick-prev slick-arrow flex-center rounded-circle border border-gray-100 hover-border-main-600 text-xl hover-bg-main-600 hover-text-white transition-1">
+                                <button type="button" id="top-selling-prev" class="slick-prev slick-arrow flex-center rounded-circle border border-gray-100 hover-border-neutral-600 text-xl hover-bg-neutral-600 hover-text-white transition-1">
                                     <i class="ph ph-caret-left"></i>
                                 </button>
-                                <button type="button" id="new-arrival-next" class="slick-next slick-arrow flex-center rounded-circle border border-gray-100 hover-border-main-600 text-xl hover-bg-main-600 hover-text-white transition-1">
+                                <button type="button" id="top-selling-next" class="slick-next slick-arrow flex-center rounded-circle border border-gray-100 hover-border-neutral-600 text-xl hover-bg-neutral-600 hover-text-white transition-1">
                                     <i class="ph ph-caret-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="row g-12">
+                    <div class="col-md-4" data-aos="zoom-in" data-aos-duration="800">
+                        <div class="position-relative rounded-16 overflow-hidden p-28 z-1 text-center bg-white shadow-lg">
 
-                <div class="new-arrival__slider arrow-style-two">
-
-
-
-                    <?php
-                    // Get the brand and sub-category ID from the product data
-                    $brandid = $productdata["brand_id"];
-                    $subcatid = $productdata["sub_category_id"];
-
-                    // Query to get products matching the brand and sub-category
-                    $p1 = Database::Search("SELECT * FROM `product` WHERE `sub_category_id`='" . $subcatid . "' OR `brand_id`='" . $brandid . "' ");
-                    $p1num = $p1->num_rows;
-
-                    // Display the number of matching products
-                    echo "Number of matching products: " . $p1num;
-
-                    // Loop through the products
-                    for ($io = 0; $io < $p1num; $io++) {
-                        $p1d = $p1->fetch_assoc();
-
-                        // Query to get batches for the current product
-                        $b1 = Database::Search("SELECT * FROM `batch` WHERE `product_id`='" . $p1d["id"] . "' ");
-                        $b1num = $b1->num_rows;
-
-                        // Loop through the batches (you can add logic here to process batches)
-                        for ($i = 0; $i < $b1num; $i++) {
-                            $b1d = $b1->fetch_assoc();
-                            $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $b1d["product_id"] . "' ");
-                            $pr =  $pr->fetch_assoc();
-                            $discountid = 0;
-                    ?>
                             <?php
-                            $pic = Database::Search("SELECT * FROM `picture`  WHERE  `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
-                            $pic_d = $pic->fetch_assoc();
-                            if (empty($pic_d["path"])) {
-                                $path = "assets/images/thumbs/product-img7.png";
+                            // Get the highest sold quantity and batch ID
+                            $tss = Database::Search("SELECT batch_id, qty FROM `invoice` ORDER BY qty DESC LIMIT 1");
+                            if ($tss->num_rows > 0) {
+                                $tssd = $tss->fetch_assoc();
+                                $max_qty = $tssd["qty"];
+
+                                // Fetch products with the same highest quantity
+                                $in = Database::Search("SELECT batch_id FROM `invoice` WHERE `qty`='$max_qty'");
+                                $inn = $in->num_rows;
+
+                                if ($inn > 0) {
+                            ?>
+                            <?php
+                                }
                             } else {
-                                $path = 'admin-panel/' . $pic_d["path"];
+                                echo "<h6 class='text-muted'>No sales data available.</h6>";
                             }
                             ?>
-                            <div>
-                                <div class="product-card h-100 p-8 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                    <a href="product-details.php" class="product-card__thumb flex-center">
-                                        <img src="<?php echo $path; ?>" alt="">
+
+                            <!-- Background & CTA Section -->
+                            <?php
+                            $top = Database::Search("SELECT * FROM `top_selling_add`");
+                            $topn = $top->num_rows;
+                            if ($topn > 0) {
+                                $topd = $top->fetch_assoc();
+                            ?>
+                                <img src="assets/images/bg/deal-bg.png" alt="Background Image" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100">
+                                <div class="py-xl-4">
+                                    <h5 class="mb-4 fw-semibold"><?php echo $topd["title"] ?></h5>
+                                    <a href="shop.php" class="btn text-heading border-neutral-600 hover-bg-neutral-600 hover-text-white py-16 px-24 d-inline-flex align-items-center rounded-pill gap-8 fw-medium">
+                                        Shop Now <i class="ph ph-shopping-cart text-xl d-flex"></i>
                                     </a>
-                                    <div class="product-card__content p-sm-2 w-100 mt-0">
-                                        <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                            <a href="product-details.php" class="link text-line-2"><?php echo $pr["title"] ?></a>
-                                        </h6>
-                                        <div class="product-card__content mt-12">
-                                            <div class="product-card__price mb-8">
-                                                <span class="text-heading text-md fw-semibold ">Rs <?php echo $b1d["selling_price"] ?> <span class="text-gray-500 fw-normal">/Qty</span> <?php echo $b1d["batch_qty"]; ?>Available</span>
-                                                <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $b1d["selling_price"] + 10; ?></span>
+                                </div>
+
+                                <!-- Promotional Image -->
+                                <div class="d-md-block d-none mt-36">
+                                    <img src="admin-panel/<?php echo $topd["path"]; ?>" alt="Promotion" class="img-fluid" style="width: 200px; height: 150px;">
+                                </div>
+                            <?php
+                            } else {
+                            ?>
+                                <img src="assets/images/bg/deal-bg.png" alt="Background Image" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100">
+                                <div class="py-xl-4">
+                                    <h6 class="mb-4 fw-semibold">Polaroid Now+ Gen 2 - White</h6>
+                                    <h5 class="mb-40 fw-semibold">Fresh Vegetables</h5>
+                                    <a href="cart.php" class="btn text-heading border-neutral-600 hover-bg-neutral-600 hover-text-white py-16 px-24 d-inline-flex align-items-center rounded-pill gap-8 fw-medium">
+                                        Shop Now <i class="ph ph-shopping-cart text-xl d-flex"></i>
+                                    </a>
+                                </div>
+
+                                <!-- Promotional Image -->
+                                <div class="d-md-block d-none mt-36">
+                                    <img src="assets/images/thumbs/3d-illustration-laptop-with-shopping-basket-paper-bags-online-shopping-e-commerce-concept-min.jpg" class="img-fluid shadow" style="width: 303px; height: 213px; object-fit: cover; border-radius: 10px !important;" alt="Promotion">
+                                </div>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+
+                    <!-- CSS Styling -->
+                    <style>
+                        .carousel-content {
+                            text-align: center;
+                            padding: 15px;
+                            background: rgba(0, 0, 0, 0.6);
+                            color: white;
+                            border-radius: 10px;
+                        }
+
+                        .carousel-text {
+                            font-size: 18px;
+                            font-weight: bold;
+                            margin-top: 10px;
+                        }
+
+                        .carousel-image {
+                            max-width: 100px;
+                            height: auto;
+                            border-radius: 10px;
+                            margin-bottom: 10px;
+                        }
+
+                        .carousel-control-prev-icon,
+                        .carousel-control-next-icon {
+                            background-color: black;
+                            border-radius: 50%;
+                            padding: 10px;
+                        }
+                    </style>
+
+
+                    <div class="col-md-8">
+                        <div class="top-selling-product-slider arrow-style-two">
+                            <?php
+
+
+                            $tsi = Database::Search("SELECT * FROM `invoice`");
+                            $tsin = $tsi->num_rows;
+                            for ($i = 0; $i < $tsin; $i++) {
+                                $tsid = $tsi->fetch_assoc();
+                                $tbatch = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $tsid["batch_id"] . "' ");
+                                $tbatchd = $tbatch->fetch_assoc();
+                                $tproduct = Database::Search("SELECT * FROM `product` WHERE `id`='" . $tbatchd["product_id"] . "' ");
+                                $tproductd = $tproduct->fetch_assoc();
+                                $tpic = Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $tproductd["id"] . "' AND `name`='Image 1' ");
+                                $tpicd = $tpic->fetch_assoc();
+                            ?>
+                                <div data-aos="fade-up" data-aos-duration="200">
+                                    <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+
+                                        <!-- IMAGE AREA -->
+                                        <a href="product-details.php?batch_id=<?php echo $tbatchd["id"]; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative" style="height: 200px; overflow: hidden;">
+                                            <img src="admin-panel/<?php echo $tpicd["path"]; ?>" alt="Product Image" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                        </a>
+
+                                        <!-- CONTENT AREA -->
+                                        <div class="product-card__content mt-16 w-100">
+                                            <h6 class="title text-lg fw-semibold mt-12 mb-8">
+                                                <a href="product-details.php?batch_id=<?php echo $tbatchd["id"]; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2" tabindex="0"><?php echo htmlspecialchars($tproductd["title"]); ?></a>
+                                            </h6>
+
+                                            <div class="mt-8">
+                                                <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar bg-tertiary-600 rounded-pill" style="width:fit-content"></div>
+                                                </div>
+                                                <span class="text-gray-900 text-xs fw-medium mt-8">Sold: <?php echo $tsid["qty"]; ?>/<?php echo $tbatchd["batch_qty"]; ?></span>
                                             </div>
-                                            <a href="cart.php" class="product-card__cart btn bg-main-50 text-main-600 hover-bg-main-600 hover-text-white py-11 px-24 rounded-pill flex-align gap-8 mt-24 w-100 justify-content-center">
+
+                                            <div class="product-card__price my-20">
+                                                <span class="text-gray-400 text-md fw-semibold text-decoration-line-through">Rs <?php echo $tsid["price"] - 10; ?></span>
+                                                <span class="text-heading text-md fw-semibold">Rs <?php echo $tsid["price"]; ?> <span class="text-gray-500 fw-normal">/Qty</span></span>
+                                            </div>
+
+                                            <a onclick="adtocart(<?= $tsid["price"] ?>, <?= 0 ?>, <?= $tbatchd["id"] ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
                                                 Add To Cart <i class="ph ph-shopping-cart"></i>
                                             </a>
                                         </div>
+
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ========================= Top Selling Products End ================================ -->
+
+
+    <!-- ========================= New Products Start ================================ -->
+    <section class="featured-products overflow-hidden pt-80">
+        <div class="container container-lg">
+            <div class="row g-4 flex-wrap-reverse">
+                <div class="col-xxl-8">
+                    <div class="border border-gray-100 p-24 rounded-16">
+                        <div class="section-heading mb-24">
+                            <div class="flex-between flex-wrap gap-8">
+                                <h5 class="mb-0 wow bounceInLeft">New Products </h5>
+                                <div class="flex-align gap-16 wow bounceInRight">
+                                    <a href="shop.php" class="text-sm fw-medium text-gray-700 hover-text-main-600 hover-text-decoration-underline">View All Deals</a>
+                                    <div class="flex-align gap-8">
+                                        <button type="button" id="featured-products-prev" class="slick-prev slick-arrow flex-center rounded-circle border border-gray-100 hover-border-neutral-600 text-xl hover-bg-neutral-600 hover-text-white transition-1">
+                                            <i class="ph ph-caret-left"></i>
+                                        </button>
+                                        <button type="button" id="featured-products-next" class="slick-next slick-arrow flex-center rounded-circle border border-gray-100 hover-border-neutral-600 text-xl hover-bg-neutral-600 hover-text-white transition-1">
+                                            <i class="ph ph-caret-right"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <style>
+                            .product-image {
+                                width: 100%;
+                                height: 140px;
+                            }
+                        </style>
+
+                        <div class="row gy-4 featured-product-slider">
+                            <?php
+                            $bach = Database::Search("SELECT * FROM `batch`");
+                            $bach_n = $bach->num_rows;
+                            $col_2 = ceil($bach_n / 2);
+                            for ($i = 0; $i < $col_2; $i++) {
+                                if ($bach_n >= 2) {
+                                    $b_times = 2;
+                                } else {
+                                    $b_times = 1;
+                                }
+                            ?>
+                                <div class="col-xxl-6">
+                                    <div class="featured-products__sliders">
+
+                                        <?php
+                                        for ($j = 0; $j < $b_times; $j++) {
+                                            $bach_d = $bach->fetch_assoc();
+                                            $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bach_d["product_id"] . "' ");
+                                            $pr =  $pr->fetch_assoc();
+                                            $discountid = 0;
+                                        ?>
+                                            <div class="" data-aos="fade-up" data-aos-duration="800">
+                                                <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+                                                    <a href="product-details.php?batch_id=<?php echo $bach_d['id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
+                                                        <?php
+                                                        $pic = Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
+                                                        $pic_d = $pic->fetch_assoc();
+                                                        if (empty($pic_d["path"])) {
+                                                        ?>
+                                                            <img src="assets/images/thumbs/product-two-img2.png" alt="" class="product-image w-auto max-w-unset">
+                                                        <?php
+                                                        } else {
+                                                        ?>
+                                                            <img src="admin-panel/<?php echo $pic_d["path"]; ?>" alt="" class="product-image ">
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </a>
+                                                    <div class="product-card__content my-20 flex-grow-1">
+                                                        <h6 class="title text-lg fw-semibold mb-12">
+                                                            <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"] ?></a>
+                                                        </h6>
+                                                        <div class="product-card__price my-20">
+                                                            <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $bach_d["selling_price"] + 20 ?></span>
+                                                            <span class="text-heading text-md fw-semibold ">Rs <?php echo $bach_d["selling_price"] ?> <span class="text-gray-500 fw-normal">/Qty</span> <?php echo $bach_d["batch_qty"] ?></span>
+                                                        </div>
+                                                        <?php
+                                                        $sprice = $bach_d["selling_price"];
+                                                        $discountpercentage = 0;
+                                                        $batch_id = $bach_d["id"];
+                                                        ?>
+                                                        <a onclick="adtocart(<?= $sprice ?>, <?= $discountpercentage ?>, <?= $batch_id ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
+                                                            Add To Cart <i class="ph ph-shopping-cart"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php
+                                            $bach_n = $bach_n - 1;
+                                        }
+                                        ?>
+
+                                    </div>
+                                </div>
+                            <?php
+
+                            }
+                            ?>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Div -->
+    <section>
+        <div class="container-fluid">
+            <div class="row">
+
+                <a href="file-1.php">
+                    <div class=""></div>
+                </a>
+
+                <a href="file-2.php">
+                    <div class=""></div>
+                </a>
+
+                <a href="file-3.php">
+                    <div class=""></div>
+                </a>
+
+                <a href="file-4.php">
+                    <div class=""></div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========================= Popular Categories Start ================================ -->
+    <section class="popular-products pt-80 overflow-hidden">
+        <div class="container container-lg">
+            <div class="border border-gray-100 p-24 rounded-16">
+                <div class="section-heading mb-24">
+                    <div class="flex-between flex-wrap gap-8">
+                        <h5 class="mb-0 wow bounceInLeft">Popular Categories</h5>
+                    </div>
+                </div>
+
+                <div class="popular-products-box rounded-16 overflow-hidden flex-between position-relative z-1 mb-24">
+                    <img src="assets/images/bg/expensive-offer-bg.png" alt="" class="position-absolute inset-block-start-0 inset-block-start-0 w-100 h-100 z-n1">
+                    <div class="d-lg-block d-none " data-aos="zoom-in" data-aos-duration="800">
+                        <img src="assets/images/thumbs/34545.jpg" alt="">
+                    </div>
+                    <div class="popular-products-box__content px-sm-4 d-block w-100 text-center py-20">
+                        <div class="flex-align gap-16 justify-content-center" data-aos="zoom-in" data-aos-duration="800">
+                            <h6 class="mb-0">Shop Our Most Popular Categories Today!</h6>
+                        </div>
+                    </div>
+                    <div class="d-lg-block d-none" data-aos="zoom-in" data-aos-duration="800">
+                        <img src="assets/images/thumbs/23454.jpg" alt="">
+                    </div>
+                </div>
+
+                <div class="row gy-4 d-flex justify-content-center">
                     <?php
-                        }
+                    $category = Database::Search("SELECT * FROM `category` LIMIT 6");
+                    $category_num = $category->num_rows;
+
+                    for ($i = 0; $i < $category_num; $i++) {
+                        $category_data = $category->fetch_assoc();
+                    ?>
+                        <div class="col-xxl-3 col-xl-4 col-sm-6 col-xs-6 wow bounceIn">
+                            <div class="product-card h-100 d-flex flex-column gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+                                <a href="shop.php" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
+                                    <img src="admin-panel/process/<?php echo $category_data["image_path"]; ?>" data-src="<?php echo $category_data['image_path']; ?>" alt="" class="lazyload img-fluid" loading="lazy" style="width: 63px; height: 80px; object-fit: cover;">
+                                </a>
+                                <div class="product-card__content flex-grow-1">
+                                    <h6 class="title text-lg fw-semibold mb-12">
+                                        <a href="shop.php" class="link text-line-2" tabindex="0"><?php echo $category_data["name"]; ?></a>
+                                    </h6>
+
+                                    <?php
+                                    // Fetch subcategories for the current category
+                                    $subcategory = Database::Search("SELECT * FROM `sub_category` WHERE `category_id` = '" . $category_data["id"] . "'");
+                                    $subcategory_num = $subcategory->num_rows;
+
+                                    for ($j = 0; $j < $subcategory_num; $j++) {
+                                        $sub_data = $subcategory->fetch_assoc();
+                                    ?>
+                                        <span class="text-gray-600 text-sm mb-4"><?php echo $sub_data["name"]; ?></span><br>
+                                    <?php
+                                    }
+                                    ?>
+
+                                    <a href="shop.php" class="text-tertiary-600 flex-align gap-8 mt-24">
+                                        All Categories
+                                        <i class="ph ph-arrow-right d-flex"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php
                     }
                     ?>
+                </div>
 
 
+
+            </div>
+        </div>
+    </section>
+    <!-- ========================= Popular Categories End ================================ -->
+
+
+    <!-- =========================== Top Vendor Section Start ========================== -->
+    <section class="top-vendor py-80 overflow-hidden">
+        <div class="container container-lg">
+            <div class="p-24 rounded-16">
+                <div class="row gy-4 vendor-card-wrapper d-flex justify-content-center">
+                    <?php
+                    $g = Database::Search("SELECT * FROM `group`");
+                    $gn = $g->num_rows;
+                    for ($i = 0; $i < $gn; $i++) {
+                        $gd = $g->fetch_assoc();
+                    ?>
+                        <div class="col-xxl-3 col-lg-4 col-sm-6 wow bounceIn">
+                            <div class="vendor-card text-center px-16 pb-24">
+                                <div class="">
+                                    <img src="admin-panel/process/<?php echo $gd["image_path"]; ?>" alt="" class="vendor-card__logo m-12" style="width: 66px; height: 64px;">
+                                    <h6 class="title mt-32 text-lg"><?php echo $gd["group_name"]; ?></h6>
+                                </div>
+                                <div class="position-relative slick-arrows-style-three">
+                                    <div class="vendor-card__list style-two mt-22">
+                                        <?php
+                                        $c = Database::search("SELECT * FROM `category` WHERE `group_id`='" . $gd["id"] . "' ");
+                                        $cn = $c->num_rows;
+                                        for ($ic = 0; $ic <  $cn; $ic++) {
+                                            $cd = $c->fetch_assoc();
+                                        ?>
+                                            <div class="">
+                                                <div>
+                                                    <span><?php echo $cd["name"] ?></span>
+                                                </div>
+                                            </div>
+                                        <?php
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
-        </section>
-        <!-- ========================== Similar Product End ============================= -->
+        </div>
+    </section>
 
-        <!-- ========================== Shipping Section Start ============================ -->
-        <section class="shipping mb-80" id="shipping">
-            <div class="container container-lg">
-                <div class="row gy-4">
-                    <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="400">
-                        <div class="shipping-item flex-align gap-16 rounded-16 bg-main-two-50 hover-bg-main-100 transition-2">
-                            <span class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i class="ph-fill ph-car-profile"></i></span>
-                            <div class="">
-                                <h6 class="mb-0">IslandWild delivery</h6>
-                                <span class="text-sm text-heading">IslandWild delivers right to your doorstep.</span>
-                            </div>
+    <!-- =========================== Top Vendor Section End ========================== -->
+
+
+    <!-- ================================== Day Sale Section Start =================================== -->
+    <!-- <section class="day-sale">
+        <div class="container container-lg">
+            <div class="day-sale-box rounded-16 overflow-hidden flex-between position-relative mb-24 z-1">
+
+                <img src="assets/images/bg/day-sale-bg.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100 cover-img">
+                <div class="d-xl-block d-none" data-aos="zoom-in" data-aos-duration="800">
+                    <img src="assets/images/thumbs/day-sale-img1.png" alt="">
+                </div>
+                <div class="day-sale-box__content d-block w-100 text-start py-32 ps-lg-0 ps-24">
+                    <h3 class="text-white fw-medium mb-24">CYBER MONDAY SALE</h3>
+                    <h6 class="text-white fw-medium mb-8">UP TO 30% OFF</h6>
+                    <h6 class="text-white fw-medium mb-0">COMPUTER & MOBILE ACCESSORIES</h6>
+                    <a href="shop.php" class="btn btn-outline-white flex-align d-inline-flex rounded-pill gap-8 mt-28" tabindex="0">
+                        Shop Now <i class="ph ph-plus text-xl d-flex"></i>
+                    </a>
+                </div>
+                <div class="d-md-block d-none pe-xxl-5 pe-md-4" data-aos="zoom-in" data-aos-duration="800">
+                    <img src="assets/images/thumbs/day-sale-img2.png" alt="">
+                </div>
+            </div>
+        </div>
+    </section> !-->
+    <!-- ================================== Day Sale Section End =================================== -->
+
+    <!-- ============================== Top Brand Section Start ==================================== -->
+    <div class="top-brand py-80">
+        <div class="container container-lg">
+            <div class="p-24 rounded-16">
+                <div class="section-heading mb-24">
+                    <div class="flex-between flex-wrap gap-8">
+                        <h5 class="mb-0">Top Brands</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="top-brand__slider">
+                <?php
+                $brand = database::Search("SELECT * FROM `brand`");
+                $brandnum = $brand->num_rows;
+                for ($i = 0; $i < $brandnum; $i++) {
+                    $branddata = $brand->fetch_assoc();
+                    $bimgpath = empty($branddata["img_path"]) ? "assets/images/thumbs/top-brand-img1.png" : "admin-panel/process/" . $branddata["img_path"];
+                ?>
+                    <div class="top-brand__wrapper" data-aos="fade-up" data-aos-delay="<?php echo $i * 100; ?>">
+                        <div class="top-brand__item flex-center rounded-8 transition-1 px-8" style="width: 100px; height: 100px; object-fit: contain;">
+                            <img src="<?php echo $bimgpath; ?>" alt="<?php echo $branddata["name"]; ?>">
                         </div>
                     </div>
-                    <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="600">
-                        <div class="shipping-item flex-align gap-16 rounded-16 bg-main-two-50 hover-bg-main-100 transition-2">
-                            <span class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i class="ph-fill ph-hand-heart"></i></span>
-                            <div class="">
-                                <h6 class="mb-0"> 100% Satisfaction</h6>
-                                <span class="text-sm text-heading">100% Satisfaction Guaranteed.</span>
-                            </div>
+                <?php
+                }
+                ?>
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+    <!-- ============================== Top Brand Section End ==================================== -->
+
+    <!-- ========================== Shipping Section Start ============================ -->
+    <section class="shipping mb-80" id="shipping">
+        <div class="container container-lg">
+            <div class="row gy-4">
+                <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="400">
+                    <div class="shipping-item flex-align gap-16 rounded-16 bg-main-two-50 hover-bg-main-100 transition-2">
+                        <span class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i class="ph-fill ph-car-profile"></i></span>
+                        <div class="">
+                            <h6 class="mb-0">IslandWild delivery</h6>
+                            <span class="text-sm text-heading">IslandWild delivers right to your doorstep.</span>
                         </div>
                     </div>
-                    <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="800">
-                        <div class="shipping-item flex-align gap-16 rounded-16 bg-main-two-50 hover-bg-main-100 transition-2">
-                            <span class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i class="ph-fill ph-credit-card"></i></span>
-                            <div class="">
-                                <h6 class="mb-0"> Secure Payments</h6>
-                                <span class="text-sm text-heading">Secure Payments with iPay.</span>
-                            </div>
+                </div>
+                <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="600">
+                    <div class="shipping-item flex-align gap-16 rounded-16 bg-main-two-50 hover-bg-main-100 transition-2">
+                        <span class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i class="ph-fill ph-hand-heart"></i></span>
+                        <div class="">
+                            <h6 class="mb-0"> 100% Satisfaction</h6>
+                            <span class="text-sm text-heading">100% Satisfaction Guaranteed.</span>
                         </div>
                     </div>
-                    <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="1000">
-                        <div class="shipping-item flex-align gap-16 rounded-16 bg-main-two-50 hover-bg-main-100 transition-2">
-                            <span class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i class="ph-fill ph-chats"></i></span>
-                            <div class="">
-                                <h6 class="mb-0"> 24/7 Support</h6>
-                                <span class="text-sm text-heading">24/7 service with IslandWild.</span>
-                            </div>
+                </div>
+                <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="800">
+                    <div class="shipping-item flex-align gap-16 rounded-16 bg-main-two-50 hover-bg-main-100 transition-2">
+                        <span class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i class="ph-fill ph-credit-card"></i></span>
+                        <div class="">
+                            <h6 class="mb-0"> Secure Payments</h6>
+                            <span class="text-sm text-heading">Secure Payments with iPay.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-3 col-sm-6" data-aos="zoom-in" data-aos-duration="1000">
+                    <div class="shipping-item flex-align gap-16 rounded-16 bg-main-two-50 hover-bg-main-100 transition-2">
+                        <span class="w-56 h-56 flex-center rounded-circle bg-main-two-600 text-white text-32 flex-shrink-0"><i class="ph-fill ph-chats"></i></span>
+                        <div class="">
+                            <h6 class="mb-0"> 24/7 Support</h6>
+                            <span class="text-sm text-heading">24/7 service with IslandWild.</span>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- ========================== Shipping Section End ============================ -->
+        </div>
+    </section>
+    <!-- ========================== Shipping Section End ============================ -->
 
-        <?php require_once "footer.php"; ?>
+    <?php require_once "footer.php"; ?>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        function initializeCountdown(elementId, endDate) {
+            const second = 1000,
+                minute = second * 60,
+                hour = minute * 60,
+                day = hour * 24;
+
+            const countDown = new Date(endDate).getTime();
+
+            const interval = setInterval(function() {
+                const now = new Date().getTime(),
+                    distance = countDown - now;
+
+                const daysElement = document.querySelector(`#${elementId} .days`);
+                const hoursElement = document.querySelector(`#${elementId} .hours`);
+                const minutesElement = document.querySelector(`#${elementId} .minutes`);
+                const secondsElement = document.querySelector(`#${elementId} .seconds`);
+
+                if (daysElement && hoursElement && minutesElement && secondsElement) {
+                    daysElement.innerText = Math.floor(distance / day);
+                    hoursElement.innerText = Math.floor((distance % day) / hour);
+                    minutesElement.innerText = Math.floor((distance % hour) / minute);
+                    secondsElement.innerText = Math.floor((distance % minute) / second);
+                }
+
+                //do something later when date is reached
+                if (distance < 0) {
+                    const countdownElement = document.querySelector(`#${elementId}`);
+                    if (countdownElement) {
+                        countdownElement.style.display = "none";
+                        document.getElementById("parent_"+elementId).style.display = "none" ;
+                    }
+                    clearInterval(interval);
+                }
+            }, 1000);
+        }
+
+        AOS.init({
+            duration: 800,
+            easing: "ease-in-out",
+            once: true,
+        });
+    </script>
 
 
-        <script src="sahan.js"></script>
-        <!-- Jquery js -->
-        <script src="assets/js/jquery-3.7.1.min.js"></script>
-        <!-- Bootstrap Bundle Js -->
-        <script src="assets/js/boostrap.bundle.min.js"></script>
-        <!-- Bootstrap Bundle Js -->
-        <script src="assets/js/phosphor-icon.js"></script>
-        <!-- Select 2 -->
-        <script src="assets/js/select2.min.js"></script>
-        <!-- Slick js -->
-        <script src="assets/js/slick.min.js"></script>
-        <!-- Slick js -->
-        <script src="assets/js/count-down.js"></script>
-        <!-- jquery UI js -->
-        <script src="assets/js/jquery-ui.js"></script>
-        <!-- wow js -->
-        <script src="assets/js/wow.min.js"></script>
-        <!-- AOS Animation -->
-        <script src="assets/js/aos.js"></script>
-        <!-- marque -->
-        <script src="assets/js/marque.min.js"></script>
-        <!-- marque -->
-        <script src="assets/js/vanilla-tilt.min.js"></script>
-        <!-- Counter -->
-        <script src="assets/js/counter.min.js"></script>
-        <!-- main js -->
-        <script src="assets/js/main.js"></script>
 
-        <!-- SweetAlert2 CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
-
-        <!-- SweetAlert2 JS -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+    <script src="sahan.js"></script>
+    <!-- Jquery js -->
+    <script src="assets/js/jquery-3.7.1.min.js"></script>
+    <!-- Bootstrap Bundle Js -->
+    <script src="assets/js/boostrap.bundle.min.js"></script>
+    <!-- Bootstrap Bundle Js -->
+    <script src="assets/js/phosphor-icon.js"></script>
+    <!-- Select 2 -->
+    <script src="assets/js/select2.min.js"></script>
+    <!-- Slick js -->
+    <script src="assets/js/slick.min.js"></script>
+    <!-- Slick js -->
+    <script src="assets/js/count-down.js"></script>
+    <!-- jquery UI js -->
+    <script src="assets/js/jquery-ui.js"></script>
+    <!-- wow js -->
+    <script src="assets/js/wow.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="assets/js/aos.js"></script>
+    <!-- marque -->
+    <script src="assets/js/marque.min.js"></script>
+    <!-- marque -->
+    <script src="assets/js/vanilla-tilt.min.js"></script>
+    <!-- Counter -->
+    <script src="assets/js/counter.min.js"></script>
+    <!-- main js -->
+    <script src="assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-    </body>
+</body>
 
-    </html>
-<?php
-}
-?>
+</html>
