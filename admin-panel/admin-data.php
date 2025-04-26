@@ -108,7 +108,7 @@ if (isset($_SESSION["a"])) {
                                                                         <td><?php echo   $bqty ?></td>
                                                                         <td><?php echo   $statusd["name"] ?></td>
                                                                         <td><a data-bs-toggle="modal" class="fw-bolder" style="color:rgb(54, 46, 161); cursor: pointer;" onclick="seebatche('<?php echo $productdata["id"]; ?>');">VIEW</a></td>
-                                                                        <td><a data-bs-toggle="modal" data-bs-target="#productDetailsModal" class="fw-bolder" style="color:rgb(25, 153, 57); cursor: pointer;" onclick="seeproducte('<?php echo $productdata["id"]; ?>');">VIEW</a></td>
+                                                                        <td hidden><a data-bs-toggle="modal" data-bs-target="#productDetailsModal" class="fw-bolder" style="color:rgb(25, 153, 57); cursor: pointer;" onclick="seeproducte('<?php echo $productdata["id"]; ?>');">VIEW</a></td>
                                                                     </tr>
                                                             <?php
                                                                 }
