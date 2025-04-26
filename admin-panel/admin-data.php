@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["a"])) {
+if (isset($_SESSION["a"])) {
     include "db.php";
     // $uemail = $_SESSION["a"]["username"];
     // $query = "SELECT * FROM `admin` WHERE `username` = ?";
@@ -77,21 +77,41 @@ if (!isset($_SESSION["a"])) {
                                                         </thead>
                                                         <tbody id="">
 
-                                                            <?php
-                                                            for ($x = 1; $x < 10; $x++) {
+                                                            <?php {
+                                                                $product = Databases::Search("SELECT * FROM `product`");
+                                                                $productnum = $product->num_rows;
+                                                                for ($x = 1; $x < $productnum; $x++) {
+                                                                    $productdata = $product->fetch_assoc();
+                                                                    $invoice = Databases::Search("SELECT * FROM `invoice` WHERE `product_id`='" . $productdata["id"] . "' ");
+                                                                    $invoicenum = $invoice->num_rows;
+                                                                    $iqty = 0;
+                                                                    for ($i = 0; $i < $invoicenum; $i++) {
+                                                                        $invoicedata = $invoice->fetch_assoc();
+                                                                        $iqty =  $iqty + $invoicedata["qty"];
+                                                                    }
+                                                                    $batch = Databases::Search("SELECT * FROM `batch` WHERE `product_id`='" . $productdata["id"] . "' ");
+                                                                    $batchnum = $batch->num_rows;
+                                                                    $bqty = 0;
+                                                                    for ($i = 0; $i < $batchnum; $i++) {
+                                                                        $batchdata = $batch->fetch_assoc();
+                                                                        $bqty = $bqty + $batchdata["batch_qty"];
+                                                                    }
+                                                                    $status = Databases::Search("SELECT * FROM `status` WHERE `id`='" . $productdata["status_id"] . "' ");
+                                                                    $statusd = $status->fetch_assoc();
                                                             ?>
-                                                                <tr>
-                                                                    <td><?php echo $x; ?></td>
-                                                                    <td><img src="product_img\_6616adeba1eea.jpg" class="img-fluid" style="width: 50px; border-radius: 10px;" alt=""></td>
-                                                                    <td>Victor Product</td>
-                                                                    <td>2025/12/25</td>
-                                                                    <td>132</td>
-                                                                    <td>15</td>
-                                                                    <td>Status</td>
-                                                                    <td><a data-bs-toggle="modal" data-bs-target="#batchDetailsModal" class="fw-bolder" style="color:rgb(54, 46, 161); cursor: pointer;">VIEW</a></td>
-                                                                    <td><a data-bs-toggle="modal" data-bs-target="#productDetailsModal" class="fw-bolder" style="color:rgb(25, 153, 57); cursor: pointer;">VIEW</a></td>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <td><?php echo $x; ?></td>
+                                                                        <td><img src="product_img\_6616adeba1eea.jpg" class="img-fluid" style="width: 50px; border-radius: 10px;" alt=""></td>
+                                                                        <td><?php echo  $productdata["title"] ?></td>
+                                                                        <td><?php echo  $productdata["date"] ?></td>
+                                                                        <td><?php echo   $iqty ?></td>
+                                                                        <td><?php echo   $bqty ?></td>
+                                                                        <td><?php echo   $statusd["name"] ?></td>
+                                                                        <td><a data-bs-toggle="modal" class="fw-bolder" style="color:rgb(54, 46, 161); cursor: pointer;" onclick="seebatche('<?php echo $productdata["id"]; ?>');">VIEW</a></td>
+                                                                        <td><a data-bs-toggle="modal" data-bs-target="#productDetailsModal" class="fw-bolder" style="color:rgb(25, 153, 57); cursor: pointer;" onclick="seeproducte('<?php echo $productdata["id"]; ?>');">VIEW</a></td>
+                                                                    </tr>
                                                             <?php
+                                                                }
                                                             }
                                                             ?>
 
@@ -103,7 +123,24 @@ if (!isset($_SESSION["a"])) {
                                     </div>
                                 </div>
                             </div>
+                            <script>
+                                function seebatche(productid) {
+                                    var req = new XMLHttpRequest();
+                                    var form = new FormData();
+                                    form.append("productid", productid);
+                                    req.open("POST", "process/batchdatam.php", true);
+                                    req.onreadystatechange = function() {
+                                        if (req.readyState === 4 && req.status === 200) {
+                                            //alert(req.responseText); // (Optional) for debugging
+                                            document.getElementById("batchDetailsContent").innerHTML = req.responseText; // Only update inner content
 
+                                            var batchModal = new bootstrap.Modal(document.getElementById('batchDetailsModal'));
+                                            batchModal.show();
+                                        }
+                                    };
+                                    req.send(form);
+                                }
+                            </script>
                             <div class="col-12">
                                 <div class="modal fade" id="productDetailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-xl modal-dialog-scrollable">
@@ -227,83 +264,23 @@ if (!isset($_SESSION["a"])) {
                                             <div class="modal-header">
                                                 <div class="modal-title fs-4 fw-bold" id="exampleModalLabel">
                                                     <div><i class="fa fa-list" aria-hidden="true"></i>&nbsp;Batch Management</div>
-                                                    
                                                 </div>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
+
                                             <div class="modal-body">
-                                                <div class="row d-flex justify-content-center my-2">
-                                                    <div class="col-12 border shadow">
-
-                                                        <div class="row d-flex flex-row justify-content-center align-items-center h-100">
-                                                            <div class="col-12 shadow p-3 py-4">
-                                                                <div class="row">
-                                                                <div class="div-12 small text-center">Product Name Here</div>
-                                                                    <div class="col-12 d-flex justify-content-center mt-2">
-                                                                        <div class="table-responsive bg-white border w-100" style=" overflow-x: auto;">
-                                                                            <table class="table mb-0 table-bordered">
-                                                                                <thead>
-                                                                                    <tr style="background-color: azure;">
-                                                                                        <th></th>
-                                                                                        <th>BATCH</th>
-                                                                                        <th>DATE</th>
-                                                                                        <th>VENDOR</th>
-                                                                                        <th>PRICE</th>
-                                                                                        <th>SOLD</th>
-                                                                                        <th>STOCK</th>
-                                                                                        <th>INCOME</th>
-                                                                                        <th>DISCOUNTS</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody id="">
-
-                                                                                    <?php
-                                                                                    for ($x = 1; $x < 3; $x++) {
-                                                                                    ?>
-                                                                                        <tr>
-                                                                                            <td class="fw-bold"><?php echo $x; ?></td>
-                                                                                            <td class="fw-bold">134D</td>
-                                                                                            <td>
-                                                                                                <div class="fw-bold">2024/12/15</div>
-                                                                                                <div class="fw-bold">13:12</div>
-                                                                                            </td>
-                                                                                            <td class="fw-bold">Moda Sahan</td>
-                                                                                            <td>
-                                                                                                <div class="fw-bold">Batch : Rs.130</div>
-                                                                                                <div class="fw-bold">Selling : Rs.110</div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div class="fw-bold " style="color:rgb(233, 72, 72);">Today : 12</div>
-                                                                                                <div class="fw-bold " style="color:rgb(165, 157, 45);">Yesterday : 14</div>
-                                                                                                <div class="fw-bold " style="color:rgb(163, 48, 163);">Month : 17</div>
-                                                                                                <div class="fw-bold mt-1" style="color:rgb(56, 155, 42);">Total : 39</div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div class="fw-bold">Sold : 14</div>
-                                                                                                <div class="fw-bold">Remain : 32</div>
-                                                                                            </td>
-                                                                                            <td class="fw-bold">Rs. 160</td>
-                                                                                            <td class="fw-bold">Not Available</td>
-                                                                                        </tr>
-                                                                                    <?php
-                                                                                    }
-                                                                                    ?>
-
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
+                                                <!-- 
+                ✅ We add an inner div here so we can update only this part
+                -->
+                                                <div id="batchDetailsContent">
+                                                    Loading...
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
+
 
                             </div>
 
