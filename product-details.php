@@ -163,16 +163,19 @@ if ($batch_id > 0) {
                                                     <div class="flex-align gap-16">
                                                         <span class="text-white text-sm">Special Offer:</span>
                                                     </div>
-                                                    <div class="countdown" id="countdown11">
+
+                                                    <div class="countdown" id="countdown11" data-end-time="<?php echo $offer_end_date; ?>">
                                                         <ul class="countdown-list flex-align flex-wrap">
-                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="days"></span></li>
-                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="hours"></span></li>
-                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="minutes"></span></li>
-                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="seconds"></span></li>
+                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="days">0</span></li>
+                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="hours">0</span></li>
+                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="minutes">0</span></li>
+                                                            <li class="countdown-list__item text-heading flex-align gap-4 text-xs fw-medium w-28 h-28 rounded-4 border border-main-600 p-0 flex-center"><span class="seconds">0</span></li>
                                                         </ul>
                                                     </div>
+
                                                     <span class="text-white text-xs">Remains until the end of the offer</span>
                                                 </div>
+
                                     <?php
 
                                             }
@@ -187,13 +190,14 @@ if ($batch_id > 0) {
 
                                             if (endTime) {
                                                 let countDownDate = new Date(endTime).getTime();
+
                                                 let x = setInterval(function() {
                                                     let now = new Date().getTime();
                                                     let distance = countDownDate - now;
 
                                                     if (distance < 0) {
                                                         clearInterval(x);
-                                                        document.querySelector(".countdown").innerHTML = "<h5>Offer Expired</h5>";
+                                                        countdownElement.innerHTML = "<h5 class='text-danger'>Offer Expired</h5>";
                                                         return;
                                                     }
 
@@ -202,14 +206,15 @@ if ($batch_id > 0) {
                                                     let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                                                     let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                                                    document.querySelector(".countdown .days").innerText = days;
-                                                    document.querySelector(".countdown .hours").innerText = hours;
-                                                    document.querySelector(".countdown .minutes").innerText = minutes;
-                                                    document.querySelector(".countdown .seconds").innerText = seconds;
+                                                    countdownElement.querySelector(".days").innerText = days;
+                                                    countdownElement.querySelector(".hours").innerText = hours;
+                                                    countdownElement.querySelector(".minutes").innerText = minutes;
+                                                    countdownElement.querySelector(".seconds").innerText = seconds;
                                                 }, 1000);
                                             }
                                         });
                                     </script>
+
 
 
                                     <h5 class="mb-12"><?php echo $productdata["title"] ?></h5>
@@ -659,7 +664,7 @@ if ($batch_id > 0) {
                                     <div class="flex-between flex-wrap gap-8 border-bottom border-gray-100 pb-16 mb-16">
                                         <span class="text-gray-500">Price</span>
                                         <h6 id="sellprice" class="text-lg mb-0">RS <?php echo $price; ?></h6>
-                                        <input id="iprice" type="hidden" value="<?php echo $price; ?>"/>
+                                        <input id="iprice" type="hidden" value="<?php echo $price; ?>" />
                                         <input type="hidden" id="price" value="<?php echo $finalPricePerItem; ?>">
                                     </div>
                                     <div class="flex-between flex-wrap gap-8">
@@ -723,10 +728,10 @@ if ($batch_id > 0) {
                                     Add To Cart
                                 </a>
                                 <script>
-                                    function beaddtocart (price,dispre,batch_id){
+                                    function beaddtocart(price, dispre, batch_id) {
                                         var qty = document.getElementById("stock").value;
                                         for (let index = 0; index < qty; index++) {
-                                            adtocart(price,dispre,batch_id);
+                                            adtocart(price, dispre, batch_id);
                                         }
                                     }
                                 </script>
