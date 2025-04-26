@@ -161,7 +161,7 @@ if ($batch_id > 0) {
                                                 <div class="flex-center mb-24 flex-wrap gap-16 bg-color-one rounded-8 py-16 px-24 position-relative z-1">
                                                     <img src="assets/images/bg/details-offer-bg.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 z-n1">
                                                     <div class="flex-align gap-16">
-                                                        <span class="text-white text-sm">Special Offer:</span>
+                                                        <span class="text-white text-sm">Special Offer: <?php echo $offer_title; ?></span>
                                                     </div>
 
                                                     <div class="countdown" id="countdown11" data-end-time="<?php echo $offer_end_date; ?>">
