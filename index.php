@@ -519,7 +519,11 @@ include_once "connection.php";
                             $tsin = $tsi->num_rows;
                             for ($i = 0; $i < $tsin; $i++) {
                                 $tsid = $tsi->fetch_assoc();
-                                $tbatch = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $tsid["batch_id"] . "' ");
+                                $tbatch = Database::Search("SELECT * FROM `batch` 
+                                INNER JOIN `product` ON `batch`.`product_id` = `product`.`id` 
+                                WHERE `batch`.`id` = '" . $tsid["batch_id"] . "' 
+                                ORDER BY `product`.`date` 
+                                LIMIT 1");
                                 $tbatchd = $tbatch->fetch_assoc();
                                 $tproduct = Database::Search("SELECT * FROM `product` WHERE `id`='" . $tbatchd["product_id"] . "' ");
                                 $tproductd = $tproduct->fetch_assoc();
@@ -604,7 +608,9 @@ include_once "connection.php";
 
                         <div class="row gy-4 featured-product-slider">
                             <?php
-                            $bach = Database::Search("SELECT * FROM `batch`");
+                            $bach = Database::Search("SELECT * FROM `batch` 
+                           INNER JOIN `product` ON `batch`.`product_id` = `product`.`id` 
+                           ORDER BY `batch`.`date` ASC");
                             $bach_n = $bach->num_rows;
                             $col_2 = ceil($bach_n / 2);
                             for ($i = 0; $i < $col_2; $i++) {
