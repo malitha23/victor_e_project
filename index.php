@@ -243,142 +243,150 @@ include_once "connection.php";
     $offers_num = $offers->num_rows;
     for ($i = 0; $i < $offers_num; $i++) {
         $offers_details = $offers->fetch_assoc();
+        $phgd = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `discount_group_id`='" . $offers_details["id"] . "' ");
+        $phgdd = $phgd->fetch_assoc();
+        $phdate = Database::Search("SELECT * FROM `discount_date_range` WHERE `id`='" . $phgdd["discount_date_range_id"] . "' ");
+        $phdatedeta = $phdate->fetch_assoc();
+
+        $currentDate = (new DateTime())->format("Y-m-d");
+        $endDate =  $phdatedeta["end_date"];
+
+        if (!($currentDate > $endDate)) {
     ?>
+            <section class="deals-weeek pt-80 overflow-hidden" id="parent_countdown<?php echo $i; ?>">
+                <div class="container container-lg">
+                    <div class="border border-gray-100 p-24 rounded-16">
+                        <div class="section-heading mb-24">
+                            <div class="flex-between flex-wrap gap-8">
+                                <h5 class="mb-0 wow bounceInLeft"><?php echo $offers_details["title"] ?></h5>
+                                <div class="flex-align gap-16 wow bounceInRight">
+                                    <a href="shop.php" class="text-sm fw-medium text-gray-700 hover-text-main-600 hover-text-decoration-underline">View All Deals</a>
+                                    <div class="flex-align gap-8">
 
-        <section class="deals-weeek pt-80 overflow-hidden" id="parent_countdown<?php echo $i; ?>">
-            <div class="container container-lg">
-                <div class="border border-gray-100 p-24 rounded-16">
-                    <div class="section-heading mb-24">
-                        <div class="flex-between flex-wrap gap-8">
-                            <h5 class="mb-0 wow bounceInLeft"><?php echo $offers_details["title"] ?></h5>
-                            <div class="flex-align gap-16 wow bounceInRight">
-                                <a href="shop.php" class="text-sm fw-medium text-gray-700 hover-text-main-600 hover-text-decoration-underline">View All Deals</a>
-                                <div class="flex-align gap-8">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="deal-week-box rounded-16 overflow-hidden flex-between position-relative z-1 mb-24">
-                        <img src="assets/images/bg/week-deal-bg.png" alt="" class="position-absolute inset-block-start-0 inset-block-start-0 w-100 h-100 z-n1 object-fit-cover">
-                        <div class="d-lg-block d-none ps-32 flex-shrink-0" data-aos="zoom-in">
-                            <img src="assets/images/thumbs/Adobe Express - file (2).jpg" style="border-radius: 10px;" alt="">
-                        </div>
-                        <div class="deal-week-box__content px-sm-4 d-block w-100 text-center">
-                            <h6 class="mb-20 wow bounceIn"><?php echo strip_tags($offers_details["description"]); ?></h6>
-                            <?php
-                            $phgd = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `discount_group_id`='" . $offers_details["id"] . "' ");
-                            $phgdd = $phgd->fetch_assoc();
-                            $phdate = Database::Search("SELECT * FROM `discount_date_range` WHERE `id`='" . $phgdd["discount_date_range_id"] . "' ");
-                            $phdatedeta = $phdate->fetch_assoc();
-                            ?>
-                            <div class="countdown mt-20" id="countdown<?php echo $i; ?>">
-                                <ul class="countdown-list style-four flex-center flex-wrap">
-                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
-                                        <span class="days"></span>Days
-                                    </li>
-                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
-                                        <span class="hours"></span>Hour
-                                    </li>
-                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
-                                        <span class="minutes"></span>Min
-                                    </li>
-                                    <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
-                                        <span class="seconds"></span>Sec
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="d-lg-block d-none flex-shrink-0 pe-xl-5" data-aos="zoom-in">
-                            <div class="me-xxl-5">
-                                <img src="assets/images/thumbs/Adobe Express - file (3).jpg" alt="">
-                            </div>
-                        </div>
-
-                        <script>
-                            document.addEventListener("DOMContentLoaded", function() {
-                                initializeCountdown("countdown<?php echo $i; ?>", "<?php echo $phdatedeta["end_date"] ?>");
-                            });
-                        </script>
-
-                    </div>
-
-                    <div class="deals-week-slider arrow-style-two">
-
-                        <?php
-                        $dpro = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `discount_group_id` = '" . $offers_details["id"] . "' ");
-                        $dpro_num = $dpro->num_rows;
-                        for ($i = 0; $i < $dpro_num; $i++) {
-                            $dpro_data = $dpro->fetch_assoc();
-                            $BA = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $dpro_data["batch_id"] . "' ");
-                            $bad = $BA->fetch_assoc();
-                            $discountid = $dpro_data["id"];
-                        ?>
-                            <!-- product card start -->
-                            <div data-aos="fade-up" data-aos-duration="200">
-                                <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                    <a href="product-details.php?batch_id=<?php echo $dpro_data['batch_id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
-                                        <span class="product-card__badge bg-main-600 px-8 py-4 text-sm text-white position-absolute inset-inline-start-0 inset-block-start-0">
-                                            <?php echo  $dpro_data["discount_pre"]; ?>% Off
-                                        </span>
-                                        <?php
-                                        $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bad["product_id"] . "' ");
-                                        $pr =  $pr->fetch_assoc();
-                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
-                                        $pic_d = $pic->fetch_assoc();
-                                        $imgSrc = empty($pic_d["path"]) ? "assets/images/thumbs/product-two-img2.png" : "admin-panel/" . $pic_d["path"];
-                                        ?>
-                                        <img src="<?php echo $imgSrc; ?>" alt="Product Image" class="product-card-img img-fluid">
-                                    </a>
-                                    <style>
-                                        .product-card-img {
-                                            width: 100%;
-                                            height: 220px;
-                                            /* You can adjust this based on your card layout */
-                                            object-fit: cover;
-                                            border-radius: 8px;
-                                        }
-                                    </style>
-                                    <div class="product-card__content mt-16 w-100 col-4">
-                                        <h6 class="title text-lg fw-semibold mt-12 mb-8">
-                                            <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"]; ?></a>
-                                        </h6>
-                                        <div class="mt-8">
-                                            <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-label="Basic example" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="progress-bar bg-tertiary-600 rounded-pill" style="width: 35%; background-color: rgb(250,104,0) !important;"></div>
-                                            </div>
-                                            <span class="text-gray-900 text-xs fw-medium mt-8">Sold: 18/35</span>
-                                        </div>
-
-                                        <div class="product-card__price my-20">
-                                            <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $bad["selling_price"]; ?></span>
-                                            <?php
-                                            $batch_id = $dpro_data["batch_id"];
-                                            $sprice = $bad["selling_price"];
-                                            $discountpercentage = $dpro_data["discount_pre"];
-                                            $nowprice = $sprice - ($sprice * $discountpercentage / 100);
-                                            ?>
-                                            <span class="text-heading text-md fw-semibold ">Rs <?php echo $nowprice; ?> <span class="text-gray-500 fw-normal">/Qty</span> </span>
-                                            <div class="col-12 small" style="color: rgb(255, 143, 68);">Only <?php echo $dpro_data["qty"] ?> items left at this special price!</div>
-                                        </div>
-
-                                        <a onclick="adtocart(<?= $sprice ?>, <?= $discountpercentage ?>, <?= $batch_id ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
-                                            Add To Cart <i class="ph ph-shopping-cart"></i>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
-                            <!-- product card end -->
-                        <?php
-                        }
-                        ?>
+                        </div>
 
+                        <div class="deal-week-box rounded-16 overflow-hidden flex-between position-relative z-1 mb-24">
+                            <img src="assets/images/bg/week-deal-bg.png" alt="" class="position-absolute inset-block-start-0 inset-block-start-0 w-100 h-100 z-n1 object-fit-cover">
+                            <div class="d-lg-block d-none ps-32 flex-shrink-0" data-aos="zoom-in">
+                                <img src="assets/images/thumbs/Adobe Express - file (2).jpg" style="border-radius: 10px;" alt="">
+                            </div>
+                            <div class="deal-week-box__content px-sm-4 d-block w-100 text-center">
+                                <h6 class="mb-20 wow bounceIn"><?php echo strip_tags($offers_details["description"]); ?></h6>
+                                <?php
+
+                                ?>
+                                <div class="countdown mt-20" id="countdown<?php echo $i; ?>">
+                                    <ul class="countdown-list style-four flex-center flex-wrap">
+                                        <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                            <span class="days"></span>Days
+                                        </li>
+                                        <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                            <span class="hours"></span>Hour
+                                        </li>
+                                        <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                            <span class="minutes"></span>Min
+                                        </li>
+                                        <li class="countdown-list__item flex-align flex-column text-sm fw-medium text-white rounded-circle bg-neutral-600">
+                                            <span class="seconds"></span>Sec
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="d-lg-block d-none flex-shrink-0 pe-xl-5" data-aos="zoom-in">
+                                <div class="me-xxl-5">
+                                    <img src="assets/images/thumbs/Adobe Express - file (3).jpg" alt="">
+                                </div>
+                            </div>
+
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    initializeCountdown("countdown<?php echo $i; ?>", "<?php echo $phdatedeta["end_date"] ?>");
+                                });
+                            </script>
+
+                        </div>
+
+                        <div class="deals-week-slider arrow-style-two">
+
+                            <?php
+                            $dpro = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `discount_group_id` = '" . $offers_details["id"] . "' ");
+                            $dpro_num = $dpro->num_rows;
+                            for ($i = 0; $i < $dpro_num; $i++) {
+                                $dpro_data = $dpro->fetch_assoc();
+                                $BA = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $dpro_data["batch_id"] . "' ");
+                                $bad = $BA->fetch_assoc();
+                                $discountid = $dpro_data["id"];
+                            ?>
+                                <!-- product card start -->
+                                <div data-aos="fade-up" data-aos-duration="200">
+                                    <div class="product-card h-100 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+                                        <a href="product-details.php?batch_id=<?php echo $dpro_data['batch_id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative">
+                                            <span class="product-card__badge bg-main-600 px-8 py-4 text-sm text-white position-absolute inset-inline-start-0 inset-block-start-0">
+                                                <?php echo  $dpro_data["discount_pre"]; ?>% Off
+                                            </span>
+                                            <?php
+                                            $pr = Database::Search("SELECT * FROM `product` WHERE `id`='" . $bad["product_id"] . "' ");
+                                            $pr =  $pr->fetch_assoc();
+                                            $pic = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
+                                            $pic_d = $pic->fetch_assoc();
+                                            $imgSrc = empty($pic_d["path"]) ? "assets/images/thumbs/product-two-img2.png" : "admin-panel/" . $pic_d["path"];
+                                            ?>
+                                            <img src="<?php echo $imgSrc; ?>" alt="Product Image" class="product-card-img img-fluid">
+                                        </a>
+                                        <style>
+                                            .product-card-img {
+                                                width: 100%;
+                                                height: 220px;
+                                                /* You can adjust this based on your card layout */
+                                                object-fit: cover;
+                                                border-radius: 8px;
+                                            }
+                                        </style>
+                                        <div class="product-card__content mt-16 w-100 col-4">
+                                            <h6 class="title text-lg fw-semibold mt-12 mb-8">
+                                                <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"]; ?></a>
+                                            </h6>
+                                            <div class="mt-8">
+                                                <div class="progress w-100 bg-color-three rounded-pill h-4" role="progressbar" aria-label="Basic example" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar bg-tertiary-600 rounded-pill" style="width: 35%; background-color: rgb(250,104,0) !important;"></div>
+                                                </div>
+                                                <span class="text-gray-900 text-xs fw-medium mt-8">Sold: 18/35</span>
+                                            </div>
+
+                                            <div class="product-card__price my-20">
+                                                <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $bad["selling_price"]; ?></span>
+                                                <?php
+                                                $batch_id = $dpro_data["batch_id"];
+                                                $sprice = $bad["selling_price"];
+                                                $discountpercentage = $dpro_data["discount_pre"];
+                                                $nowprice = $sprice - ($sprice * $discountpercentage / 100);
+                                                ?>
+                                                <span class="text-heading text-md fw-semibold ">Rs <?php echo $nowprice; ?> <span class="text-gray-500 fw-normal">/Qty</span> </span>
+                                                <div class="col-12 small" style="color: rgb(255, 143, 68);">Only <?php echo $dpro_data["qty"] ?> items left at this special price!</div>
+                                            </div>
+
+                                            <a onclick="adtocart(<?= $sprice ?>, <?= $discountpercentage ?>, <?= $batch_id ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
+                                                Add To Cart <i class="ph ph-shopping-cart"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- product card end -->
+                            <?php
+                            }
+                            ?>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        <?php
+        }
 
+        ?>
     <?php
     }
     ?>
@@ -683,7 +691,7 @@ include_once "connection.php";
     <section>
         <div class="container-fluid mt-80">
 
-        <div class="row justify-content-center g-5 px-20 py-5" data-aos="fade-up" data-aos-duration="1000" id="aboutUsContainer"></div>
+            <div class="row justify-content-center g-5 px-20 py-5" data-aos="fade-up" data-aos-duration="1000" id="aboutUsContainer"></div>
 
             <script>
                 const aboutUsSections = [{
