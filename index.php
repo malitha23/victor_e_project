@@ -627,11 +627,16 @@ include_once "connection.php";
                                                 <div class="" data-aos="fade-up" data-aos-duration="800">
                                                     <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
                                                         <a href="product-details.php?batch_id=<?php echo $nbd["id"]; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative" style="height: 200px; overflow: hidden;">
-                                                            <img src="<?php echo $pic ?>" alt="Product Image" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                                            <img src="<?php echo $pic ?>" class="product-image" alt="Product Image">
                                                         </a>
                                                         <style>
+                                                            .product-image {
+                                                                width: 100%;
+                                                                height: 140px;
+                                                                object-fit: contain;
+                                                            }
                                                             .uniform-img-card {
-                                                                width: 150px;
+                                                                width: 140px;
                                                                 /* reduced from 250px */
                                                                 height: 150px;
                                                                 /* reduced from 250px */
