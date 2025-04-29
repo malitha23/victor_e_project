@@ -633,7 +633,6 @@ include_once "connection.php";
                                                             .product-image {
                                                                 width: 100%;
                                                                 height: 140px;
-                                                                object-fit: contain;
                                                             }
                                                         </style>
 
