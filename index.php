@@ -605,7 +605,7 @@ include_once "connection.php";
                             $nproductn = $nproduct->num_rows;
                             for ($ik = 0; $ik < $nproductn; $ik++) {
                                 $nproductd = $nproduct->fetch_assoc();
-                                $nb = Database::Search("SELECT * FROM `batch` WHERE `Delete`='0' AND `product_id`='" . $nproductd["id"] . "' ");
+                                $nb = Database::Search("SELECT * FROM `batch` WHERE `Delete`='0' AND `product_id`='" . $nproductd["id"] . "' ORDER BY `date` DESC LIMIT 1");
                                 $nbn = $nb->num_rows;
                                 for ($i = 0; $i < $nbn; $i++) {
                                     $nbd = $nb->fetch_assoc();
