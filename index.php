@@ -577,7 +577,7 @@ include_once "connection.php";
 
 
     <!-- ========================= New Products Start ================================ -->
-    <section class="featured-products overflow-hidden">
+    <section class="featured-products overflow-hidden pt-80">
         <div class="container container-lg">
             <div class="row g-4 flex-wrap-reverse">
                 <div class="col-xxl-8">
@@ -634,23 +634,6 @@ include_once "connection.php";
                                                                 width: 100%;
                                                                 height: 140px;
                                                                 object-fit: contain;
-                                                            }
-                                                            .uniform-img-card {
-                                                                width: 140px;
-                                                                /* reduced from 250px */
-                                                                height: 150px;
-                                                                /* reduced from 250px */
-                                                                display: flex;
-                                                                align-items: center;
-                                                                justify-content: center;
-                                                                overflow: hidden;
-                                                            }
-
-                                                            .uniform-img-card img {
-                                                                width: 100%;
-                                                                height: 100%;
-                                                                object-fit: cover;
-                                                                border-radius: 8px;
                                                             }
                                                         </style>
 
