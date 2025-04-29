@@ -575,7 +575,7 @@ include_once "connection.php";
     </section>
     <!-- ========================= Top Selling Products End ================================ -->
 
-
+    
     <!-- ========================= New Products Start ================================ -->
     <section class="featured-products overflow-hidden pt-80">
         <div class="container container-lg">
@@ -601,65 +601,49 @@ include_once "connection.php";
 
                         <div class="row gy-4 featured-product-slider">
                             <?php
-                            $nproduct = Database::Search("SELECT * FROM `product` WHERE `status_id`='1'  AND `delete_id`='0' ");
-                            $nproductn = $nproduct->num_rows;
-                            for ($ik = 0; $ik < $nproductn; $ik++) {
-                                $nproductd = $nproduct->fetch_assoc();
-                                $nb = Database::Search("SELECT * FROM `batch` WHERE `Delete`='0' AND `product_id`='" . $nproductd["id"] . "' ");
-                                $nbn = $nb->num_rows;
-                                for ($i = 0; $i < $nbn; $i++) {
-                                    $nbd = $nb->fetch_assoc();
-                                    $npic = Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $nproductd["id"] . "' AND `name`='Image 1' ");
-                                    $npicn = $npic->num_rows;
-                                    if ($npicn > 0) {
-                                        $npicd = $npic->fetch_assoc();
-                                        $pic = "admin-panel/" . $npicd["path"];
-                                    } else {
-                                        $pic = "assets/images/thumbs/product-two-img2.png";
-                                    }
+                            $nproduct = Database::Search("SELECT * FROM `product` WHERE `status_id`='1' AND `delete_id`='0'");
+                            while ($nproductd = $nproduct->fetch_assoc()) {
+                                $batches = Database::Search("SELECT * FROM `batch` WHERE `Delete`='0' AND `product_id`='" . $nproductd["id"] . "'");
+                                $batchData = [];
+                                while ($b = $batches->fetch_assoc()) {
+                                    $batchData[] = $b;
+                                }
+
+                                $totalBatches = count($batchData);
+                                for ($i = 0; $i < $totalBatches; $i += 2) {
+                                    echo '<div class="col-xxl-6"><div class="featured-products__sliders">';
+                                    for ($j = 0; $j < 2 && ($i + $j) < $totalBatches; $j++) {
+                                        $batch = $batchData[$i + $j];
+                                        $picResult = Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $nproductd["id"] . "' AND `name`='Image 1'");
+                                        $pic = ($picResult->num_rows > 0) ? "admin-panel/" . $picResult->fetch_assoc()["path"] : "assets/images/thumbs/product-two-img2.png";
                             ?>
-                                    <div class="col-xxl-6">
-                                        <div class="featured-products__sliders">
-
-                                            <?php
-                                            for ($j = 0; $j < 2; $j++) {
-                                            ?>
-                                                <div class="" data-aos="fade-up" data-aos-duration="800">
-                                                    <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                                        <a href="product-details.php?batch_id=<?php echo $nbd["id"]; ?>&discount_id=<?php echo 0; ?>" class="product-card__thumb flex-center rounded-8 bg-gray-50 position-relative" style="height: 200px; overflow: hidden;">
-                                                            <img src="<?php echo $pic ?>" class="product-image" alt="Product Image">
-                                                        </a>
-                                                        <style>
-                                                            .product-image {
-                                                                width: 100%;
-                                                                height: 140px;
-                                                            }
-                                                        </style>
-
-                                                        <div class="product-card__content my-20 flex-grow-1">
-                                                            <h6 class="title text-lg fw-semibold mb-12">
-                                                                <a href="product-details.php?batch_id=<?php echo $nbd["id"]; ?>&discount_id=<?php echo 0; ?>" class="link text-line-2" tabindex="0"><?php echo $nproductd["title"]; ?></a>
-                                                            </h6>
-                                                            <div class="product-card__price my-20">
-                                                                <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $nbd["selling_price"] - 10; ?> </span>
-                                                                <span class="text-heading text-md fw-semibold ">Rs <?php echo $nbd["selling_price"]; ?> <span class="text-gray-500 fw-normal">/Qty</span> </span>
-                                                            </div> <a onclick="adtocart(<?= $nbd["selling_price"] ?>, <?= 0 ?>, <?= $nbd["id"] ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
-                                                                Add To Cart <i class="ph ph-shopping-cart"></i>
-                                                            </a>
-                                                        </div>
+                                        <div class="" data-aos="fade-up" data-aos-duration="800">
+                                            <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
+                                                <a href="product-details.php?batch_id=<?= $batch['id']; ?>&discount_id=0" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
+                                                    <img src="<?= $pic ?>" alt="" class="product-image">
+                                                </a>
+                                                <div class="product-card__content my-20 flex-grow-1">
+                                                    <h6 class="title text-lg fw-semibold mb-12">
+                                                        <a href="product-details.php?batch_id=<?= $batch['id']; ?>&discount_id=0" class="link text-line-2" tabindex="0"><?= $nproductd["title"]; ?></a>
+                                                    </h6>
+                                                    <div class="product-card__price my-20">
+                                                        <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?= $batch["selling_price"] + 20 ?> </span>
+                                                        <span class="text-heading text-md fw-semibold">Rs <?= $batch["selling_price"] ?> <span class="text-gray-500 fw-normal">/Qty</span> <?= $batch["batch_qty"] ?></span>
                                                     </div>
+                                                    <a onclick="adtocart(<?= $batch['selling_price'] ?>, 0, <?= $batch['id'] ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium" tabindex="0">
+                                                        Add To Cart <i class="ph ph-shopping-cart"></i>
+                                                    </a>
                                                 </div>
-                                            <?php
-                                            }
-                                            ?>
-
+                                            </div>
                                         </div>
-                                    </div>
                             <?php
+                                    }
+                                    echo '</div></div>';
                                 }
                             }
                             ?>
                         </div>
+
 
 
                     </div>
@@ -670,14 +654,14 @@ include_once "connection.php";
                         <img src="assets/images/bg/big-deal-pattern.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100 cover-img">
                         <div class="py-xl-4 text-center">
                             <h4 class=" mb-20 text-dark">Don't miss out — grab your favourites now.</h4>
-                                <div class="flex-center gap-12 text-white h6 mt-3">
-                                    <span class="text-dark">Shop Smarter, Live Better — Discover Top Deals & Fast Delivery with Vicstore!</span>
-                                    <span class="badge-style-two position-relative me-8 bg-main-two-600 text-white text-sm py-2 px-8 rounded-4">Special Discounts</span>
-                                </div>
-                                <a href="shop.php" class="mt-16 mb-24 btn btn-main-two fw-medium d-inline-flex align-items-center rounded-pill gap-8" tabindex="0">
-                                    Grab Your Deals
-                                    <span class="icon text-xl d-flex"><i class="ph ph-arrow-right"></i></span>
-                                </a>
+                            <div class="flex-center gap-12 text-white h6 mt-3">
+                                <span class="text-dark">Shop Smarter, Live Better — Discover Top Deals & Fast Delivery with Vicstore!</span>
+                                <span class="badge-style-two position-relative me-8 bg-main-two-600 text-white text-sm py-2 px-8 rounded-4">Special Discounts</span>
+                            </div>
+                            <a href="shop.php" class="mt-16 mb-24 btn btn-main-two fw-medium d-inline-flex align-items-center rounded-pill gap-8" tabindex="0">
+                                Grab Your Deals
+                                <span class="icon text-xl d-flex"><i class="ph ph-arrow-right"></i></span>
+                            </a>
                         </div>
                         <img src="assets/images/thumbs/featured-product-img.png" alt="" class="d-xxl-inline-flex d-none wow bounceInUp">
                     </div>
