@@ -114,7 +114,7 @@ if (isset($_SESSION["a"])) {
                                                     <div class="col-12 col-lg-10 ">
 
                                                         <?php
-                                                        $batch = Databases::Search("SELECT * FROM `batch` WHERE `Delete`='0' ORDER BY `date` ASC");
+                                                        $batch = Databases::Search("SELECT * FROM `batch` WHERE `product_id`='".$productdata["id"]."' AND  `Delete`='0' ORDER BY `date` ASC");
                                                         $batch_num = $batch->num_rows;
                                                         for ($io = 0; $io < $batch_num; $io++) {
                                                             $batchdata = $batch->fetch_assoc();
