@@ -95,7 +95,26 @@ if (isset($_SESSION["a"])) {
                                             <div class="d-flex justify-content-end mt-2">
                                                 <button class="btn tex-g p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $productdata["id"] ?>">UPDATE</button>
                                                 <button class="btn tex-b p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModalb">BATCH</button>
-                                                <button class="btn tex-r p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModalx">DELETE</button>
+                                                <button class="btn tex-r p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModalx<?php echo $productdata["id"] ?>">DELETE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Modal for delete confirmation -->
+                                <div class="modal fade" id="exampleModalx<?php echo $productdata["id"] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <div class="modal-title fs-4 fw-bold" id="exampleModalLabel">Warning&nbsp;&nbsp;<i class="fa fa-exclamation" aria-hidden="true"></i>
+                                                </div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <span>Do you really want to delete <b>Example Product Title</b>?</span>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" onclick="deleteProduct('<?php echo $productdata["id"]; ?>');" class="btn ub-btn">Delete</button>
                                             </div>
                                         </div>
                                     </div>
@@ -441,24 +460,7 @@ if (isset($_SESSION["a"])) {
                                 </div>
                             </div>
 
-                            <!-- Modal for delete confirmation -->
-                            <div class="modal fade" id="exampleModalx" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <div class="modal-title fs-4 fw-bold" id="exampleModalLabel">Warning&nbsp;&nbsp;<i class="fa fa-exclamation" aria-hidden="true"></i>
-                                            </div>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <span>Do you really want to delete <b>Example Product Title</b>?</span>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn ub-btn">Delete</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
 
                         </div>
                     </div>
