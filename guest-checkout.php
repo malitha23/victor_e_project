@@ -131,7 +131,7 @@ $cart_items = []; // Array to store cart items
 
                             <div class="col-12 col-lg-6 mb-24">
                                 <label for="district">District <span class="text-danger">*</span></label>
-                                <select id="district" name="district" class="common-input">
+                                <select onchange="lordcityg();" id="district" name="district" class="common-input">
                                     <option value="" disabled selected>Select District</option>
                                     <?php if (isset($user_data['district_name']) && !empty($user_data['district_name'])) : ?>
                                         <option value="<?php echo $user_data['district_name']; ?>" selected>
@@ -463,5 +463,5 @@ $cart_items = []; // Array to store cart items
 
 
 </body>
-
+<script src="sahan.js"></script>
 </html>

@@ -767,5 +767,33 @@ function lordcity() {
     req.open("POST", "loadcity.php", true);
     req.send(form);
 }
+function lordcity() {
+    var disid = document.getElementById("district").value;
+    var req = new XMLHttpRequest();
+    var form = new FormData();
+    form.append("district_id", disid);
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            // Assuming you want to update a <select> with id="city"
+            document.getElementById("city").innerHTML = req.responseText;
+        }
+    };
+    req.open("POST", "loadcity.php", true);
+    req.send(form);
+}
+function lordcityg() {
+    var disid = document.getElementById("district").value;
+    var req = new XMLHttpRequest();
+    var form = new FormData();
+    form.append("district_id", disid);
+    req.onreadystatechange = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            // Assuming you want to update a <select> with id="city"
+            document.getElementById("city").innerHTML = req.responseText;
+        }
+    };
+    req.open("POST", "loadcityg.php", true);
+    req.send(form);
+}
 
 
