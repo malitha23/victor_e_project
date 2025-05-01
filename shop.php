@@ -1,4 +1,6 @@
-<?php require_once "connection.php"; ?>
+<?php
+session_start();
+ require_once "connection.php"; ?>
 <!DOCTYPE html>
 <html lang="en" class="color-two font-exo">
 
