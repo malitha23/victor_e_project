@@ -641,7 +641,7 @@ include_once "connection.php";
                                         ?>
                                             <div class="" data-aos="fade-up" data-aos-duration="800">
                                                 <div class="mt-24 product-card d-flex gap-16 p-16 border border-gray-100 hover-border-main-600 rounded-16 position-relative transition-2">
-                                                    <a href="product-details.php?batch_id=<?php echo $bach_d['id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
+                                                    <a href="product-details.php?batch_id=<?php echo $pr['id']; ?>&discount_id=<?php echo $discountid; ?>" class="product-card__thumb flex-center h-unset rounded-8 bg-gray-50 position-relative w-unset flex-shrink-0 p-24" tabindex="0">
                                                         <?php
                                                         $pic = Database::Search("SELECT * FROM `picture` WHERE `product_id`='" . $pr["id"] . "' AND `name`='Image 1' ");
                                                         $pic_d = $pic->fetch_assoc();
@@ -658,7 +658,7 @@ include_once "connection.php";
                                                     </a>
                                                     <div class="product-card__content my-20 flex-grow-1">
                                                         <h6 class="title text-lg fw-semibold mb-12">
-                                                            <a href="product-details.php" class="link text-line-2" tabindex="0"><?php echo $pr["title"] ?></a>
+                                                            <a href="product-details.php?batch_id=<?php echo $pr['id']; ?>&discount_id=<?php echo $discountid; ?>" class="link text-line-2" tabindex="0"><?php echo $pr["title"] ?></a>
                                                         </h6>
                                                         <div class="product-card__price my-20">
                                                             <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $pr["selling_price"] + 20 ?></span>
