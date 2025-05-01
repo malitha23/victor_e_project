@@ -21,6 +21,7 @@ if (isset($_SESSION["a"])) {
             <link rel="shortcut icon" href="assets/img/logo-icon.ico" type="image/x-icon">
             <link rel="stylesheet" href="assets-admin/css/style.css" />
             <link rel="stylesheet" href="assets-admin/css/styles.min.css" />
+            <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.3/dist/sweetalert2.min.css" rel="stylesheet">
         </head>
 
         <body>
@@ -60,7 +61,7 @@ if (isset($_SESSION["a"])) {
                             <?php
                             $product = Databases::Search("SELECT * FROM `product` WHERE `delete_id`='0' ");
                             $productnum = $product->num_rows;
-                            for ($i = 0; $i < $productnum; $i++) {
+                            for ($im = 0; $im < $productnum; $im++) {
                                 $productdata = $product->fetch_assoc();
                             ?>
                                 <div class="col-sm-6 col-xl-3">
@@ -92,9 +93,248 @@ if (isset($_SESSION["a"])) {
                                         <div class="card-body pt-3 p-4">
                                             <h6 class="fw-semibold fs-4"><?php echo $productdata["title"] ?></h6>
                                             <div class="d-flex justify-content-end mt-2">
-                                                <button class="btn tex-g p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModal">UPDATE</button>
+                                                <button class="btn tex-g p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $productdata["id"] ?>">UPDATE</button>
                                                 <button class="btn tex-b p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModalb">BATCH</button>
                                                 <button class="btn tex-r p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModalx">DELETE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" id="exampleModal<?php echo $productdata["id"] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <div class="modal-title fs-4 fw-bold" id="exampleModalLabel"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;
+                                                    Product Management</div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row d-flex justify-content-center my-2">
+                                                    <div class="col-12 col-lg-9 border shadow">
+                                                        <div class="row m-3">
+                                                            <div class="col-12 mt-3">
+                                                                <div class="row d-flex justify-content-center">
+                                                                    <?php
+                                                                    $image = Databases::Search("SELECT * FROM `picture` WHERE `product_id`='" . $productdata["id"] . "' ");
+                                                                    $imagenum = $image->num_rows;
+                                                                    $image1 = "";
+                                                                    $image2 = "";
+                                                                    $image3 = "";
+                                                                    for ($i = 0; $i < $imagenum; $i++) {
+                                                                        $imagedata = $image->fetch_assoc();
+                                                                        if ($imagedata["name"] == "Image 1") {
+                                                                            $image1 = $imagedata["path"];
+                                                                        } elseif ($imagedata["name"] == "Image 2") {
+                                                                            $image2 = $imagedata["path"];
+                                                                        } elseif ($imagedata["name"] == "Image 3") {
+                                                                            $image3 = $imagedata["path"];
+                                                                        }
+                                                                    }
+                                                                    ?>
+                                                                    <div class="col-8 col-md-4 mb-2" style="height: 200px;">
+                                                                        <input type="file" class="d-none" id="img_input_<?php echo $productdata['id']; ?>_1" onclick="imageget(<?php echo $productdata['id']; ?>, 1);">
+                                                                        <div class="border-x log-link d-flex justify-content-center align-items-center h-100 outer-div" id="di_<?php echo $productdata['id']; ?>_1" onclick="uProductImage(<?php echo $productdata['id']; ?>, 1);">
+                                                                            <?php if ($image1 == "") { ?>
+                                                                                <span class="small" id="img_span_<?php echo $productdata['id']; ?>_1">Image 1</span>
+                                                                            <?php } else { ?>
+                                                                                <img src="<?php echo $image1; ?>" class="img-fluid" id="img_div_<?php echo $productdata['id']; ?>_1">
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-8 col-md-4 mb-2" style="height: 200px;">
+                                                                        <input onclick="imageget(<?php echo $productdata['id']; ?>, 2);" type="file" class="d-none" id="img_input_<?php echo $productdata['id']; ?>_2">
+                                                                        <div class="border-x log-link d-flex justify-content-center align-items-center h-100" id="di_<?php echo $productdata['id']; ?>_2" onclick="uProductImage(<?php echo $productdata['id']; ?>, 2);">
+                                                                            <?php
+                                                                            if ($image2 == "") {
+                                                                            ?>
+                                                                                <span class="small" id="img_span_<?php echo $productdata['id']; ?>_2">Image 2</span>
+                                                                            <?php
+                                                                            }
+                                                                            ?>
+                                                                            <img src="<?php echo $image2; ?>" class="img-fluid" id="img_div_<?php echo $productdata['id']; ?>_2">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-8 col-md-4 mb-2" style="height: 200px;">
+                                                                        <input onclick="imageget(<?php echo $productdata['id']; ?>, 3)" type="file" class="d-none" id="img_input_<?php echo $productdata['id']; ?>_3">
+                                                                        <div class="border-x log-link d-flex justify-content-center align-items-center h-100" id="di_<?php echo $productdata['id']; ?>_3" onclick="uProductImage(<?php echo $productdata['id']; ?>,3);">
+                                                                            <?php
+                                                                            if ($image3 == "") {
+                                                                            ?>
+                                                                                <span class="small" id="img_span_<?php echo $productdata['id']; ?>_3">Image 3</span>
+                                                                            <?php
+                                                                            }
+                                                                            ?>
+                                                                            <img src="<?php echo $image3; ?>" class="img-fluid" id="img_div_<?php echo $productdata['id']; ?>_3">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 mt-3">
+                                                                <div class="form-floating">
+                                                                    <input type="text" class="form-control rounded-0" id="productt<?php echo $productdata["id"]; ?>" value="<?php echo $productdata["title"]; ?>" placeholder="title of the product">
+                                                                    <label for="floatingInput">Product Title</label>
+                                                                </div>
+                                                            </div>
+                                                            <?php
+                                                            $subcategory = Databases::Search("SELECT * FROM `sub_category` WHERE `id`='" . $productdata["sub_category_id"] . "' ");
+                                                            $subcategorydata = $subcategory->fetch_assoc();
+                                                            $category = Databases::Search("SELECT * FROM `category` WHERE `id`='" . $subcategorydata["category_id"] . "' ");
+                                                            $categorydata = $category->fetch_assoc();
+                                                            ?>
+                                                            <div class="col-6 mt-3">
+                                                                <div class="form-floating">
+                                                                    <select class="form-select rounded-0" id="pc<?php echo $productdata["id"]; ?>" aria-label="Floating label select example">
+                                                                        <?php
+                                                                        $cat = Databases::Search("SELECT * FROM `category`");
+                                                                        $catnum = $cat->num_rows;
+                                                                        for ($i = 0; $i < $catnum; $i++) {
+                                                                            $catdata = $cat->fetch_assoc();
+                                                                        ?>
+                                                                            <option value="<?php echo $catdata["id"] ?>"><?php echo $catdata["name"] ?></option>
+                                                                        <?php
+                                                                        }
+                                                                        ?>
+                                                                        <option selected value="<?php echo $categorydata["id"] ?>"><?php echo $categorydata["name"] ?></option>
+                                                                    </select>
+                                                                    <label for="floatingSelect">Select your product Category here</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6 mt-3">
+                                                                <div class="form-floating">
+                                                                    <select class="form-select rounded-0" id="group<?php echo $productdata["id"]; ?>" aria-label="Floating label select example">
+                                                                        <?php
+                                                                        $avgroup = Databases::Search("SELECT * FROM `group` WHERE `id`='" . $categorydata["group_id"] . "' ");
+                                                                        $avgroupdata = $avgroup->fetch_assoc();
+                                                                        ?>
+                                                                        <option selected value="<?php echo $avgroupdata["id"] ?>"><?php echo $avgroupdata["group_name"] ?></option>
+                                                                        <?php
+                                                                        $group = Databases::Search("SELECT * FROM `group`");
+                                                                        $groupnum = $group->num_rows;
+                                                                        for ($i = 0; $i < $groupnum; $i++) {
+                                                                            $groupdata = $group->fetch_assoc();
+                                                                        ?>
+                                                                            <option value="<?php echo $groupdata["id"] ?>"><?php echo $groupdata["group_name"] ?></option>
+                                                                        <?php
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                    <label for="floatingSelect">Select your product group here</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6 mt-3">
+                                                                <div class="form-floating">
+                                                                    <select class="form-select rounded-0" id="subcategory<?php echo $productdata["id"]; ?>" aria-label="Floating label select example">
+                                                                        <option selected value="<?php echo $subcategorydata["id"] ?>"><?php echo $subcategorydata["name"] ?></option>
+                                                                        <?php
+                                                                        $subcate = Databases::Search("SELECT * FROM sub_category");
+                                                                        $subcatenum = $subcate->num_rows;
+                                                                        for ($i = 0; $i < $subcatenum; $i++) {
+                                                                            $subcatedata = $subcate->fetch_assoc();
+                                                                        ?>
+                                                                            <option value="<?php echo $subcatedata["id"] ?>"><?php echo $subcatedata["name"] ?></option>
+                                                                        <?php
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                    <label for="floatingSelect">Select your product sub_category here</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6 mt-3">
+                                                                <div class="form-floating">
+                                                                    <select class="form-select rounded-0" id="condition<?php echo $productdata["id"]; ?>" aria-label="Floating label select example">
+                                                                        <?php
+                                                                        $condition = Databases::Search("SELECT * FROM `condition`");
+                                                                        $conditionnum = $condition->num_rows;
+                                                                        for ($i = 0; $i < $conditionnum; $i++) {
+                                                                            $conditiondata = $condition->fetch_assoc();
+                                                                        ?>
+                                                                            <option value="<?php echo $conditiondata["id"]; ?>"><?php echo $conditiondata["name"]; ?></option>
+                                                                        <?php
+                                                                        }
+                                                                        ?>
+                                                                        <?php
+                                                                        $activcondition = Databases::Search("SELECT * FROM `condition` WHERE `id`='" . $productdata["condition_id"] . "' ");
+                                                                        $activconditiondata = $activcondition->fetch_assoc();
+                                                                        ?>
+                                                                        <option selected value="<?php echo  $activconditiondata["id"] ?>"><?php echo  $activconditiondata["name"] ?></option>
+                                                                    </select>
+                                                                    <label for="floatingSelect">Select your product condition here</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6 mt-3">
+                                                                <div class="form-floating">
+                                                                    <select class="form-select rounded-0" id="brand<?php echo $productdata["id"]; ?>" aria-label="Floating label select example">
+                                                                        <?php
+                                                                        $brand = Databases::Search("SELECT * FROM `brand`");
+                                                                        $brandnum = $brand->num_rows;
+                                                                        for ($i = 0; $i < $brandnum; $i++) {
+                                                                            $branddata = $brand->fetch_assoc();
+                                                                        ?>
+                                                                            <option value="<?php echo $branddata["id"]; ?>"><?php echo $branddata["name"]; ?></option>
+                                                                        <?php
+                                                                        }
+                                                                        ?>
+                                                                        <?php
+                                                                        $activbrand = Databases::Search("SELECT * FROM `brand` WHERE `id`='" . $productdata["brand_id"] . "' ");
+                                                                        $activbranddata = $activbrand->fetch_assoc();
+                                                                        ?>
+                                                                        <option selected value="<?php echo  $activbranddata["id"]; ?>"><?php echo  $activbranddata["name"]; ?></option>
+                                                                    </select>
+                                                                    <label for="floatingSelect">Select your product brand here</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6 mt-3">
+                                                                <div class="form-floating">
+                                                                    <select class="form-select rounded-0" id="status<?php echo $productdata["id"]; ?>" aria-label="Floating label select example">
+                                                                        <?php
+                                                                        $status = Databases::Search("SELECT * FROM `status`");
+                                                                        $statusnum = $status->num_rows;
+                                                                        for ($i = 0; $i < $statusnum; $i++) {
+                                                                            $statusdata = $status->fetch_assoc();
+                                                                        ?>
+                                                                            <option value="<?php echo $statusdata["id"] ?>"><?php echo $statusdata["id"] ?></option>
+                                                                        <?php
+                                                                        }
+                                                                        ?>
+                                                                        <?php
+                                                                        $availablestatus = Databases::Search("SELECT * FROM `status` WHERE `id`='" . $productdata["status_id"] . "' ");
+                                                                        $availablestatusdata = $availablestatus->fetch_assoc();
+                                                                        ?>
+                                                                        <option selected value="<?php echo $availablestatusdata["id"] ?>"><?php echo $availablestatusdata["name"] ?></option>
+                                                                    </select>
+                                                                    <label for="floatingSelect">Select your product status here</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6 mt-3">
+                                                                <div class="input-group">
+                                                                    <div class="form-floating is-invalid">
+                                                                        <input id="weight<?php echo $productdata["id"]; ?>" type="text" class="form-control rounded-0" value="<?php echo $productdata["weight"]; ?>" required>
+                                                                        <label>Product Weight ( Ex:-3.450 )</label>
+                                                                    </div>
+                                                                    <span class="input-group-text rounded-0">kg</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6 mt-3">
+                                                                <div class="input-group">
+                                                                    <div class="form-floating is-invalid">
+                                                                        <input value="<?php echo $productdata["date"]; ?>" type="datetime" class="form-control rounded-0" readonly>
+                                                                        <label>Added date and time</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 mt-4 mb-3">
+                                                                <textarea id="desc<?php echo $productdata["id"]; ?>" class="form-control rounded-0" name="editor1" style="height: 100px"><?php echo $productdata["description"] ?></textarea>
+                                                            </div>
+
+                                                            <div class="col-12 text-end mt-3">
+                                                                <button class="btn rounded-1 fw-bold x col-md-2" onclick="update_product(<?php echo $productdata["id"]; ?>)">
+                                                                    <i class="fa fa-floppy-o" aria-hidden="true"></i> SAVE
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -105,115 +345,7 @@ if (isset($_SESSION["a"])) {
                             <!-- Example Product Card End -->
 
                             <!-- Modal for updating product -->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <div class="modal-title fs-4 fw-bold" id="exampleModalLabel"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;
-                                                Product Management</div>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row d-flex justify-content-center my-2">
-                                                <div class="col-12 col-lg-9 border shadow">
-                                                    <div class="row m-3">
-                                                        <div class="col-12 mt-3">
-                                                            <div class="row d-flex justify-content-center">
-                                                                <div class="col-8 col-md-4 mb-2" style="height: 200px;">
-                                                                    <input type="file" class="d-none" id="img_input_1">
-                                                                    <div class="border-x log-link d-flex justify-content-center align-items-center h-100 outer-div" id="di_1" onclick="uProductImage(1);"><span class="small" id="img_span_1">Image 1</span>
-                                                                        <img src="" class="img-fluid" id="img_div_1">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-8 col-md-4  mb-2" style="height: 200px;">
-                                                                    <input type="file" class="d-none" id="img_input_2">
-                                                                    <div class="border-x log-link d-flex justify-content-center align-items-center h-100" id="di_2" onclick="uProductImage(2);"><span class="small" id="img_span_2">Image 2</span>
-                                                                        <img src="" class="img-fluid" id="img_div_2">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-8 col-md-4 mb-2" style="height: 200px;">
-                                                                    <input type="file" class="d-none" id="img_input_3">
-                                                                    <div class="border-x log-link d-flex justify-content-center align-items-center h-100" id="di_3" onclick="uProductImage(3);"><span class="small" id="img_span_3">Image 3</span>
-                                                                        <img src="" class="img-fluid" id="img_div_3">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12 mt-3">
-                                                            <div class="form-floating">
-                                                                <input type="text" class="form-control rounded-0" id="pt" value="Example Product Title" placeholder="title of the product">
-                                                                <label for="floatingInput">Product Title</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 mt-3">
-                                                            <div class="form-floating">
-                                                                <select class="form-select rounded-0" id="pc" aria-label="Floating label select example">
-                                                                    <option selected value="1">Category 1</option>
-                                                                    <option value="2">Category 2</option>
-                                                                </select>
-                                                                <label for="floatingSelect">Select your product group here</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 mt-3">
-                                                            <div class="form-floating">
-                                                                <select class="form-select rounded-0" id="pc" aria-label="Floating label select example">
-                                                                    <option selected value="1">Category 1</option>
-                                                                    <option value="2">Category 2</option>
-                                                                </select>
-                                                                <label for="floatingSelect">Select your product category here</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 mt-3">
-                                                            <div class="form-floating">
-                                                                <select class="form-select rounded-0" id="pc" aria-label="Floating label select example">
-                                                                    <option selected value="1">Category 1</option>
-                                                                    <option value="2">Category 2</option>
-                                                                </select>
-                                                                <label for="floatingSelect">Select your product condition here</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 mt-3">
-                                                            <div class="form-floating">
-                                                                <select class="form-select rounded-0" id="pc" aria-label="Floating label select example">
-                                                                    <option selected value="1">Category 1</option>
-                                                                    <option value="2">Category 2</option>
-                                                                </select>
-                                                                <label for="floatingSelect">Select your product status here</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 mt-3">
-                                                            <div class="input-group">
-                                                                <div class="form-floating is-invalid">
-                                                                    <input type="text" class="form-control rounded-0" placeholder="Enter Amount" required>
-                                                                    <label>Product Weight ( Ex:-3.450 )</label>
-                                                                </div>
-                                                                <span class="input-group-text rounded-0">kg</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-6 mt-3">
-                                                            <div class="input-group">
-                                                                <div class="form-floating is-invalid">
-                                                                    <input type="date" class="form-control rounded-0" readonly>
-                                                                    <label>Added date and time</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12 mt-4 mb-3">
-                                                            <textarea class="form-control rounded-0" name="editor1" placeholder="Product Description" style="height: 100px"></textarea>
-                                                        </div>
 
-                                                        <div class="col-12 text-end mt-3">
-                                                            <button class="btn rounded-1 fw-bold x col-md-2" onclick="update_product(1)">
-                                                                <i class="fa fa-floppy-o" aria-hidden="true"></i> SAVE
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <!-- Modal for updating batch -->
                             <div class="modal fade" id="exampleModalb" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -345,7 +477,7 @@ if (isset($_SESSION["a"])) {
                 </div>
             </div>
 
-            <script src="https://cdn.tiny.cloud/1/v6ya2mxbd70fn22v774qp5fw78t114ccnejem2vy8oriyj04/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+            <script src="https://cdn.tiny.cloud/1/723hsc796jwdbccgl2cjvmqzh651t875e476ph2334nnlnhu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
             <script>
                 // Wait for the document to be ready
@@ -353,7 +485,7 @@ if (isset($_SESSION["a"])) {
                     // Initialize TinyMCE with API key
                     tinymce.init({
                         selector: 'textarea',
-                        apiKey: 'v6ya2mxbd70fn22v774qp5fw78t114ccnejem2vy8oriyj04', // Replace 'YOUR_API_KEY_HERE' with your actual API key
+                        apiKey: '723hsc796jwdbccgl2cjvmqzh651t875e476ph2334nnlnhu', // Replace 'YOUR_API_KEY_HERE' with your actual API key
                         plugins: 'autosave autolink lists link',
                         toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link',
                         menubar: false,
@@ -379,8 +511,12 @@ if (isset($_SESSION["a"])) {
             <script src="../denu.js"></script>
             <script src="../M.js"></script>
             <!-- Include jQuery library -->
+            <script src="sahan.js"></script>
+            <!-- Include jQuery library -->
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.3/dist/sweetalert2.min.js"></script>
 
         </body>
 

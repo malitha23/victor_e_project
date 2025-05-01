@@ -247,21 +247,21 @@ function batchADD() {
      xhr.send(formData);
 
 }
-function update_product(product_id, batch_id) {
+function update_product(product_id) {
      // Get the values from the form fields
-     var product_title = document.getElementById("productt" + batch_id).value;
-     var product_category = document.getElementById("pc" + batch_id).value;
-     var product_group = document.getElementById("group" + batch_id).value;
-     var product_subcategory = document.getElementById("subcategory" + batch_id).value;
-     var product_condition = document.getElementById("condition" + batch_id).value;
-     var product_status = document.getElementById("status" + batch_id).value;
-     var product_weight = document.getElementById("weight" + batch_id).value;
-     var product_description = getDescription(batch_id);
-     var brand = document.getElementById("brand" + batch_id).value;
+     var product_title = document.getElementById("productt" + product_id).value;
+     var product_category = document.getElementById("pc" + product_id).value;
+     var product_group = document.getElementById("group" + product_id).value;
+     var product_subcategory = document.getElementById("subcategory" + product_id).value;
+     var product_condition = document.getElementById("condition" + product_id).value;
+     var product_status = document.getElementById("status" + product_id).value;
+     var product_weight = document.getElementById("weight" + product_id).value;
+     var product_description = getDescription(product_id);
+     var brand = document.getElementById("brand" + product_id).value;
 
-     let img1 = document.getElementById("img_input_" + batch_id + "_" + "1").files[0] || 0;
-     let img2 = document.getElementById("img_input_" + batch_id + "_" + "2").files[0] || 0;
-     let img3 = document.getElementById("img_input_" + batch_id + "_" + "3").files[0] || 0;
+     let img1 = document.getElementById("img_input_" + product_id + "_" + "1").files[0] || 0;
+     let img2 = document.getElementById("img_input_" + product_id + "_" + "2").files[0] || 0;
+     let img3 = document.getElementById("img_input_" + product_id + "_" + "3").files[0] || 0;
 
      var formData = new FormData();
      formData.append("id", product_id);
@@ -283,7 +283,7 @@ function update_product(product_id, batch_id) {
      xhttp.onreadystatechange = function () {
           if (this.readyState == 4 && this.status == 200) {
                var res = this.responseText;
-
+               alert(res);
                switch (res) {
                     case "123":
                          Swal.fire({
@@ -364,8 +364,8 @@ function update_product(product_id, batch_id) {
      xhttp.send(formData);
 }
 
-function getDescription(batch_id) {
-     var description = tinymce.get('desc' + batch_id).getContent();
+function getDescription(product_id) {
+     var description = tinymce.get('desc' + product_id).getContent();
      console.log(description);
      return description;
 }
