@@ -94,10 +94,113 @@ if (isset($_SESSION["a"])) {
                                             <h6 class="fw-semibold fs-4"><?php echo $productdata["title"] ?></h6>
                                             <div class="d-flex justify-content-end mt-2">
                                                 <button class="btn tex-g p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $productdata["id"] ?>">UPDATE</button>
-                                                <button class="btn tex-b p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModalb">BATCH</button>
+                                                <button class="btn tex-b p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModalb<?php echo $productdata["id"] ?>">BATCH</button>
                                                 <button class="btn tex-r p-1 rounded-0-5" data-bs-toggle="modal" data-bs-target="#exampleModalx<?php echo $productdata["id"] ?>">DELETE</button>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" id="exampleModalb<?php echo $productdata["id"]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                                        <?php
+                                        $batch = Databases::Search("SELECT * FROM `batch` WHERE `Delete`='0' ORDER BY `date` ASC");
+                                        $batch_num = $batch->num_rows;
+                                        for ($io = 0; $io < $batch_num; $io++) {
+                                            $batchdata = $batch->fetch_assoc();
+                                        ?>
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <div class="modal-title fs-4 fw-bold" id="exampleModalLabel"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;
+                                                        Batch Management</div>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row d-flex justify-content-center my-2">
+                                                        <div class="col-12 col-lg-10 ">
+
+                                                            <!-- batch 1 start -->
+                                                            <div class="row p-3 border border-dark-subtle shadow">
+
+                                                                <div class="col-6 mt-3">
+                                                                    <div class="form-floating">
+                                                                        <input type="text" class="form-control rounded-0" id="bbatch_code<?php echo $batchdata["id"]; ?>" value="<?php echo $batchdata["batch_code"]; ?>" placeholder="Batch ID">
+                                                                        <label for="floatingInput">Batch CODE</label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-6 mt-3">
+                                                                    <div class="input-group">
+                                                                        <div class="form-floating is-invalid">
+                                                                            <input type="datetime" value="<?php echo $batchdata["date"]; ?>" class="form-control rounded-0" readonly>
+                                                                            <label>Added date and time</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-12 mt-3">
+                                                                    <div class="form-floating">
+                                                                        <input readonly type="text" class="form-control rounded-0" value="<?php echo $productdata["title"]; ?>" placeholder="title of the product">
+                                                                        <label for="floatingInput">Product Title</label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-6 mt-4">
+                                                                    <div class="form-floating">
+                                                                        <input id="vendornameb<?php echo $batchdata["id"]; ?>" value="<?php echo $batchdata["vendor_name"]; ?>" type="text" class="form-control rounded-0">
+                                                                        <label>Vendor Name</label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-6 mt-4">
+                                                                    <div class="form-floating">
+                                                                        <input id="batchqty<?php echo $batchdata["id"]; ?>" type="number" class="form-control rounded-0" value="<?php echo $batchdata["batch_qty"]; ?>">
+                                                                        <label>Batch Qty</label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-6 mt-4">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-text rounded-0">LKR</span>
+                                                                        <div class="form-floating is-invalid">
+                                                                            <input id="Batchprice<?php echo $batchdata["id"]; ?>" type="text" class="form-control" value="<?php echo $batchdata["batch_price"]; ?>" required>
+                                                                            <label>Batch Price</label>
+                                                                        </div>
+                                                                        <span class="input-group-text rounded-0">.00</span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-6 mt-4 mb-3">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-text rounded-0">LKR</span>
+                                                                        <div class="form-floating is-invalid">
+                                                                            <input type="text" id="selling_price<?php echo $batchdata["id"]; ?>" class="form-control" value="<?php echo $batchdata["selling_price"]; ?>" required>
+                                                                            <label>Selling Price</label>
+                                                                        </div>
+                                                                        <span class="input-group-text rounded-0">.00</span>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <!-- batch 1 end -->
+
+                                                            <div class="row">
+                                                                <div class="col-12 text-end mt-3">
+                                                                    <button onclick="savebatchup('<?php echo $batchdata['id']; ?>');" class="btn rounded-1 fw-bold x col-md-2">
+                                                                        <i class="fa fa-floppy-o" aria-hidden="true"></i> SAVE
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php
+                                        }
+                                        ?>
+
                                     </div>
                                 </div>
 
