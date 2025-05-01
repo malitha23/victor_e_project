@@ -8,16 +8,13 @@ if (isset($_POST["district_id"])) {
      if ($dhcn == 0) {
           exit();
      }
-     $dhcdata = $dhc->fetch_assoc();
-     $city = Database::Search("SELECT * FROM `city` WHERE `city_id`='" .  $dhcdata["city_city_id"] . "' ");
-     $city_a = $city->fetch_assoc();
 ?>
      <select id="city" class="common-input">
-          <option value="<?php echo $city_a["city_id"]  ?>" selected><?php echo $city_a["name"]  ?></option>
           <?php
-          $dis = Database::Search("SELECT * FROM `city` WHERE `city_id`='" .  $dhcdata["city_city_id"] . "' ");
-          $dis_num  = $dis->num_rows;
-          for ($i = 0; $i < $dis_num; $i++) {
+          for ($i = 0; $i < $dhcn; $i++) {
+               $dhcdata = $dhc->fetch_assoc();
+               $dis = Database::Search("SELECT * FROM `city` WHERE `city_id`='" .  $dhcdata["city_city_id"] . "' ");
+               $dis_num  = $dis->num_rows;
                $dis_data = $dis->fetch_assoc();
           ?>
                <option value="<?php echo $dis_data["city_id"] ?>"><?php echo $dis_data["name"] ?></option>
