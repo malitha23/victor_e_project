@@ -111,42 +111,43 @@ $cart_items = []; // Array to store cart items
 
                             <div class="col-12 col-lg-6 mb-24">
                                 <label for="first-name">First Name <span class="text-danger">*</span></label>
-                                <input type="text" class="common-input" id="first-name" name="fname"
-                                    value="<?php echo isset($user_data['fname']) ? htmlspecialchars($user_data['fname']) : ''; ?>"
-                                    required>
+                                <input type="text" class="common-input" id="first-name" name="fname" value="<?php echo isset($user_data['fname']) ? htmlspecialchars($user_data['fname']) : ''; ?>" required>
                             </div>
 
                             <div class="col-12 col-lg-6 mb-24">
                                 <label for="last-name">Last Name <span class="text-danger">*</span></label>
-                                <input type="text" class="common-input" id="last-name" name="lname"
-                                    value="<?php echo isset($user_data['lname']) ? htmlspecialchars($user_data['lname']) : ''; ?>"
-                                    required>
+                                <input type="text" class="common-input" id="last-name" name="lname" value="<?php echo isset($user_data['lname']) ? htmlspecialchars($user_data['lname']) : ''; ?>" required>
                             </div>
 
                             <div class="col-12 col-lg-6 mb-24">
                                 <label for="email">Email Address <span class="text-danger">*</span></label>
-                                <input type="email" class="common-input" id="uemail" name="uemail"
-                                    value="<?php echo isset($user_data['email']) ? htmlspecialchars($user_data['email']) : ''; ?>"
-                                    required>
+                                <input type="email" class="common-input" id="uemail" name="uemail" value="<?php echo isset($user_data['email']) ? htmlspecialchars($user_data['email']) : ''; ?>" required>
                             </div>
 
                             <div class="col-12 col-lg-6 mb-24">
                                 <label for="mobile">Mobile <span class="text-danger">*</span></label>
-                                <input type="tel" class="common-input" id="mobile" name="mobile"
-                                    value="<?php echo isset($user_data['mobile']) ? htmlspecialchars($user_data['mobile']) : ''; ?>">
+                                <input type="tel" class="common-input" id="mobile" name="mobile" value="<?php echo isset($user_data['mobile']) ? htmlspecialchars($user_data['mobile']) : ''; ?>">
                             </div>
 
                             <div class="col-12 col-lg-6 mb-24">
                                 <label for="district">District <span class="text-danger">*</span></label>
                                 <select id="district" name="district" class="common-input">
                                     <option value="" disabled selected>Select District</option>
-                                    <?php if (isset($user_data['district_name']) && !empty($user_data['district_name'])): ?>
+                                    <?php if (isset($user_data['district_name']) && !empty($user_data['district_name'])) : ?>
                                         <option value="<?php echo $user_data['district_name']; ?>" selected>
                                             <?php echo $user_data['district_name']; ?>
                                         </option>
                                     <?php endif; ?>
-                                    <option value="Gampaha">Gampaha</option>
-                                    <option value="Kandy">Kandy</option>
+                                    <?php
+                                    $dis = Database::Search("SELECT * FROM `distric` ");
+                                    $dis_num  = $dis->num_rows;
+                                    for ($i = 0; $i < $dis_num; $i++) {
+                                        $dis_data = $dis->fetch_assoc();
+                                    ?>
+                                        <option value="<?php echo $dis_data["name"] ?>"><?php echo $dis_data["name"] ?></option>
+                                    <?php
+                                    }
+                                    ?>
                                 </select>
                             </div>
 
@@ -154,33 +155,38 @@ $cart_items = []; // Array to store cart items
                                 <label for="city">City <span class="text-danger">*</span></label>
                                 <select id="city" name="city" class="common-input">
                                     <option value="" disabled selected>Select City</option>
-                                    <?php if (isset($user_data['city_name']) && !empty($user_data['city_name'])): ?>
+                                    <?php if (isset($user_data['city_name']) && !empty($user_data['city_name'])) : ?>
                                         <option value="<?php echo $user_data['city_name']; ?>" selected>
                                             <?php echo $user_data['city_name']; ?>
                                         </option>
                                     <?php endif; ?>
-                                    <option value="Gampaha">Gampaha</option>
-                                    <option value="Kandy">Kandy</option>
+                                    <?php
+                                    $dis = Database::Search("SELECT * FROM `city` ");
+                                    $dis_num  = $dis->num_rows;
+                                    for ($i = 0; $i < $dis_num; $i++) {
+                                        $dis_data = $dis->fetch_assoc();
+                                    ?>
+                                        <option value="<?php echo $dis_data["name"] ?>"><?php echo $dis_data["name"] ?></option>
+                                    <?php
+                                    }
+                                    ?>
                                 </select>
                             </div>
 
 
                             <div class="col-12 col-lg-6 mb-24">
                                 <label for="address-line-1">Address Line 1 <span class="text-danger">*</span></label>
-                                <input type="text" class="common-input" id="address-line-1" name="address1"
-                                    value="<?php echo isset($user_data['line_1']) ? htmlspecialchars($user_data['line_1']) : ''; ?>">
+                                <input type="text" class="common-input" id="address-line-1" name="address1" value="<?php echo isset($user_data['line_1']) ? htmlspecialchars($user_data['line_1']) : ''; ?>">
                             </div>
 
                             <div class="col-12 col-lg-6 mb-24">
                                 <label for="address-line-2">Address Line 2</label>
-                                <input type="text" class="common-input" id="address-line-2" name="address2"
-                                    value="<?php echo isset($user_data['line_2']) ? htmlspecialchars($user_data['line_2']) : ''; ?>">
+                                <input type="text" class="common-input" id="address-line-2" name="address2" value="<?php echo isset($user_data['line_2']) ? htmlspecialchars($user_data['line_2']) : ''; ?>">
                             </div>
 
                             <div class="col-12 mb-24">
                                 <label for="additional-info">Additional Information</label>
-                                <input type="text" class="common-input" id="additional-info" name="additional_info"
-                                    placeholder="Enter Additional Information (Optional)">
+                                <input type="text" class="common-input" id="additional-info" name="additional_info" placeholder="Enter Additional Information (Optional)">
                             </div>
 
                             <!-- <div class="mb-40">
@@ -366,8 +372,7 @@ $cart_items = []; // Array to store cart items
 
 
     <script>
-
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const citySelect = document.getElementById("city");
             const deliverySpan = document.querySelector(".text-danger-900"); // Delivery fee span
             const totalPriceSpan = document.getElementById("totalPrice");
@@ -380,7 +385,7 @@ $cart_items = []; // Array to store cart items
             let discount = 0;
             let deliveryFee = 0.0;
 
-            document.getElementById("applyCoupon").addEventListener("click", function () {
+            document.getElementById("applyCoupon").addEventListener("click", function() {
                 const couponInput = document.getElementById("couponCode");
                 const couponCode = couponInput.value.trim();
                 const couponMessage = document.getElementById("couponMessage");
@@ -414,7 +419,7 @@ $cart_items = []; // Array to store cart items
                         .then(response => response.json())
                         .then(data => {
                             // Check if the API response is successful and retrieve delivery fee
-                             deliveryFee = data.success ? parseFloat(data.fee) : 0;
+                            deliveryFee = data.success ? parseFloat(data.fee) : 0;
 
                             // Call the updateTotalPrice function to update delivery fee and total price
                             updateTotalPrice(deliveryFee, discount);
@@ -441,7 +446,7 @@ $cart_items = []; // Array to store cart items
             }
 
             // Event listener to handle city change
-            citySelect.addEventListener("change", function () {
+            citySelect.addEventListener("change", function() {
                 updateDeliveryFee(this.value);
             });
 
@@ -450,8 +455,6 @@ $cart_items = []; // Array to store cart items
                 updateDeliveryFee(citySelect.value);
             }
         });
-
-
     </script>
 
 
