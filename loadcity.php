@@ -15,7 +15,7 @@ if (isset($_POST["district_id"])) {
      <select id="city" class="common-input">
           <option value="<?php echo $city_a["city_id"]  ?>" selected><?php echo $city_a["name"]  ?></option>
           <?php
-          $dis = Database::Search("SELECT * FROM `city` ");
+          $dis = Database::Search("SELECT * FROM `city` WHERE `city_id`='" .  $dhcdata["city_city_id"] . "' ");
           $dis_num  = $dis->num_rows;
           for ($i = 0; $i < $dis_num; $i++) {
                $dis_data = $dis->fetch_assoc();
