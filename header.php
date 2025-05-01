@@ -35,21 +35,11 @@
                     <div class="search-category style-two d-flex h-48 search-form d-sm-flex d-none">
                         <select class="js-example-basic-single border border-gray-200 border-end-0 rounded-0 border-0" name="state">
                             <option value="1" selected>All Categories</option>
-                            <option value="1">Grocery</option>
-                            <option value="1">Breakfast & Dairy</option>
-                            <option value="1">Vegetables</option>
-                            <option value="1">Milks and Dairies</option>
-                            <option value="1">Pet Foods & Toy</option>
-                            <option value="1">Breads & Bakery</option>
-                            <option value="1">Fresh Seafood</option>
-                            <option value="1">Fronzen Foods</option>
-                            <option value="1">Noodles & Rice</option>
-                            <option value="1">Ice Cream</option>
                         </select>
                         <div class="search-form__wrapper position-relative d-md-flex">
                             <input type="text" class="search-form__input common-input py-13 ps-16 pe-18 rounded-0 border-0" placeholder="Type here">
                         </div>
-                        <button type="submit" class="bg-main-two-600 flex-center text-xl text-white flex-shrink-0 w-48 hover-bg-main-two-700 d-md-flex d-none"><i class="ph ph-magnifying-glass"></i></button>
+                        <button href="shop.php" type="submit" class="bg-main-two-600 flex-center text-xl text-white flex-shrink-0 w-48 hover-bg-main-two-700 d-md-flex d-none"><i class="ph ph-magnifying-glass"></i></button>
                     </div>
                 </form>
 
