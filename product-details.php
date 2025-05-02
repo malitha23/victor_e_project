@@ -257,7 +257,7 @@ if ($batch_id > 0) {
                                                     $dis = (($batchdata["batch_price"] - $batchdata["selling_price"]) / $batchdata["batch_price"]) * 100
                                                 ?>
                                                     <i class="ph-fill ph-seal-percent text-xl"></i>
-                                                    <?php echo $dis; ?>%
+                                                    -<?php echo number_format($dis, 0) ?>%
                                                 <?php
                                                 }
                                                 ?>
@@ -277,6 +277,11 @@ if ($batch_id > 0) {
                                                 <style>
                                                     .ob {
                                                         background-color: rgb(255, 199, 199);
+                                                        background-image: url("assets/images/wet.PNG");
+                                                        background-size: cover;
+                                                        background-position: center;
+                                                        background-repeat: no-repeat;
+                                                        cursor: pointer;
                                                     }
 
                                                     .rs {
@@ -294,9 +299,9 @@ if ($batch_id > 0) {
                                                 </style>
                                                 <div class="col-4 ob rs"><img src="assets/images/thumbs/price-drop.png" class="img-fluid" alt=""></div>
                                                 <div class="col-auto ob re">
-                                                    <div class="small text-black fw-bold">Special Price : </div>
-                                                    <div class="fw-bold h3 text-black pb-0 mb-0 ap">Rs <?php echo $discount_due; ?></div>
-                                                    <div class="small text-success fw-bold"><?php echo $discount_percentage; ?>% OFF</div>
+                                                    <div class="small fw-bold" style="color:rgb(53, 29, 18) !important;">Special Price : </div>
+                                                    <div class=" h3 pb-0 mb-0 ap" style="color:rgb(53, 29, 18) !important; font-weight: 800 !important;">Rs <?php echo $discount_due; ?></div>
+                                                    <div class="h6 " style="color:rgb(255, 50, 50); font-weight: 800 !important;"><?php echo $discount_percentage; ?>% OFF</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -414,15 +419,21 @@ if ($batch_id > 0) {
                                         </a>
                                     </div>
 
-                                    <a href="https://www.whatsapp.com" class="btn btn-black flex-center gap-8 rounded-8 py-16">
-                                        <i class="ph ph-whatsapp-logo text-lg"></i>
+                                    <a href="contact.php" class="btn btn-black flex-center gap-8 rounded-8 py-16">
+                                        <i class="ph ph-envelope-open text-lg"></i>
                                         Request More Information
                                     </a>
 
+                                    <style>
+                                        .pg-div {
+                                            width: 277px;
+                                        }
+                                    </style>
+
                                     <div class="mt-32">
                                         <span class="fw-medium text-gray-900">100% Guarantee Safe Checkout</span>
-                                        <div class="mt-10">
-                                            <img src="assets/images/thumbs/gateway-img.png" alt="">
+                                        <div class="mt-10 pg-div">
+                                            <img src="assets/images/thumbs/gateway-img.png" style="border-radius: 5px;" alt="">
                                         </div>
                                     </div>
 
@@ -854,7 +865,7 @@ if ($batch_id > 0) {
                                                 <span class="text-heading text-md fw-semibold ">Rs <?php echo $b1d["selling_price"] ?> <span class="text-gray-500 fw-normal">/Qty</span>
                                                     <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $b1d["selling_price"] + 10; ?></span>
                                             </div>
-                                            <a onclick="adtocart(<?= $b1d["selling_price"]; ?>, <?= 0 ?>, <?= $b1d["id"] ?>);" class="btn btn-main flex-center gap-8 rounded-8 py-16 fw-normal mt-48">
+                                            <a onclick="adtocart(<?= $b1d['selling_price']; ?>, <?= 0 ?>, <?= $b1d['id'] ?>);" class="product-card__cart btn bg-main-50 text-main-600 hover-bg-main-600 hover-text-white py-11 px-24 rounded-pill flex-align gap-8 mt-24 w-100 justify-content-center">
                                                 <i class="ph ph-shopping-cart-simple text-lg"></i>
                                                 Add To Cart
                                             </a>

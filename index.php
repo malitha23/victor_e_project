@@ -605,7 +605,7 @@ include_once "connection.php";
                             $nproductn = $nproduct->num_rows;
                             for ($ik = 0; $ik < $nproductn; $ik++) {
                                 $nproductd = $nproduct->fetch_assoc();
-                                $nb = Database::Search("SELECT * FROM `batch` WHERE `Delete`='0' AND `product_id`='" . $nproductd["id"] . "' ORDER BY `date` DESC LIMIT 1");
+                                $nb = Database::Search("SELECT * FROM `batch` WHERE `Delete`='0' AND `product_id`='" . $nproductd["id"] . "' ");
                                 $nbn = $nb->num_rows;
                                 for ($i = 0; $i < $nbn; $i++) {
                                     $nbd = $nb->fetch_assoc();
@@ -665,18 +665,17 @@ include_once "connection.php";
                     </div>
                 </div>
 
-                <div class="col-xxl-4">
+                <div class="col-xxl-4 mb-22">
                     <div class="position-relative rounded-16 bg-light-purple overflow-hidden p-28 pb-0 z-1 text-center h-100" data-aos="fade-up" data-aos-duration="1000">
                         <img src="assets/images/bg/big-deal-pattern.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100 cover-img">
                         <div class="py-xl-4 text-center">
-                            <h4 class=" mb-20 text-dark">iPhone Smart Phone - Red</h>
+                            <h4 class=" mb-20 text-dark">Don't miss out — grab your favourites now.</h4>
                                 <div class="flex-center gap-12 text-white h6 mt-3">
-                                    <span class="text-dark">FROM</span>
-                                    <h4 class="mb-8 text-dark">$890</h4>
-                                    <span class="badge-style-two position-relative me-8 bg-main-two-600 text-white text-sm py-2 px-8 rounded-4">20% off</span>
+                                    <span class="text-dark">Shop Smarter, Live Better — Discover Top Deals & Fast Delivery with Vicstore!</span>
+                                    <span class="badge-style-two position-relative me-8 bg-main-two-600 text-white text-sm py-2 px-8 rounded-4">Special Discounts</span>
                                 </div>
                                 <a href="shop.php" class="mt-16 mb-24 btn btn-main-two fw-medium d-inline-flex align-items-center rounded-pill gap-8" tabindex="0">
-                                    Shop Now
+                                    Grab Your Deals
                                     <span class="icon text-xl d-flex"><i class="ph ph-arrow-right"></i></span>
                                 </a>
                         </div>
