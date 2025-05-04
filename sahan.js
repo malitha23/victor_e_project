@@ -560,7 +560,7 @@ function adtocart(sprice, discountPercentage, batchId) {
             responseText = req.responseText;
             if (responseText == "cart is update") {
                 Swal.fire({
-                    title: "Hey...",
+                    title: "Done",
                     text: "Item added to cart successfully!",
                     icon: "success",
                     showConfirmButton: true,

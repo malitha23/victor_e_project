@@ -199,6 +199,19 @@ if ($carto > 0) {
                                 </div>
                                 <?php
                             }
+
+                            if($cartnum==0){
+                                ?>
+                                <div class="row text-center">
+                                    <div class="col-12 h5 fw-bold" style="color: #121535 !important;">
+                                        No Items
+                                    </div>
+                                    <div class="col-12">
+                                        <a href="shop.php" class="text-decoration-underline" style="color: #FA6800 !important;">Shop Now</a>
+                                    </div>
+                                </div>
+                                <?php
+                            }
                             ?>
 
                             <!-- <div class="flex-between flex-wrap gap-16 mt-16">

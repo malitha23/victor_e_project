@@ -4,10 +4,32 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Order Status</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Title -->
+        <title>replace_title</title>
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+        <!-- Include SweetAlert2 CSS and JS -->
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <!-- select 2 -->
+        <link rel="stylesheet" href="assets/css/select2.min.css">
+        <!-- Slick -->
+        <link rel="stylesheet" href="assets/css/slick.css">
+        <!-- Jquery Ui -->
+        <link rel="stylesheet" href="assets/css/jquery-ui.css">
+        <!-- animate -->
+        <link rel="stylesheet" href="assets/css/animate.css">
+        <!-- AOS Animation -->
+        <link rel="stylesheet" href="assets/css/aos.css">
+        <!-- Main css -->
+        <link rel="stylesheet" href="assets/css/main.css">
 
     <style>
         /* Modal Container */

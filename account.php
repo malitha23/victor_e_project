@@ -77,7 +77,7 @@ if (isset($_SESSION["user_vec"])) {
                             <div class="bg-neutral-600 rounded-8 p-24">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="w-80 h-80 flex-center bg-white rounded-8 flex-shrink-0">
-                                        <img src="assets/images/thumbs/vendors-two-icon1.png" alt="">
+                                        <img src="assets/images/thumbs/user-svgrepo-com.svg" alt="">
                                     </span>
                                     <div class="d-flex flex-column gap-24">
                                         <button onclick="signout();" type="button" class="text-uppercase group border border-white px-16 py-8 rounded-pill text-white text-sm hover-bg-main-two-600 hover-text-white hover-border-main-two-600 transition-2 flex-center gap-8 w-100">
@@ -92,7 +92,7 @@ if (isset($_SESSION["user_vec"])) {
                                     </h6>
                                     <span class="text-xs text-white mb-12">Joined on <?php echo $user_data["date"]; ?></span>
                                     <div class="flex-align gap-6">
-                                        <span class="text-xs fw-medium text-white">5 total orders</span>
+                                        <span class="text-xs fw-medium "><a href="" class="text-decoration-underline" style="color: #FA6800;">Go to Home</a></span>
                                     </div>
                                 </div>
                                 <div class="mt-32 d-flex flex-column gap-8">
