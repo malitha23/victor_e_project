@@ -38,7 +38,6 @@ include_once "connection.php";
         <img src="assets/images/icon/preloader.gif" alt="">
     </div> -->
     <!--==================== Preloader End ====================-->
-
     <?php require_once "index_header.php"; ?>
 
     <!-- ============================ Banner Section start =============================== -->

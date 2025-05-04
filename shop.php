@@ -352,7 +352,7 @@ session_start();
                         $batchm = Database::Search("SELECT * FROM `batch`");
                         $batchnumm = $batchm->num_rows;
                         ?>
-                        <span class="text-gray-900">Showing 1-20 of <?php echo  $batchnumm; ?> result</span>
+                        <span class="text-gray-900"></span>
                         <div class="position-relative flex-align gap-16 flex-wrap">
                             <div class="list-grid-btns flex-align gap-16">
                                 <button type="button" style="display: none;" class="w-44 h-44 flex-center border border-gray-100 rounded-6 text-2xl list-btn">

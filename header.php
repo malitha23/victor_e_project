@@ -1,18 +1,4 @@
-<!-- ==================== Search Box Start Here ==================== -->
-<form action="#" class="search-box">
-    <button type="button" class="search-box__close position-absolute inset-block-start-0 inset-inline-end-0 m-16 w-48 h-48 border border-gray-100 rounded-circle flex-center text-white hover-text-gray-800 hover-bg-white text-2xl transition-1">
-        <i class="ph ph-x"></i>
-    </button>
-    <div class="container">
-        <div class="position-relative">
-            <input type="text" class="form-control py-16 px-24 text-xl rounded-pill pe-64" placeholder="Type here">
-            <button type="submit" class="w-48 h-48 bg-main-600 rounded-circle flex-center text-xl text-white position-absolute top-50 translate-middle-y inset-inline-end-0 me-8">
-                <i class="ph ph-magnifying-glass"></i>
-            </button>
-        </div>
-    </div>
-</form>
-<!-- ==================== Search Box End Here ==================== -->
+
 
 
 
@@ -33,13 +19,7 @@
 
                 <form action="#" class="flex-align flex-wrap form-location-wrapper">
                     <div class="search-category style-two d-flex h-48 search-form d-sm-flex d-none">
-                        <select class="js-example-basic-single border border-gray-200 border-end-0 rounded-0 border-0" name="state">
-                            <option value="1" selected>All Categories</option>
-                        </select>
-                        <div class="search-form__wrapper position-relative d-md-flex">
-                            <input type="text" class="search-form__input common-input py-13 ps-16 pe-18 rounded-0 border-0" placeholder="Type here">
-                        </div>
-                        <button href="shop.php" type="submit" class="bg-main-two-600 flex-center text-xl text-white flex-shrink-0 w-48 hover-bg-main-two-700 d-md-flex d-none"><i class="ph ph-magnifying-glass"></i></button>
+                        
                     </div>
                 </form>
 
@@ -95,17 +75,17 @@
                                 </span>
                             </button>
                             <?php
-                            if (isset($_SESSION["user_vec"]["email"])) {
-                                try {
-                                    $cc = Database::Search("SELECT * FROM `cart` WHERE `user_email`='" . $_SESSION["user_vec"]["email"] . "'");
-                                    $ccn = $cc->num_rows; // corrected: should be `num_rows` not `num_row`
-                                } catch (Exception $e) {
-                                    $ccn = "..";
-                                }
-                            } else {
-                                $ccn = "..";
-                            }
-                            ?>
+                    if (isset($_SESSION["user_vec"]["email"])) {
+                        try {
+                            $cc = Database::Search("SELECT * FROM `cart` WHERE `user_email`='" . $_SESSION["user_vec"]["email"] . "'");
+                            $ccn = $cc->num_rows; // corrected: should be `num_rows` not `num_row`
+                        } catch (Exception $e) {
+                            $ccn = "..";
+                        }
+                    } else {
+                        $ccn = "..";
+                    }
+                    ?>
                             <a href="cart.php" class="flex-align flex-column gap-8 item-hover-two">
                                 <span class="text-2xl text-white d-flex position-relative me-6 mt-6 item-hover__text">
                                     <i class="ph ph-shopping-cart-simple text-white"></i>

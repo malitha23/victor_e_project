@@ -24,6 +24,7 @@
             <input type="text" class="form-control py-16 px-24 text-xl rounded-pill pe-64" placeholder="Type here">
             <button type="submit" class="w-48 h-48 bg-main-600 rounded-circle flex-center text-xl text-white position-absolute top-50 translate-middle-y inset-inline-end-0 me-8">
                 <i class="ph ph-magnifying-glass"></i>
+
             </button>
         </div>
     </div>
@@ -48,10 +49,7 @@
 
                 <form action="#" class="flex-align flex-wrap form-location-wrapper">
                     <div class="search-category style-two d-flex h-48 search-form d-sm-flex d-none">
-                        <select class="js-example-basic-single border border-gray-200 border-end-0 rounded-0 border-0" name="state">
-                            <option value="1" selected>All Categories</option>
-                            <option value="1">Grocery</option>
-                        </select>
+                        
                         <div class="search-form__wrapper position-relative d-md-flex">
                             <input id="searchtext" oninput="advancesearch();" type="text" class="search-form__input common-input py-13 ps-16 pe-18 rounded-0 border-0" placeholder="Type here">
                         </div>
@@ -71,20 +69,8 @@
                     </button>
                     <a href="cart.php" class="flex-align flex-column gap-8 item-hover-two">
                         <span class="text-2xl text-white d-flex position-relative me-6 mt-6 item-hover__text">
-                        <?php
-                            if (isset($_SESSION["user_vec"]["email"])) {
-                                try {
-                                    $cc = Database::Search("SELECT * FROM `cart` WHERE `user_email`='" . $_SESSION["user_vec"]["email"] . "'");
-                                    $ccn = $cc->num_rows; // corrected: should be `num_rows` not `num_row`
-                                } catch (Exception $e) {
-                                    $ccn = "..";
-                                }
-                            } else {
-                                $ccn = "..";
-                            }
-                            ?>
                             <i class="ph ph-shopping-cart-simple text-white"></i>
-                            <span class="w-16 h-16 flex-center rounded-circle bg-main-two-600 text-white text-xs position-absolute top-n6 end-n4"><?php echo  $ccn; ?></span>
+                            <span class="w-16 h-16 flex-center rounded-circle bg-main-two-600 text-white text-xs position-absolute top-n6 end-n4">2</span>
                         </span>
                         <span class="text-md text-white item-hover__text d-none d-lg-flex">Cart</span>
                     </a>
@@ -194,19 +180,7 @@
                         <a href="cart.php" class="flex-align flex-column gap-8 item-hover-two">
                             <span class="text-2xl text-white d-flex position-relative me-6 mt-6 item-hover__text">
                                 <i class="ph ph-shopping-cart-simple"></i>
-                                <?php
-                            if (isset($_SESSION["user_vec"]["email"])) {
-                                try {
-                                    $cc = Database::Search("SELECT * FROM `cart` WHERE `user_email`='" . $_SESSION["user_vec"]["email"] . "'");
-                                    $ccn = $cc->num_rows; // corrected: should be `num_rows` not `num_row`
-                                } catch (Exception $e) {
-                                    $ccn = "..";
-                                }
-                            } else {
-                                $ccn = "..";
-                            }
-                            ?>
-                                <span class="w-16 h-16 flex-center rounded-circle bg-main-two-600 text-white text-xs position-absolute top-n6 end-n4"><?php echo $ccn; ?></span>
+                                <span class="w-16 h-16 flex-center rounded-circle bg-main-two-600 text-white text-xs position-absolute top-n6 end-n4">2</span>
                             </span>
                             <span class="text-md text-white item-hover__text d-none d-lg-flex">Cart</span>
                         </a>
