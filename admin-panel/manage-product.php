@@ -103,24 +103,25 @@ if (isset($_SESSION["a"])) {
 
                                 <div class="modal fade" id="exampleModalb<?php echo $productdata["id"]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                                        <?php
-                                        $batch = Databases::Search("SELECT * FROM `batch` WHERE `Delete`='0' ORDER BY `date` ASC");
-                                        $batch_num = $batch->num_rows;
-                                        for ($io = 0; $io < $batch_num; $io++) {
-                                            $batchdata = $batch->fetch_assoc();
-                                        ?>
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <div class="modal-title fs-4 fw-bold" id="exampleModalLabel"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;
-                                                        Batch Management</div>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="row d-flex justify-content-center my-2">
-                                                        <div class="col-12 col-lg-10 ">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <div class="modal-title fs-4 fw-bold" id="exampleModalLabel"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;
+                                                    Batch Management</div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row d-flex justify-content-center my-2">
+                                                    <div class="col-12 col-lg-10 ">
+
+                                                        <?php
+                                                        $batch = Databases::Search("SELECT * FROM `batch` WHERE `Delete`='0' ORDER BY `date` ASC");
+                                                        $batch_num = $batch->num_rows;
+                                                        for ($io = 0; $io < $batch_num; $io++) {
+                                                            $batchdata = $batch->fetch_assoc();
+                                                        ?>
 
                                                             <!-- batch 1 start -->
-                                                            <div class="row p-3 border border-dark-subtle shadow">
+                                                            <div class="row p-3 border border-dark-subtle shadow mt-4">
 
                                                                 <div class="col-6 mt-3">
                                                                     <div class="form-floating">
@@ -185,21 +186,24 @@ if (isset($_SESSION["a"])) {
                                                             <!-- batch 1 end -->
 
                                                             <div class="row">
-                                                                <div class="col-12 text-end mt-3">
+                                                                <div class="col-12 text-end mt-1">
                                                                     <button onclick="savebatchup('<?php echo $batchdata['id']; ?>');" class="btn rounded-1 fw-bold x col-md-2">
                                                                         <i class="fa fa-floppy-o" aria-hidden="true"></i> SAVE
                                                                     </button>
                                                                 </div>
                                                             </div>
-                                                        </div>
+
+                                                        <?php
+                                                        }
+                                                        ?>
 
 
                                                     </div>
+
+
                                                 </div>
                                             </div>
-                                        <?php
-                                        }
-                                        ?>
+                                        </div>
 
                                     </div>
                                 </div>
