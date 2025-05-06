@@ -58,56 +58,8 @@ if (isset($_SESSION["a"])) {
                                     <div class="mask d-flex align-items-center h-100">
                                         <div class="container">
 
-                                            <div class="container mt-4">
-                                                <div class="row justify-content-center">
-                                                    <div class="col-md-6 p-4 border rounded shadow bg-white">
-                                                        <h3 class="text-center mb-3">Add Order Status</h3>
-                                                        <div class="mb-3">
-                                                            <input type="text" id="orderStatus" class="form-control" placeholder="Enter Order Status" required>
-                                                        </div>
-                                                        <div class="text-center">
-                                                            <button class="btn btn-primary btn-lg" onclick="saveOrderStatus()">Save</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="container mt-5">
-                                                <div class="row justify-content-center">
-                                                    <div class="col-md-6">
-                                                        <div class="card shadow-sm">
-                                                            <div class="card-body">
-                                                                <h4 class="card-title mb-4 text-center text-danger">Delete Order Status</h4>
-                                                                <?php
-                                                                $ordermd = Databases::Search("SELECT * FROM `order_status`");
-                                                                $ordermnd = $ordermd->num_rows;
-                                                                ?>
-                                                                <div class="mb-3">
-                                                                    <label for="statusdelete" class="form-label">Select Order Status</label>
-                                                                    <select class="form-select" id="statusdelete">
-                                                                        <option value="0">-- Select Status --</option>
-                                                                        <?php
-                                                                        for ($imd = 0; $imd < $ordermnd; $imd++) {
-                                                                            $ordermde = $ordermd->fetch_assoc();
-                                                                        ?>
-                                                                            <option value="<?php echo  $ordermde["id"]; ?>">
-                                                                                <?php echo  $ordermde["status"]; ?>
-                                                                            </option>
-                                                                        <?php
-                                                                        }
-                                                                        ?>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="d-grid gap-2">
-                                                                    <button onclick="deleteorder();" class="btn btn-danger">Delete Selected Status</button>
-                                                                </div>
-                                                                <div class="mt-3 text-muted text-center">
-                                                                    <label>Need to change instead? Try updating status instead of deleting.</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
+                                           
                                             <script>
                                                 function deleteorder() {
                                                     const statusId = document.getElementById("statusdelete").value;
