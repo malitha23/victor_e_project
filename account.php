@@ -117,65 +117,70 @@ if (isset($_SESSION["user_vec"])) {
                             $ordernum = $order->num_rows;
                             for ($i = 0; $i < $ordernum; $i++) {
                                 $orderdata = $order->fetch_assoc();
+                                if ($orderdata["Order_status_id"] == 1 || $orderdata["Order_status_id"] == 0) {
+                                } else {
                             ?>
-                                <div class="row border rounded-16 p-3 mt-10 hover-border-main-600 transition-1">
-                                    <div class="col-12">
-                                        <div class="row mt-10">
-                                            <!-- Left Side: Product Details -->
-                                            <div class="col-8 text-sm">
-                                                <p class="mb-0"><strong>Order ID : </strong><?php echo $orderdata["id"] ?></p>
-                                                <p class="mb-0"><strong>Date : </strong><?php echo $orderdata["date_time"] ?></p>
-                                            </div>
-                                            <?php
-                                            $ostatus = Database::Search("SELECT * FROM `order_status` WHERE `id`='" . $orderdata["Order_status_id"] . "' ");
-                                            $ostatusnum = $ostatus->num_rows;
-                                            for ($i = 0; $i < $ostatusnum; $i++) {
-                                                $osdata = $ostatus->fetch_assoc();
-                                            ?>
-                                                <!-- Right Side: Delivery Status Button -->
-                                                <div class="col-4 text-end">
-                                                    <button class="btn p-18 btn-main"><?php echo  $osdata["status"] ?></button>
+                                    <div class="row border rounded-16 p-3 mt-10 hover-border-main-600 transition-1">
+                                        <div class="col-12">
+                                            <div class="row mt-10">
+                                                <!-- Left Side: Product Details -->
+                                                <div class="col-8 text-sm">
+                                                    <p class="mb-0"><strong>Order ID : </strong><?php echo $orderdata["id"] ?></p>
+                                                    <p class="mb-0"><strong>Date : </strong><?php echo $orderdata["date_time"] ?></p>
                                                 </div>
-                                            <?php
-                                            }
-                                            ?>
-                                        </div>
-                                        <div class="row px-10">
-                                            <?php
-                                             $invoice  = Database::Search("SELECT * FROM `invoice` WHERE `id`='" . $orderdata["invoice_id"] . "' ");
-                                             $invoicenum = $invoice->num_rows;
-                                            for ($x = 0; $x < $invoicenum; $x++) {
-                                                $invoicedata = $invoice->fetch_assoc();
-                                                $product = Database::Search("SELECT * FROM `product` WHERE `id`='" . $invoicedata["product_id"] . "' ");
-                                                $productdata = $product->fetch_assoc();
-                                            ?>
-                                                <!-- Order Item Start -->
-                                                <div class="col-12 d-flex align-items-center p-10 border-bottom">
-                                                    <?php
-                                                     $pic = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $productdata["id"] . "' AND `name`='Image 1' ");
-                                                     $pic_d = $pic->fetch_assoc();
-                                                     if(empty($pic_d["path"])){
-                                                        $pth = "assets/images/thumbs/vendors-two-icon1.png";
-                                                     }else{
-                                                        $pth = "admin-panel/".$pic_d["path"];
-                                                     }
-                                                     ?>
-                                                    <img src="<?php echo $pth ?>" alt="Product Image" class="rounded me-10 img-fluid" width="80">
-                                                    <div class="flex-grow-1">
-                                                        <p class="mb-1 text-gray-500"><?php echo $productdata["title"]; ?></p>
-                                                        <p class="mb-1 text-gray-500 text-sm">
-                                                            <span class="text-main me-10">Rs <?php echo $invoicedata["price"]; ?></span>
-                                                            <span class="text-success"><?php echo $invoicedata["qty"]; ?></span>
-                                                        </p>
+                                                <?php
+                                                $ostatus = Database::Search("SELECT * FROM `order_status` WHERE `id`='" . $orderdata["Order_status_id"] . "' ");
+                                                $ostatusnum = $ostatus->num_rows;
+                                                for ($i = 0; $i < $ostatusnum; $i++) {
+                                                    $osdata = $ostatus->fetch_assoc();
+                                                ?>
+                                                    <!-- Right Side: Delivery Status Button -->
+                                                    <div class="col-4 text-end">
+                                                        <button class="btn p-18 btn-main"><?php echo  $osdata["status"] ?></button>
                                                     </div>
-                                                </div>
-                                                <!-- Order Item End -->
-                                            <?php
-                                            }
-                                            ?>
+                                                <?php
+                                                }
+                                                ?>
+                                            </div>
+                                            <div class="row px-10">
+                                                <?php
+                                                $invoice  = Database::Search("SELECT * FROM `invoice` WHERE `id`='" . $orderdata["invoice_id"] . "' ");
+                                                $invoicenum = $invoice->num_rows;
+                                                for ($x = 0; $x < $invoicenum; $x++) {
+                                                    $invoicedata = $invoice->fetch_assoc();
+                                                    $product = Database::Search("SELECT * FROM `product` WHERE `id`='" . $invoicedata["product_id"] . "' ");
+                                                    $productdata = $product->fetch_assoc();
+                                                ?>
+                                                    <!-- Order Item Start -->
+                                                    <div class="col-12 d-flex align-items-center p-10 border-bottom">
+                                                        <?php
+                                                        $pic = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $productdata["id"] . "' AND `name`='Image 1' ");
+                                                        $pic_d = $pic->fetch_assoc();
+                                                        if (empty($pic_d["path"])) {
+                                                            $pth = "assets/images/thumbs/vendors-two-icon1.png";
+                                                        } else {
+                                                            $pth = "admin-panel/" . $pic_d["path"];
+                                                        }
+                                                        ?>
+                                                        <img src="<?php echo $pth ?>" alt="Product Image" class="rounded me-10 img-fluid" width="80">
+                                                        <div class="flex-grow-1">
+                                                            <p class="mb-1 text-gray-500"><?php echo $productdata["title"]; ?></p>
+                                                            <p class="mb-1 text-gray-500 text-sm">
+                                                                <span class="text-main me-10">Rs <?php echo $invoicedata["price"]; ?></span>
+                                                                <span class="text-success"><?php echo $invoicedata["qty"]; ?></span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Order Item End -->
+                                                <?php
+                                                }
+                                                ?>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                <?php
+                                }
+                                ?>
                             <?php
                             }
                             ?>
