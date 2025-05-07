@@ -31,9 +31,23 @@ session_start();
 <?php
 if (isset($_SESSION["user_vec"])) {
     require_once "connection.php";
+    $WEB = Database::Search("SELECT * FROM   `web_status`   WHERE `status`='0' ");
+    $WEBNUM = $WEB->num_rows;
+    if ($WEBNUM == 1) {
+        comminzoon();
+        exit();
+    }
+    function comminzoon()
+    {
+?>
+        <script>
+            window.location = "coming-soon.php";
+        </script>
+    <?php
+    }
     $user_row = Database::Search("SELECT * FROM `user` WHERE `email`='" . $_SESSION["user_vec"]["email"] . "' ");
     $user_data = $user_row->fetch_assoc();
-?>
+    ?>
 
     <body>
 
