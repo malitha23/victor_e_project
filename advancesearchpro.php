@@ -157,7 +157,7 @@ $product_num = $product_rs->num_rows;
                $dataap = $product_rs->fetch_assoc();
                $dataap["id"];
                // Fetch limited product data for current page
-               $batch = Database::Search("SELECT * FROM `batch` WHERE `product_id`='" . $dataap["id"] . "' LIMIT $start, $itemsPerPage");
+               $batch = Database::Search("SELECT * FROM `batch` WHERE `product_id`='" . $dataap["id"] . "' AND `Delete`='0' LIMIT $start, $itemsPerPage");
                $batchnum = $batch->num_rows;
                for ($i = 0; $i <  $batchnum; $i++) {
                     $batchdata = $batch->fetch_assoc();
