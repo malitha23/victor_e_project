@@ -58,7 +58,7 @@ if (isset($_SESSION["a"])) {
                                     <div class="mask d-flex align-items-center h-100">
                                         <div class="container">
                                             <?php
-                                            $order = Databases::Search("SELECT * FROM `order` WHERE `Order_status_id`='1' ");
+                                            $order = Databases::Search("SELECT * FROM `order` WHERE `Order_status_id`='22' ");
                                             $ordernum = $order->num_rows;
                                             for ($i = 0; $i < $ordernum; $i++) {
                                                 $orderdata = $order->fetch_assoc();

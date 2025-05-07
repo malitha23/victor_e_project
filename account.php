@@ -135,9 +135,26 @@ if (isset($_SESSION["user_vec"])) {
                                                     $osdata = $ostatus->fetch_assoc();
                                                 ?>
                                                     <!-- Right Side: Delivery Status Button -->
-                                                    <div class="col-4 text-end">
-                                                        <button class="btn p-18 btn-main"><?php echo  $osdata["status"] ?></button>
-                                                    </div>
+                                                    <?php
+                                                    $trans = Database::Search("SELECT * FROM `transactions` WHERE `order_id`='" . $orderdata["id"] . "' ");
+                                                    $transnum = $trans->num_rows;
+                                                    if ($transnum == 1) {
+                                                        $transdata = $trans->fetch_assoc();
+                                                        if ($transdata["transaction_status"] == 2) {
+                                                    ?>
+                                                            <div class="col-4 text-end">
+                                                                <button class="btn p-18 btn-main"><?php echo  $osdata["status"] ?></button>
+                                                            </div>
+                                                        <?php
+                                                        } else {
+                                                        ?>
+                                                            <div class="col-4 text-end">
+                                                                <button class="btn p-18 btn-main">ORDER Failed</button>
+                                                            </div>
+                                                    <?php
+                                                        }
+                                                    }
+                                                    ?>
                                                 <?php
                                                 }
                                                 ?>
