@@ -79,7 +79,18 @@
                                     $ccn = "..";
                                 }
                             } else {
-                                $ccn = "..";
+                                if (isset($_SESSION["cart"])) {
+                                    $total_qty = 0;
+
+                                    if (isset($_SESSION['cart'])) {
+                                        foreach ($_SESSION['cart'] as $item) {
+                                            $total_qty += $item['qty'];
+                                        }
+                                    }
+                                    $ccn = $total_qty;
+                                } else {
+                                    $ccn = "..";
+                                }
                             }
                             ?>
                             <span class="w-16 h-16 flex-center rounded-circle bg-main-two-600 text-white text-xs position-absolute top-n6 end-n4"><?php echo $ccn; ?></span>
@@ -201,7 +212,18 @@
                                         $ccn = "..";
                                     }
                                 } else {
-                                    $ccn = "..";
+                                    if (isset($_SESSION["cart"])) {
+                                        $total_qty = 0;
+
+                                        if (isset($_SESSION['cart'])) {
+                                            foreach ($_SESSION['cart'] as $item) {
+                                                $total_qty += $item['qty'];
+                                            }
+                                        }
+                                        $ccn = $total_qty;
+                                    } else {
+                                        $ccn = "..";
+                                    }
                                 }
                                 ?>
                                 <span class="w-16 h-16 flex-center rounded-circle bg-main-two-600 text-white text-xs position-absolute top-n6 end-n4"><?php echo $ccn; ?></span>

@@ -35,17 +35,28 @@
                         </span>
                     </button>
                     <?php
-                    if (isset($_SESSION["user_vec"]["email"])) {
-                        try {
-                            $cc = Database::Search("SELECT * FROM `cart` WHERE `user_email`='" . $_SESSION["user_vec"]["email"] . "'");
-                            $ccn = $cc->num_rows; // corrected: should be `num_rows` not `num_row`
-                        } catch (Exception $e) {
-                            $ccn = "..";
+                        if (isset($_SESSION["user_vec"]["email"])) {
+                            try {
+                                $cc = Database::Search("SELECT * FROM `cart` WHERE `user_email`='" . $_SESSION["user_vec"]["email"] . "'");
+                                $ccn = $cc->num_rows; // corrected: should be `num_rows` not `num_row`
+                            } catch (Exception $e) {
+                                $ccn = "..";
+                            }
+                        } else {
+                            if (isset($_SESSION["cart"])) {
+                                $total_qty = 0;
+
+                                if (isset($_SESSION['cart'])) {
+                                    foreach ($_SESSION['cart'] as $item) {
+                                        $total_qty += $item['qty'];
+                                    }
+                                }
+                                $ccn = $total_qty;
+                            } else {
+                                $ccn = "..";
+                            }
                         }
-                    } else {
-                        $ccn = "..";
-                    }
-                    ?>
+                        ?>
                     <a href="cart.php" class="flex-align flex-column gap-8 item-hover-two">
                         <span class="text-2xl text-white d-flex position-relative me-6 mt-6 item-hover__text">
                             <i class="ph ph-shopping-cart-simple text-white"></i>
@@ -75,17 +86,28 @@
                                 </span>
                             </button>
                             <?php
-                    if (isset($_SESSION["user_vec"]["email"])) {
-                        try {
-                            $cc = Database::Search("SELECT * FROM `cart` WHERE `user_email`='" . $_SESSION["user_vec"]["email"] . "'");
-                            $ccn = $cc->num_rows; // corrected: should be `num_rows` not `num_row`
-                        } catch (Exception $e) {
-                            $ccn = "..";
+                        if (isset($_SESSION["user_vec"]["email"])) {
+                            try {
+                                $cc = Database::Search("SELECT * FROM `cart` WHERE `user_email`='" . $_SESSION["user_vec"]["email"] . "'");
+                                $ccn = $cc->num_rows; // corrected: should be `num_rows` not `num_row`
+                            } catch (Exception $e) {
+                                $ccn = "..";
+                            }
+                        } else {
+                            if (isset($_SESSION["cart"])) {
+                                $total_qty = 0;
+
+                                if (isset($_SESSION['cart'])) {
+                                    foreach ($_SESSION['cart'] as $item) {
+                                        $total_qty += $item['qty'];
+                                    }
+                                }
+                                $ccn = $total_qty;
+                            } else {
+                                $ccn = "..";
+                            }
                         }
-                    } else {
-                        $ccn = "..";
-                    }
-                    ?>
+                        ?>
                             <a href="cart.php" class="flex-align flex-column gap-8 item-hover-two">
                                 <span class="text-2xl text-white d-flex position-relative me-6 mt-6 item-hover__text">
                                     <i class="ph ph-shopping-cart-simple text-white"></i>
