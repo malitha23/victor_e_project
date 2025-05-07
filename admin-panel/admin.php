@@ -176,22 +176,35 @@ if (isset($_SESSION["a"])) {
                     <ul class="timeline-widget mb-0 position-relative mb-n5">
                       <?php
                       try {
-                        $recent_rs = Databases::search("SELECT * FROM `invoice` ORDER BY `date_time` DESC LIMIT 5");
+                        $recent_rs = Databases::search("SELECT * FROM `invoice` ORDER BY `date_time` DESC LIMIT 10");
                         while ($recent = $recent_rs->fetch_assoc()) {
-                          $time = explode(" ", $recent['date_time'])[1];
+                          $ordrer = Databases::Search("SELECT * FROM `order` WHERE `invoice_id`='" . $recent["uni_code"] . "' ");
+                          if ($ordrer->num_rows > 0) {
+                            $ordrerdata = $ordrer->fetch_assoc();
                       ?>
-                          <li class="timeline-item d-flex position-relative overflow-hidden">
-                            <div class="timeline-time text-dark flex-shrink-0 text-end"><?php echo $time; ?></div>
-                            <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                              <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                              <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                            </div>
-                            <div class="timeline-desc fs-3 text-dark mt-n1">
-                              Payment received from <?php echo $recent['user_email']; ?> of
-                              LKR <?php echo number_format($recent['price'] + $recent['delivery_fee'] - $recent['discount'], 2); ?>
-                            </div>
-                          </li>
+                            <br />
+                            <?php
+                            $it = Databases::search("SELECT * FROM `transactions` WHERE `transaction_status`='2' AND `order_id`='" . $ordrerdata['id'] . "' ");
+                           $itnum = $it->num_rows;
+                            if ($itnum == 1) {
+                              $time = explode(" ", $recent['date_time'])[1];
+                            ?>
+                              <li class="timeline-item d-flex position-relative overflow-hidden">
+                                <div class="timeline-time text-dark flex-shrink-0 text-end"><?php echo $time; ?></div>
+                                <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                                  <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
+                                  <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                                </div>
+                                <div class="timeline-desc fs-3 text-dark mt-n1">
+                                  Payment received from <?php echo $recent['user_email']; ?> of
+                                  LKR <?php echo number_format($recent['price'] + $recent['delivery_fee'] - $recent['discount'], 2); ?>
+                                </div>
+                              </li>
                       <?php
+                            }else{
+                              
+                            }
+                          }
                         }
                       } catch (Exception $e) {
                         echo "<li class='text-danger'>Error loading recent invoices: " . $e->getMessage() . "</li>";
@@ -231,7 +244,7 @@ if (isset($_SESSION["a"])) {
                         <tbody>
                           <?php
                           try {
-                            $trans_rs = Databases::search("SELECT * FROM `transactions` ORDER BY `id` DESC LIMIT 10");
+                            $trans_rs = Databases::search("SELECT * FROM `transactions` WHERE  `transaction_status`='2' ORDER BY `id` DESC LIMIT 10");
                             while ($trans = $trans_rs->fetch_assoc()) {
                           ?>
                               <tr>
