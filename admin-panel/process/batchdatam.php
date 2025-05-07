@@ -3,6 +3,8 @@ require_once '../db.php';
 
 if (isset($_POST['productid'])) {
      $productid = (int) $_POST['productid'];
+     $product = Databases::Search("SELECT * FROM `product` WHERE `id`=' $productid ' ");
+     $pproduct = $product->fetch_assoc();
 
      $batch = Databases::Search("SELECT * FROM `batch` WHERE `product_id`='" . $productid . "' ");
      $batchnum = $batch->num_rows;
@@ -14,7 +16,7 @@ if (isset($_POST['productid'])) {
                     <div class="row d-flex flex-row justify-content-center align-items-center h-100">
                          <div class="col-12 shadow p-3 py-4">
                               <div class="row">
-                                   <div class="div-12 small text-center">Product Name Here</div>
+                                   <div class="div-12 small text-center"><?php echo  $pproduct["title"]  ?></div>
                                    <div class="col-12 d-flex justify-content-center mt-2">
                                         <div class="table-responsive bg-white border w-100" style=" overflow-x: auto;">
                                              <table class="table mb-0 table-bordered">

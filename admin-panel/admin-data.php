@@ -72,7 +72,7 @@ if (isset($_SESSION["a"])) {
                                                                 <th>STOCK</th>
                                                                 <th>STATUS</th>
                                                                 <th>BATCH</th>
-                                                                <th>DETAILS</th>
+                                                            
                                                             </tr>
                                                         </thead>
                                                         <tbody id="">
