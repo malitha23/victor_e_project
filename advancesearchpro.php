@@ -48,7 +48,8 @@ if ($subcatagoryid != 0) {
           }
      }
 }
-
+$conditions[] = " `delete_id` = '0' ";
+$conditions[] = " `status_id` = '1' ";
 if (!empty($condition) && $condition != 0) {
      $conditions[] = " `condition_id` = '" . $condition . "' ";
 }
@@ -135,7 +136,7 @@ $product_num = $product_rs->num_rows;
           $start = ($currentPage - 1) * $itemsPerPage;
 
           // Get total number of products
-          $totalBatch = Database::Search("SELECT COUNT(*) as total FROM `batch`");
+          $totalBatch = Database::Search("SELECT COUNT(*) as total FROM `batch` ");
           $totalBatchCount = $totalBatch->fetch_assoc()["total"];
 
           // Calculate total pages
@@ -443,7 +444,7 @@ $product_num = $product_rs->num_rows;
                                                   </span>
                                              </div>
 
-                                             <a onclick="adtocart(<?= $batchdata['selling_price'] ?>, <?= 0 ?>, <?= $batchdata['id'] ?>);"  class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium">
+                                             <a onclick="adtocart(<?= $batchdata['selling_price'] ?>, <?= 0 ?>, <?= $batchdata['id'] ?>);" class="product-card__cart btn bg-gray-50 text-heading hover-bg-main-600 hover-text-white py-11 px-24 rounded-8 flex-center gap-8 fw-medium">
                                                   Add To Cart <i class="ph ph-shopping-cart"></i>
                                              </a>
                                         </div>
