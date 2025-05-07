@@ -47,7 +47,7 @@ $cart_items = []; // Array to store cart items
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Title -->
-    <title>replace_title</title>
+    <title>Secure Checkout – Complete Your Purchase</title>
     <!-- Favicon -->
     <link rel="shortcut icon" href="assets/images/logo/favicon.png">
 

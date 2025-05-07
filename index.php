@@ -10,7 +10,7 @@ include_once "connection.php";
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Title -->
-    <title>replace_title</title>
+    <title>Welcome to Vicstore – Your One-Stop Online Shop</title>
     <!-- Favicon -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="shortcut icon" href="assets/images/logo/favicon.png">

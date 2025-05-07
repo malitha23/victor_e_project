@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>replace_title_admin</title>
+  <title>Vicstore Admin Panel – Manage Your Store with Ease</title>
   <link rel="shortcut icon" type="image/png" href="assets-admin/images/logos/store_logo.webp" />
   <link rel="stylesheet" href="assets-admin/css/styles.min.css" />
 </head>

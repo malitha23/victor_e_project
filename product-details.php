@@ -42,7 +42,7 @@ if ($batch_id > 0) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Title -->
-        <title>replace_title</title>
+        <title>Product Details – Everything You Need to Know</title>
         <!-- Favicon -->
         <link rel="shortcut icon" href="assets/images/logo/favicon.png">
 

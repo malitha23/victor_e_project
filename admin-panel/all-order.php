@@ -17,7 +17,7 @@ if (isset($_SESSION["a"])) {
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>replace_title_admin</title>
+            <title>Vicstore Admin Panel – Manage Your Store with Ease</title>
             <link rel="shortcut icon" href="assets/img/logo-icon.ico" type="image/x-icon">
             <link rel="stylesheet" href="assets-admin/css/style.css" />
             <link rel="stylesheet" href="assets-admin/css/styles.min.css" />
