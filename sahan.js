@@ -450,7 +450,7 @@ function plusprice(qty, id) {
                 if (req.responseText == 0) {
                     Swal.fire({
                         title: 'Quantity NOT Updated',
-                        text: 'Discounts are available for limited quantities only. Do not increase quantities beyond this.',
+                        text: 'valid and limited quantities only. Do not increase quantities beyond this.',
                         icon: 'success',
                         showConfirmButton: true,
                         confirmButtonColor: '#3085d6',
@@ -459,21 +459,12 @@ function plusprice(qty, id) {
                         timer: 10000,
                         timerProgressBar: true
                     }).then(() => {
-                        location.reload();
+                      //  location.reload();
                     });
                 } else {
-                    Swal.fire({
-                        title: 'quantity updated',
-                        text: req.responseText,
-                        icon: 'success',
-                        showConfirmButton: true,
-                        confirmButtonColor: '#3085d6',
-                        background: '#fefefe',
-                        color: '#333',
-                        timer: 3000,
-                        timerProgressBar: true,
-                    });
-                    location.reload();
+                    document.open();
+                    document.write(req.responseText);
+                    document.close();
                 }
             } else {
                 Swal.fire({
@@ -501,7 +492,7 @@ function minprice(qty, id) {
                 if (req.responseText == 0) {
                     Swal.fire({
                         title: 'Quantity NOT Updated',
-                        text: 'Discounts are available for limited quantities only. Do not increase quantities beyond this.',
+                        text: 'valid and limited quantities only. Do not increase quantities beyond this..',
                         icon: 'success',
                         showConfirmButton: true,
                         confirmButtonColor: '#3085d6',
@@ -510,21 +501,13 @@ function minprice(qty, id) {
                         timer: 10000,
                         timerProgressBar: true
                     }).then(() => {
-                        location.reload();
+                       // location.reload();
                     });
                 } else {
-                    Swal.fire({
-                        title: 'quantity updated',
-                        text: req.responseText,
-                        icon: 'success',
-                        showConfirmButton: true,
-                        confirmButtonColor: '#3085d6',
-                        background: '#fefefe',
-                        color: '#333',
-                        timer: 3000,
-                        timerProgressBar: true,
-                    });
-                    location.reload();
+                    document.open();
+                    document.write(req.responseText);
+                    document.close();
+                 //   location.reload();
                 }
             } else {
                 Swal.fire({

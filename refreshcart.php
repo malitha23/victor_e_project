@@ -1,8 +1,7 @@
 <?php
-session_start();
-include "connection.php";
+//include "connection.php";
 
-require_once "connection.php";
+//require_once "connection.php";
 require_once "./placeOdersBackend/order_status.php";
 
 
@@ -16,10 +15,8 @@ if (isset($_SESSION["user_vec"])) {
 $carto = 1;
 if ($carto > 0) {
     ?>
-
-
     <!DOCTYPE html>
-    <html lang="en" id="cartht" class="color-two font-exo">
+    <html id="cartht" lang="en" class="color-two font-exo">
 
     <head>
         <meta charset="UTF-8">

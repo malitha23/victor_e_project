@@ -1,7 +1,6 @@
 <?php
 session_start();
 include "connection.php";
-
 if (isset($_POST["id"]) && isset($_POST["qty"])) {
     $id = $_POST["id"];
     $qty = $_POST["qty"];
@@ -22,12 +21,12 @@ if (isset($_POST["id"]) && isset($_POST["qty"])) {
                         $batch = Database::Search("SELECT * FROM `batch` WHERE `id` = '" . $cartItem["batch_id"] . "'");
                         $batch_data = $batch->fetch_assoc();
                         if ($qty > $batch_data["batch_qty"]) {
-                            echo "Error: Not enough stock available. Maximum available: " . $batch_data["batch_qty"];
+                            echo 0;
                         } elseif ($qty == 0) {
-                            echo "Error: Quantity cannot be zero.";
+                            echo 0;
                         } else {
                             $cartItem['qty'] = $qty; // Update quantity in session
-                            echo "UPDATED";
+                            include "refreshcart.php";
                         }
                     } else {
                         $dis = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `batch_id`='" . $cartItem["batch_id"] . "' ");
@@ -36,54 +35,63 @@ if (isset($_POST["id"]) && isset($_POST["qty"])) {
                             $batch = Database::Search("SELECT * FROM `batch` WHERE `id` = '" . $cartItem["batch_id"] . "'");
                             $batch_data = $batch->fetch_assoc();
                             if ($qty > $batch_data["batch_qty"]) {
-                                echo "Error: Not enough stock available. Maximum available: " . $batch_data["batch_qty"];
+                                echo 0;
                             } elseif ($qty == 0) {
-                                echo "Error: Quantity cannot be zero.";
+                                echo 0;
                             } else {
                                 $cartItem['qty'] = $qty; // Update quantity in session
-                                echo "UPDATED";
+                                include "refreshcart.php";
                             }
                         } else {
                             echo 0;
                         }
                     }
-
                 }
             }
         }
-      //  echo "Error: Cart item not found in session.";
+        //  echo "Error: Cart item not found in session.";
         exit();
     } else {
         $email = $_SESSION["user_vec"]["email"];
-        $cart = Database::Search("SELECT * FROM `cart` WHERE `user_email` = '" . $email . "'");
+        $cart = Database::Search("SELECT * FROM `cart` WHERE `user_email` = '" . $email . "' AND `id`='" . $id . "' ");
         $cartnum = $cart->num_rows;
 
         if ($cartnum > 0) {
-            $cartdata = $cart->fetch_assoc();
-            if ($cartdata["discount"] == 0) {
-                $batch = Database::Search("SELECT * FROM `batch` WHERE `id` = '" . $cartdata["batch_id"] . "'");
+            $cardata = $cart->fetch_assoc();
+            if ($cardata["discount"] == 0) {
+                if ($qty == 0) {
+                    echo 0;
+                    exit();
+                }
+                $batch = Database::Search("SELECT * FROM `batch` WHERE `id` = '" . $cardata["batch_id"] . "'");
                 $batch_data = $batch->fetch_assoc();
-                if ($qty > $batch_data["batch_qty"]) {
-                    echo "Error: Not enough stock available. Maximum available: " . $batch_data["batch_qty"];
-                } elseif ($qty == 0) {
-                    echo "Error: Quantity cannot be zero.";
+                if ($batch_data["batch_qty"] < $qty) {
+                    echo 0;
                 } else {
-                    Database::IUD("UPDATE `cart` SET `qty` = '" . $qty . "' WHERE `id` = '" . $id . "'");
-                    echo "UPDATED";
+                    Database::IUD("UPDATE `cart` SET `qty`='" . $qty . "' WHERE `id`='" . $id . "' ");
+                    $cartresult = Database::Search("SELECT * FROM  `cart` WHERE `user_email` = '" . $email . "' AND `id`='" . $id . "'");
+                    $cartresultd = $cartresult->fetch_assoc();
+                    if ($cartresultd["qty"] == $qty) {
+                        include "refreshcart.php";
+                    }
                 }
             } else {
-                $dis = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `batch_id`='" . $cartdata["batch_id"] . "' ");
+                $dis = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `batch_id`='" . $cardata["batch_id"] . "' ");
                 $disdata = $dis->fetch_assoc();
                 if ($disdata["qty"] >= $qty) {
-                    $batch = Database::Search("SELECT * FROM `batch` WHERE `id` = '" . $cartdata["batch_id"] . "'");
+                    $batch = Database::Search("SELECT * FROM `batch` WHERE `id` = '" . $cardata["batch_id"] . "'");
                     $batch_data = $batch->fetch_assoc();
                     if ($qty > $batch_data["batch_qty"]) {
-                        echo "Error: Not enough stock available. Maximum available: " . $batch_data["batch_qty"];
+                        echo 0;
                     } elseif ($qty == 0) {
-                        echo "Error: Quantity cannot be zero.";
+                        echo 0;
                     } else {
-                        Database::IUD("UPDATE `cart` SET `qty` = '" . $qty . "' WHERE `id` = '" . $id . "'");
-                        echo "UPDATED";
+                        Database::IUD("UPDATE `cart` SET `qty`='" . $qty . "' WHERE `id`='" . $id . "' ");
+                        $cartresult = Database::Search("SELECT * FROM  `cart` WHERE `user_email` = '" . $email . "' AND `id`='" . $id . "'");
+                        $cartresultd = $cartresult->fetch_assoc();
+                        if ($cartresultd["qty"] == $qty) {
+                            include "refreshcart.php";
+                        }
                     }
                 } else {
                     echo 0;
@@ -103,7 +111,7 @@ if (isset($_POST["id"]) && isset($_POST["qty"])) {
                                 echo "Error: Quantity cannot be zero.";
                             } else {
                                 $cartItem['qty'] = $qty; // Update quantity in session
-                                echo "UPDATED";
+                                include "refreshcart.php";
                             }
                         } else {
                             $dis = Database::Search("SELECT * FROM `discount_date_range_has_product` WHERE `batch_id`='" . $cartItem["batch_id"] . "' ");
@@ -117,17 +125,16 @@ if (isset($_POST["id"]) && isset($_POST["qty"])) {
                                     echo "Error: Quantity cannot be zero.";
                                 } else {
                                     $cartItem['qty'] = $qty; // Update quantity in session
-                                    echo "UPDATED";
+                                    include "refreshcart.php";
                                 }
                             } else {
                                 echo 0;
                             }
                         }
-
                     }
                 }
             }
-         ///   echo "Error: Cart item not found.";
+            ///   echo "Error: Cart item not found.";
         }
     }
 } else {
