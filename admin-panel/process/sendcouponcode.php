@@ -1,60 +1,66 @@
 <?php
 require "../db.php";
-// Send Email
-require ".../email/PHPMailer.php";
-require ".../email/SMTP.php";
-require ".../email/Exception.php";
 
-class main
-{
-    public function main()
-    {
-        $cuponcode = "abc";
-        $user_email = "sahantharakasahan500@gmail.com";
-        $start_date = 2021 - 12 - 12;
-        $end_date = 2022 - 12 - 12;
-        $dispre = 20;
-        if (strlen($user_email) > 100) {
-            return ("user email is invalid");
-            exit();
-        }
-        if (strlen($cuponcode) > 45) {
-            return ("code is invalid");
-            exit();
-        }
-        if (strlen($dispre) > 45) {
-            return ("discount is invalid");
-            exit();
-        }
-        $S = new insert();
-        return  $S->sql($cuponcode, $user_email, $start_date, $end_date, $dispre);
-    }
-}
-class insert
-{
-    function sql($cuponcode, $user_email, $start_date, $end_date, $dispre)
-    {
-        Databases::IUD("INSERT INTO `coupon` (`code`, `user_email`, `start_date`, `end_date`, `status`, `dis_percentage`) 
-        VALUES ('" . $cuponcode . "', '" . $user_email . "', '" . $start_date . ", '$end_date', 1, '$dispre');");
-        return  new emailsend()->sendmail($user_email, $cuponcode);
-    }
-}
+// Email library imports
+require "email/PHPMailer.php";
+require "email/SMTP.php";
+require "email/Exception.php";
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+class MainClass
+{
+    public function execute()
+    {
+        $cuponcode = "abc";
+        $user_email = "sahantharakasahan500@gmail.com";
+        $start_date = '2021-12-12';
+        $end_date = '2022-12-12';
+        $dispre = 20;
+
+        if (strlen($user_email) > 100) {
+            return "User email is invalid";
+        }
+        if (strlen($cuponcode) > 45) {
+            return "Coupon code is invalid";
+        }
+        if (!is_numeric($dispre) || $dispre < 0 || $dispre > 100) {
+            return "Discount percentage is invalid";
+        }
+
+        $insertObj = new Insert();
+        return $insertObj->sql($cuponcode, $user_email, $start_date, $end_date, $dispre);
+    }
+}
+
+class Insert
+{
+    public function sql($cuponcode, $user_email, $start_date, $end_date, $dispre)
+    {
+        // You should use prepared statements here for security
+        $query = "INSERT INTO `coupon` (`code`, `user_email`, `start_date`, `end_date`, `status`, `dis_percentage`) 
+                  VALUES ('$cuponcode', '$user_email', '$start_date', '$end_date', 1, '$dispre')";
+
+        Databases::IUD($query);
+
+        $emailSender = new EmailSend();
+        return $emailSender->sendMail($user_email, $cuponcode);
+    }
+}
+
 class EmailSend
 {
-    public function sendmail($email, $couponCode)
+    public function sendMail($email, $couponCode)
     {
-        require 'vendor/autoload.php'; // Ensure PHPMailer is loaded
+        $mail = new PHPMailer(true);
 
         try {
-            $mail = new PHPMailer(true);
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'codylanka00@gmail.com'; // Your Gmail
-            $mail->Password = 'jnil boop pwrb sejy';    // App password
+            $mail->Username = 'codylanka00@gmail.com';
+            $mail->Password = 'jnil boop pwrb sejy';  // App-specific password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             $mail->Port = 465;
 
@@ -62,16 +68,15 @@ class EmailSend
             $mail->addAddress($email);
             $mail->isHTML(true);
             $mail->Subject = '🎁 Your Exclusive Coupon Code Inside!';
-
             $mail->Body = $this->generateEmailBody($couponCode);
 
             if ($mail->send()) {
-                echo 1;
+                return "Email sent successfully.";
             } else {
-                echo "Failed to send email. Please try again later.";
+                return "Failed to send email. Please try again later.";
             }
         } catch (Exception $e) {
-            echo "Mailer Error: " . $mail->ErrorInfo;
+            return "Mailer Error: " . $mail->ErrorInfo;
         }
     }
 
@@ -127,6 +132,6 @@ class EmailSend
     }
 }
 
-$main = new main();
-$mainmethod = $main->main();
-echo $mainmethod;
+// Run the process
+$main = new MainClass();
+echo $main->execute();
