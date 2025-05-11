@@ -644,7 +644,7 @@ if ($batch_id > 0) {
 
                                     if ($productdata["weight"] > 0) {
                                         $product_weight = $productdata["weight"];
-                                        $dw = Database::Search("SELECT * FROM `weight`");
+                                        $dw = Database::Search("SELECT * FROM `weight` WHERE `weight`='".$productdata["weight"]."' ");
                                         $dwn = $dw->num_rows;
                                         for ($i = 0; $i < $dwn; $i++) {
                                             $dwd = $dw->fetch_assoc();
@@ -677,6 +677,10 @@ if ($batch_id > 0) {
                                         <h6 id="sellprice" class="text-lg mb-0">RS <?php echo $price; ?></h6>
                                         <input id="iprice" type="hidden" value="<?php echo $price; ?>" />
                                         <input type="hidden" id="price" value="<?php echo $finalPricePerItem; ?>">
+                                    </div>
+                                    <div class="flex-between flex-wrap gap-8">
+                                        <span class="text-gray-500" style="color: #FA6400 !important;">weight -</span>
+                                        <h6 class="text-lg mb-0" style="color: #FA6400 !important;"> <?php echo $productdata["weight"]; ?>g/ml</h6>
                                     </div>
                                     <div class="flex-between flex-wrap gap-8">
                                         <span class="text-gray-500" style="color: #FA6400 !important;">Discount -</span>
