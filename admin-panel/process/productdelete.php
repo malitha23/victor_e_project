@@ -15,8 +15,9 @@ if (isset($_POST['productID'])) {
      }
      if ($batchnum > 0) {
           for ($i = 0; $i < $batchnum; $i++) {
-               echo ($bachcode[$i] . "Delete these first.Then delete these.");
+               echo ($bachcode[$i] );
           }
+          echo("Delete these first.Then delete these.");
           exit();
      }
      $product = Databases::Search("SELECT * FROM `product` WHERE `id`='" . $productID . "' ");

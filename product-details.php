@@ -862,7 +862,7 @@ if ($batch_id > 0) {
                                         </h6>
                                         <div class="product-card__content mt-12">
                                             <div class="product-card__price mb-8">
-                                                <span class="text-heading text-md fw-semibold ">Rs <?php echo $b1d["selling_price"] ?> <span class="text-gray-500 fw-normal">/Qty</span>
+                                                <span class="text-heading text-md fw-semibold ">Rs <?php echo $b1d["selling_price"] ?> <span class="text-gray-500 fw-normal"></span>
                                                     <span class="text-gray-400 text-md fw-semibold text-decoration-line-through"> Rs <?php echo $b1d["selling_price"] + 10; ?></span>
                                             </div>
                                             <a onclick="adtocart(<?= $b1d['selling_price']; ?>, <?= 0 ?>, <?= $b1d['id'] ?>);" class="product-card__cart btn bg-main-50 text-main-600 hover-bg-main-600 hover-text-white py-11 px-24 rounded-pill flex-align gap-8 mt-24 w-100 justify-content-center">
