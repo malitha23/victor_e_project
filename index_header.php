@@ -1,3 +1,19 @@
+<?php
+ if (isset($_SESSION["user_vec"]["email"])) {
+    $user = Database::Search("SELECT * FROM `user` WHERE `email`='".$_SESSION["user_vec"]["email"]."' ");
+    $usernum = $user->num_rows;
+    if($usernum == 1){
+        try {
+             $usershd = $user->fetch_assoc();
+              $uname = $usershd["fname"];
+        } catch (\Throwable $th) {
+           $uname = "Profile";
+        }
+    }
+ }else{
+    $uname = "Profile";
+ }
+ ?>
 <!--==================== Overlay Start ====================-->
 <div class="overlay"></div>
 <!--==================== Overlay End ====================-->
@@ -117,7 +133,7 @@
                         <span class="text-2xl text-white d-flex position-relative item-hover__text">
                             <i class="ph ph-user text-white"></i>
                         </span>
-                        <span class="text-md text-white item-hover__text d-none d-lg-flex">Profile</span>
+                        <span class="text-md text-white item-hover__text d-none d-lg-flex"><?php echo $uname ?></span>
                     </a>
                 </div>
             </div>
@@ -237,7 +253,7 @@
                             <span class="text-2xl text-white d-flex position-relative item-hover__text">
                                 <i class="ph ph-user"></i>
                             </span>
-                            <span class="text-md text-white item-hover__text d-none d-lg-flex">Profile</span>
+                            <span class="text-md text-white item-hover__text d-none d-lg-flex"><?php echo $uname ?></span>
                         </a>
 
                     </div>
