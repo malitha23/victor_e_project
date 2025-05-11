@@ -287,7 +287,7 @@ $cart_items = []; // Array to store cart items
                                 </div>
                             </div>
                         </div>
-                        <div class="flex-between flex-wrap gap-16 mt-16" style="justify-content: center;">
+                        <div class="flex-between flex-wrap gap-16 mt-16" style="justify-content: center; display: none;">
                             <div class="flex-align gap-16" style="margin: auto;">
                                 <input type="text" id="couponCode" class="common-input" placeholder="Coupon Code">
                                 <button type="submit" class="btn btn-main py-18 w-100 rounded-8" id="applyCoupon">Apply

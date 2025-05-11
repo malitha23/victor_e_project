@@ -34,6 +34,7 @@
     </div>
     <!--==================== Preloader End ====================-->
 
+    <?php require_once "connection.php"; ?>
     <?php require_once "basic_header.php"; ?>
 
     <!-- ========================= Breadcrumb Start =============================== -->

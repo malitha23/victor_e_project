@@ -1,20 +1,7 @@
 <?php
 session_start();
 include_once "connection.php";
-$WEB = Database::Search("SELECT * FROM   `web_status`   WHERE `status`='0' ");
-$WEBNUM = $WEB->num_rows;
-if ($WEBNUM == 1) {
-    comminzoon();
-    exit();
-}
-function comminzoon()
-{
-?>
-    <script>
-        window.location = "coming-soon.php";
-    </script>
-<?php
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en" class="color-two font-exo">
@@ -48,9 +35,9 @@ function comminzoon()
 <body>
 
     <!--==================== Preloader Start ====================-->
-    <!-- <div class="preloader">
+    <div class="preloader">
         <img src="assets/images/icon/preloader.gif" alt="">
-    </div> -->
+    </div>
     <!--==================== Preloader End ====================-->
     <?php require_once "index_header.php"; ?>
 
@@ -704,7 +691,7 @@ function comminzoon()
                     </div>
                 </div>
 
-                <div class="col-xxl-4">
+                <div class="col-12 d-none d-lg-block">
                     <div class="position-relative rounded-16 bg-light-purple overflow-hidden p-28 pb-0 z-1 text-center h-100" data-aos="fade-up" data-aos-duration="1000">
                         <img src="assets/images/bg/big-deal-pattern.png" alt="" class="position-absolute inset-block-start-0 inset-inline-start-0 z-n1 w-100 h-100 cover-img">
                         <div class="py-xl-4 text-center">

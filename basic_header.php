@@ -1,3 +1,19 @@
+<?php
+$WEB = Database::Search("SELECT * FROM   `web_status`   WHERE `status`='0' ");
+$WEBNUM = $WEB->num_rows;
+if ($WEBNUM == 1) {
+    comminzoon();
+    exit();
+}
+function comminzoon()
+{
+?>
+    <script>
+        window.location = "coming-soon.php";
+    </script>
+<?php
+}
+?>
 <!-- ======================= Middle Header Two Start ========================= -->
 <header class="header-middle style-two bg-color-neutral" style="padding-top: 20px !important; padding-bottom: 20px !important;">
     <div class="container container-lg">
