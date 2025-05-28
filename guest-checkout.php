@@ -374,9 +374,11 @@ $cart_items = []; // Array to store cart items
                                                 // Simple email regex
                                                 var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                                                 if (emailPattern.test(response)) {
-                                                window.location.href = "cashoninvoice.php?email=" + response;
+                                                    window.location.href = "cashoninvoice.php?email=" + response;
                                                 } else {
-                                                    alert("Error: " + response);
+                                                    if(response == 0){
+                                                        window.location.href = "shop.php";
+                                                    }
                                                 }
                                             }
                                         };
@@ -391,25 +393,18 @@ $cart_items = []; // Array to store cart items
                                 function cashon() {
                                     var cashonChecked = document.getElementById("payment3").checked;
                                     if (cashonChecked) {
-                                        // Retrieve values from input fields
                                         var address1 = document.getElementById("address-line-1").value;
                                         var address2 = document.getElementById("address-line-2").value;
                                         var firstName = document.getElementById("first-name").value;
                                         var lastName = document.getElementById("last-name").value;
                                         var email = document.getElementById("uemail").value;
                                         var mobile = document.getElementById("mobile").value;
-                                        const subtotal = parseFloat(<?php echo $total_price; ?>);
-                                        const disPriceSpan = document.getElementById("disPrice");
-
-                                        alert(disPriceSpan.textContent);
-                                        exit();
-
                                         // Retrieve values from select fields
                                         var district = document.getElementById("district").value;
                                         var city = document.getElementById("city").value;
 
+
                                         var form = new FormData();
-                                        form.append("subtotal", subtotal);
                                         form.append("address1", address1);
                                         form.append("address2", address2);
                                         form.append("firstName", firstName);
@@ -424,8 +419,14 @@ $cart_items = []; // Array to store cart items
                                         req.onreadystatechange = function() {
                                             if (req.readyState === 4 && req.status === 200) {
                                                 // Handle the response from the server
-                                                var response = (req.responseText);
-                                                alert(response);
+                                                var response = req.responseText;
+                                                // Simple email regex
+                                                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                                if (emailPattern.test(response)) {
+                                                    window.location.href = "cashoninvoice.php?email=" + response;
+                                                } else {
+                                                    alert( response);
+                                                }
                                             }
                                         };
                                         req.open("POST", "cashonpro.php", true);

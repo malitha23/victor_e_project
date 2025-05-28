@@ -2,7 +2,7 @@
 session_start();
 include_once "connection.php";
 if (isset($_SESSION["user_vec"])) {
-
+    unset($_SESSION['cart']);
     class cashonpro
     {
         private $firstName, $lastName, $email, $mobile, $district, $city, $address1, $address2;
@@ -85,7 +85,12 @@ if (isset($_SESSION["user_vec"])) {
             $result = Database::Search($query);
 
             $user = $result->fetch_assoc();
-            $existing_address_id = $user['adress_id'];
+            if (!empty($user['adress_id'])) {
+                $existing_address_id = $user['adress_id'];
+            } else {
+                $existing_address_id = null;
+            }
+
 
             // 🔹 Step 2: Insert or Update Address
             if ($existing_address_id) {
@@ -198,7 +203,7 @@ if (isset($_SESSION["user_vec"])) {
                 // Optional: Clear cart
                 // Database::IUD("DELETE FROM `cart` WHERE `user_email` = '$email'");
             } else {
-                $price_tot_formatted = number_format(0, 2);
+                echo 0;
             }
             //    return "User details updated successfully.";
         }
@@ -237,5 +242,145 @@ if (isset($_SESSION["user_vec"])) {
         echo $out['email'];
     } else {
         echo $out; // Output the error message
+    }
+} else {
+
+    if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+
+        $address1 = $_POST['address1'] ?? '';
+        $address2 = $_POST['address2'] ?? '';
+        $fname = $_POST['firstName'] ?? '';
+        $lname = $_POST['lastName'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $mobile = $_POST['mobile'] ?? '';
+        $district = $_POST['district'] ?? '';
+        $city = $_POST['city'] ?? '';
+
+        // Insert or get City ID
+        $cityQuery = "SELECT city_id FROM city WHERE name = '$city'";
+        $cityResult = Database::Search($cityQuery);
+
+        if ($cityResult->num_rows === 0) {
+            $insertCityQuery = "INSERT INTO city (name) VALUES (?)";
+            Database::IUD($insertCityQuery, [$city], "s");
+            $city_id = Database::$connection->insert_id;
+        } else {
+            $cityRow = $cityResult->fetch_assoc();
+            $city_id = $cityRow['city_id'];
+        }
+
+        // Insert or get District ID
+        $districtQuery = "SELECT distric_id FROM distric WHERE name = '$district'";
+        $districtResult = Database::Search($districtQuery);
+
+        if ($districtResult->num_rows === 0) {
+            $insertDistrictQuery = "INSERT INTO distric (name) VALUES (?)";
+            Database::IUD($insertDistrictQuery, [$district], "s");
+            $district_id = Database::$connection->insert_id;
+        } else {
+            $districtRow = $districtResult->fetch_assoc();
+            $district_id = $districtRow['distric_id'];
+        }
+
+        // Insert new address
+        $insertAddressQuery = "INSERT INTO address (line_1, line_2, city_city_id, distric_distric_id) VALUES (?, ?, ?, ?)";
+        Database::IUD($insertAddressQuery, [$address1, $address2, $city_id, $district_id], "ssii");
+        $address_id = Database::$connection->insert_id;
+
+        $generatedPassword = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 0, 8);
+
+        $insertUserQuery = "INSERT INTO user (email, fname, lname, mobile, status, password, date, adress_id) VALUES (?, ?, ?, ?, 1, ?, NOW(), ?)";
+        Database::IUD($insertUserQuery, [$email, $fname, $lname, $mobile, $generatedPassword, $address_id], "sssssi");
+
+        $_SESSION["user_vec"] = array(
+            "email" => $email,
+            "login_time" => date("Y-m-d H:i:s"),
+            "ip_address" => $_SERVER['REMOTE_ADDR'],
+            "user_agent" => $_SERVER['HTTP_USER_AGENT'],
+        );
+
+
+        $u = Database::Search("SELECT * FROM `user` WHERE `email`='" . $email . "' ");
+        $deliveryfee = 0;
+        if ($u->num_rows == 1) {
+            $ud = $u->fetch_assoc();
+            if (!empty($ud["adress_id"])) {
+                $ad = Database::Search("SELECT * FROM `address` WHERE `address_id` ='" . $ud["adress_id"] . "'");
+                if ($ad->num_rows == 1) {
+                    $add = $ad->fetch_assoc();
+                    $df = Database::Search("SELECT * FROM `delivery_fee` WHERE `city_city_id`='" . $add["city_city_id"] . "' ");
+                    if ($df->num_rows == 1) {
+                        $dfd = $df->fetch_assoc();
+                        $deliveryfee = floatval($dfd["fee"]);
+                    }
+                }
+            }
+        }
+        $price_tot = 0;
+        foreach ($_SESSION['cart'] as $item) {
+
+           // Database::IUD("INSERT INTO `cart` (`qty`, `user_email`, `batch_id`, `discount`) 
+                 //             VALUES ('" . $item["qty"] . "', '" . $email . "', '" . $item['batch_id'] . "', '" . $item['discount'] . "');");
+
+            $batch = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $item['batch_id']  . "' ");
+            $batch_data = $batch->fetch_assoc();
+            $price = floatval($batch_data["selling_price"]);
+            $discountpre = floatval($item['discount']);
+            $qty = intval($item["qty"]);
+            $discountAmount = ($price * $discountpre) / 100;
+            $finalPricePerItem = $price - $discountAmount;
+            $item_total = $finalPricePerItem * $qty;
+            $price_tot += $item_total;
+
+
+            $product = Database::Search("SELECT * FROM `product` WHERE `id`='" . $item['batch_id'] . "' ");
+            $product_data = $product->fetch_assoc();
+            if ($product_data["weight"] > 0) {
+                $product_weight = $product_data["weight"];
+                $dw = Database::Search("SELECT * FROM `weight`");
+                $dwn = $dw->num_rows;
+                for ($i = 0; $i < $dwn; $i++) {
+                    $dwd = $dw->fetch_assoc();
+                    if ($dwd["weight"] == $product_weight) {
+                        $final_product_weight = $dwd["weight"];
+                        $dfw = Database::Search("SELECT * FROM `delivery_fee_for_weight` WHERE `weight_id`='" . $dwd["id"] . "' ");
+                        $dfwn = $dfw->num_rows;
+                        if ($dfwn == 1) {
+                            $dfwd = $dfw->fetch_assoc();
+                            $weigdeliveryfee = $dfwd["fee"];
+                        } else {
+                            $weigdeliveryfee = 0;
+                        }
+                    } else {
+                        $weigdeliveryfee = 0;
+                    }
+                }
+            } else {
+                $weigdeliveryfee = 0;
+            }
+
+
+
+            $delivery_total_fee = $weigdeliveryfee + $deliveryfee;
+            $price = number_format($item_total, 2, '.', '');
+            $totalprice = number_format($item_total + $delivery_total_fee, 2, '.', '');
+
+            $UNI = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 0, 8);
+            Database::IUD("INSERT INTO `cashond` (`delivery_fee`,`price`,`totalprice`, `discount_pre`, `qty`, `uniq_id`, `product_id`, `batch_id`, `email`, `cashon_status_id`)
+                    VALUES ('" . $delivery_total_fee . "','" . $price . "','" . $totalprice . "', '$discountpre', '$qty', '$UNI', '" . $batch_data["product_id"] . "', '" . $item['batch_id'] . "', '".$email."', '1');");
+            
+            echo $email;
+
+            unset($_SESSION['cart']);
+
+          //  echo "<tr>";
+          //  echo "<td>" . htmlspecialchars($item['id']) . "</td>";
+          //  echo "<td>" . htmlspecialchars($item['batch_id']) . "</td>";
+          //  echo "<td>" . htmlspecialchars($item['user_email']) . "</td>";
+          //  echo "<td>" . htmlspecialchars($item['qty']) . "</td>";
+          //  echo "<td>" . htmlspecialchars($item['discount']) . "</td>";
+        }
+    } else {
+        echo "<p>Your cart is empty.</p>";
     }
 }
