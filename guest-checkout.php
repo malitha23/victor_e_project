@@ -327,9 +327,115 @@ $cart_items = []; // Array to store cart items
                             <p class="text-gray-500">Your personal data will be used to process your order.</p>
                         </div>
 
-                        <a class="btn btn-main mt-10 py-18 w-100 rounded-8 mt-56" id="placeOders">Place
+                        <a class="btn btn-main mt-10 py-18 w-100 rounded-8 mt-56" onclick="cashon();" id="placeOders">Place
                             Order</a>
+                        <?php
+                        if (isset($_SESSION["user_vec"])) {
+                            $ccart = Database::Search("SELECT * FROM `cart` WHERE `user_email` = '" . $_SESSION["user_vec"]["email"] . "' ");
+                            $ccart_num = $ccart->num_rows;
+                            if ($ccart_num == 0) {
+                            } else {
+                                $cart_data = $ccart->fetch_assoc();
+                                $cartid = $cart_data["id"];
+                                echo '<input type="hidden" id="cartid" value="' . htmlspecialchars($cartid) . '">';
+                            }
+                        ?>
+                            <script>
+                                function cashon() {
+                                    var cashonChecked = document.getElementById("payment3").checked;
+                                    if (cashonChecked) {
+                                        var address1 = document.getElementById("address-line-1").value;
+                                        var address2 = document.getElementById("address-line-2").value;
+                                        var firstName = document.getElementById("first-name").value;
+                                        var lastName = document.getElementById("last-name").value;
+                                        var email = document.getElementById("uemail").value;
+                                        var mobile = document.getElementById("mobile").value;
+                                        // Retrieve values from select fields
+                                        var district = document.getElementById("district").value;
+                                        var city = document.getElementById("city").value;
 
+
+                                        var form = new FormData();
+                                        form.append("address1", address1);
+                                        form.append("address2", address2);
+                                        form.append("firstName", firstName);
+                                        form.append("lastName", lastName);
+                                        form.append("email", email);
+                                        form.append("mobile", mobile);
+                                        form.append("district", district);
+                                        form.append("city", city);
+
+                                        // Log or use the values
+                                        var req = new XMLHttpRequest();
+                                        req.onreadystatechange = function() {
+                                            if (req.readyState === 4 && req.status === 200) {
+                                                // Handle the response from the server
+                                                var response = req.responseText;
+                                                // Simple email regex
+                                                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                                if (emailPattern.test(response)) {
+                                                window.location.href = "cashoninvoice.php?email=" + response;
+                                                } else {
+                                                    alert("Error: " + response);
+                                                }
+                                            }
+                                        };
+                                        req.open("POST", "cashonpro.php", true);
+                                        req.send(form);
+                                    }
+                                }
+                            </script>
+                        <?php                       } else {
+                        ?>
+                            <script>
+                                function cashon() {
+                                    var cashonChecked = document.getElementById("payment3").checked;
+                                    if (cashonChecked) {
+                                        // Retrieve values from input fields
+                                        var address1 = document.getElementById("address-line-1").value;
+                                        var address2 = document.getElementById("address-line-2").value;
+                                        var firstName = document.getElementById("first-name").value;
+                                        var lastName = document.getElementById("last-name").value;
+                                        var email = document.getElementById("uemail").value;
+                                        var mobile = document.getElementById("mobile").value;
+                                        const subtotal = parseFloat(<?php echo $total_price; ?>);
+                                        const disPriceSpan = document.getElementById("disPrice");
+
+                                        alert(disPriceSpan.textContent);
+                                        exit();
+
+                                        // Retrieve values from select fields
+                                        var district = document.getElementById("district").value;
+                                        var city = document.getElementById("city").value;
+
+                                        var form = new FormData();
+                                        form.append("subtotal", subtotal);
+                                        form.append("address1", address1);
+                                        form.append("address2", address2);
+                                        form.append("firstName", firstName);
+                                        form.append("lastName", lastName);
+                                        form.append("email", email);
+                                        form.append("mobile", mobile);
+                                        form.append("district", district);
+                                        form.append("city", city);
+
+                                        // Log or use the values
+                                        var req = new XMLHttpRequest();
+                                        req.onreadystatechange = function() {
+                                            if (req.readyState === 4 && req.status === 200) {
+                                                // Handle the response from the server
+                                                var response = (req.responseText);
+                                                alert(response);
+                                            }
+                                        };
+                                        req.open("POST", "cashonpro.php", true);
+                                        req.send(form);
+                                    }
+                                }
+                            </script>
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -464,4 +570,5 @@ $cart_items = []; // Array to store cart items
 
 </body>
 <script src="sahan.js"></script>
+
 </html>

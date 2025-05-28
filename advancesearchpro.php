@@ -157,7 +157,21 @@ $product_num = $product_rs->num_rows;
                $dataap = $product_rs->fetch_assoc();
                $dataap["id"];
                // Fetch limited product data for current page
-               $batch = Database::Search("SELECT * FROM `batch` WHERE `product_id`='" . $dataap["id"] . "' AND `Delete`='0' LIMIT $start, $itemsPerPage");
+               $batch = Database::Search("SELECT 
+                                        *
+                                    FROM 
+                                        product
+                                    JOIN (
+                                        SELECT 
+                                            product_id,
+                                            MIN(id) AS first_batch_id
+                                        FROM batch
+                                        GROUP BY product_id
+                                    ) AS first_batches ON product.id = first_batches.product_id
+                                    JOIN batch ON batch.id = first_batches.first_batch_id
+                                    WHERE product.delete_id=0 AND product.status_id=1 AND batch.delete = 0 AND batch.product_id='" . $dataap["id"] . "'
+                                    ORDER BY `batch`.`date` ASC LIMIT $start, $itemsPerPage");
+            //   $batch = Database::Search("SELECT * FROM `batch` WHERE `product_id`='" . $dataap["id"] . "' AND `Delete`='0' LIMIT $start, $itemsPerPage");
                $batchnum = $batch->num_rows;
                for ($i = 0; $i <  $batchnum; $i++) {
                     $batchdata = $batch->fetch_assoc();
