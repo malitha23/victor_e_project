@@ -374,9 +374,17 @@ $cart_items = []; // Array to store cart items
                                                 // Simple email regex
                                                 var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                                                 if (emailPattern.test(response)) {
-                                                    window.location.href = "cashoninvoice.php?email=" + response;
+                                                    Swal.fire({
+                                                        icon: 'success',
+                                                        title: 'Order Placed Successfully',
+                                                        confirmButtonText: 'OK'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            window.location.href = 'shop.php'; // Redirect after OK
+                                                        }
+                                                    });
                                                 } else {
-                                                    if(response == 0){
+                                                    if (response == 0) {
                                                         window.location.href = "shop.php";
                                                     }
                                                 }
@@ -423,9 +431,22 @@ $cart_items = []; // Array to store cart items
                                                 // Simple email regex
                                                 var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                                                 if (emailPattern.test(response)) {
-                                                    window.location.href = "cashoninvoice.php?email=" + response;
+                                                    Swal.fire({
+                                                        icon: 'success',
+                                                        title: 'Order Placed Successfully',
+                                                        confirmButtonText: 'OK'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            window.location.href = 'shop.php'; // Redirect after OK
+                                                        }
+                                                    });
                                                 } else {
-                                                    alert( response);
+                                                    Swal.fire({
+                                                        icon: 'info',
+                                                        title: response,
+                                                        showConfirmButton: false,
+                                                        timer: 2000
+                                                    });
                                                 }
                                             }
                                         };

@@ -189,6 +189,7 @@ if (isset($_SESSION["user_vec"])) {
                             $out = [
                                 'email' => $email
                             ];
+                            Database::IUD("DELETE FROM `cart` WHERE `user_email` = '$email' AND `batch_id` = '" . $cartdata["batch_id"] . "'");
                             return $out;
                         } catch (Exception $e) {
                             return "Error inserting cashond order: " . $e->getMessage();
@@ -256,6 +257,23 @@ if (isset($_SESSION["user_vec"])) {
         $district = $_POST['district'] ?? '';
         $city = $_POST['city'] ?? '';
 
+        $VALI = new Validate();
+        $user_data = [
+            'firstName' => $fname,
+            'lastName'  => $lname,
+            'email'     => $email,
+            'mobile'    => $mobile,
+            'district'  => $district,
+            'city'      => $city,
+            'address1'  => $address1,
+            'address2'  => $address2
+        ];
+        $validationResult = $VALI->get($user_data);
+        if ($validationResult != 1) {
+            echo $validationResult;
+            exit();
+        }
+
         // Insert or get City ID
         $cityQuery = "SELECT city_id FROM city WHERE name = '$city'";
         $cityResult = Database::Search($cityQuery);
@@ -289,8 +307,14 @@ if (isset($_SESSION["user_vec"])) {
 
         $generatedPassword = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 0, 8);
 
-        $insertUserQuery = "INSERT INTO user (email, fname, lname, mobile, status, password, date, adress_id) VALUES (?, ?, ?, ?, 1, ?, NOW(), ?)";
-        Database::IUD($insertUserQuery, [$email, $fname, $lname, $mobile, $generatedPassword, $address_id], "sssssi");
+        try {
+            $insertUserQuery = "INSERT INTO user (email, fname, lname, mobile, status, password, date, adress_id) VALUES (?, ?, ?, ?, 1, ?, NOW(), ?)";
+            Database::IUD($insertUserQuery, [$email, $fname, $lname, $mobile, $generatedPassword, $address_id], "sssssi");
+        } catch (\Throwable $th) {
+            echo ("You are already registered or have invalid details.");
+            Database::IUD("DELETE FROM `address` WHERE (`address_id` = '".$address_id."');");
+            exit();
+        }
 
         $_SESSION["user_vec"] = array(
             "email" => $email,
@@ -319,8 +343,8 @@ if (isset($_SESSION["user_vec"])) {
         $price_tot = 0;
         foreach ($_SESSION['cart'] as $item) {
 
-           // Database::IUD("INSERT INTO `cart` (`qty`, `user_email`, `batch_id`, `discount`) 
-                 //             VALUES ('" . $item["qty"] . "', '" . $email . "', '" . $item['batch_id'] . "', '" . $item['discount'] . "');");
+            // Database::IUD("INSERT INTO `cart` (`qty`, `user_email`, `batch_id`, `discount`) 
+            //             VALUES ('" . $item["qty"] . "', '" . $email . "', '" . $item['batch_id'] . "', '" . $item['discount'] . "');");
 
             $batch = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $item['batch_id']  . "' ");
             $batch_data = $batch->fetch_assoc();
@@ -367,18 +391,18 @@ if (isset($_SESSION["user_vec"])) {
 
             $UNI = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 0, 8);
             Database::IUD("INSERT INTO `cashond` (`delivery_fee`,`price`,`totalprice`, `discount_pre`, `qty`, `uniq_id`, `product_id`, `batch_id`, `email`, `cashon_status_id`)
-                    VALUES ('" . $delivery_total_fee . "','" . $price . "','" . $totalprice . "', '$discountpre', '$qty', '$UNI', '" . $batch_data["product_id"] . "', '" . $item['batch_id'] . "', '".$email."', '1');");
-            
+                    VALUES ('" . $delivery_total_fee . "','" . $price . "','" . $totalprice . "', '$discountpre', '$qty', '$UNI', '" . $batch_data["product_id"] . "', '" . $item['batch_id'] . "', '" . $email . "', '1');");
+
             echo $email;
 
             unset($_SESSION['cart']);
 
-          //  echo "<tr>";
-          //  echo "<td>" . htmlspecialchars($item['id']) . "</td>";
-          //  echo "<td>" . htmlspecialchars($item['batch_id']) . "</td>";
-          //  echo "<td>" . htmlspecialchars($item['user_email']) . "</td>";
-          //  echo "<td>" . htmlspecialchars($item['qty']) . "</td>";
-          //  echo "<td>" . htmlspecialchars($item['discount']) . "</td>";
+            //  echo "<tr>";
+            //  echo "<td>" . htmlspecialchars($item['id']) . "</td>";
+            //  echo "<td>" . htmlspecialchars($item['batch_id']) . "</td>";
+            //  echo "<td>" . htmlspecialchars($item['user_email']) . "</td>";
+            //  echo "<td>" . htmlspecialchars($item['qty']) . "</td>";
+            //  echo "<td>" . htmlspecialchars($item['discount']) . "</td>";
         }
     } else {
         echo "<p>Your cart is empty.</p>";
