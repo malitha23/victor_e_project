@@ -24,7 +24,7 @@ if (isset($_SESSION["a"])) {
                         WHERE distric.distric_id ='" . $did . "' ORDER BY city.`name` ASC ";
                 $qs = Databases::search($q1);
 
-                for($n=1;$n<$qs->num_rows;$n++){
+                for($n=1;$n<=$qs->num_rows;$n++){
                     $data = $qs->fetch_assoc();
 ?>
                     <tr class="">
