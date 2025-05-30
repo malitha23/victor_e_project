@@ -130,13 +130,15 @@ if (isset($_SESSION["user_vec"])) {
                     }
                 }
 
-                $cart->data_seek(0);
+              //  $deliveryfee = 0; // Or fetch this if needed
                 $cartdatafull = [];
                 while ($row = $cart->fetch_assoc()) {
                     $cartdatafull[] = $row;
                 }
 
                 $price_tot = 0;
+                $out = [];
+
                 foreach ($cartdatafull as $cartdata) {
                     $batch = Database::Search("SELECT * FROM `batch` WHERE `id`='" . $cartdata["batch_id"] . "' ");
                     if ($batch->num_rows == 1) {
@@ -149,57 +151,44 @@ if (isset($_SESSION["user_vec"])) {
                         $item_total = $finalPricePerItem * $qty;
                         $price_tot += $item_total;
 
-
                         $product = Database::Search("SELECT * FROM `product` WHERE `id`='" . $batch_data["product_id"] . "' ");
                         $product_data = $product->fetch_assoc();
+
+                        // Calculate delivery fee by weight
+                        $weigdeliveryfee = 0;
                         if ($product_data["weight"] > 0) {
-                            $product_weight = $product_data["weight"];
-                            $dw = Database::Search("SELECT * FROM `weight`");
-                            $dwn = $dw->num_rows;
-                            for ($i = 0; $i < $dwn; $i++) {
+                            $dw = Database::Search("SELECT * FROM `weight` WHERE `weight` = '" . $product_data["weight"] . "'");
+                            if ($dw->num_rows == 1) {
                                 $dwd = $dw->fetch_assoc();
-                                if ($dwd["weight"] == $product_weight) {
-                                    $final_product_weight = $dwd["weight"];
-                                    $dfw = Database::Search("SELECT * FROM `delivery_fee_for_weight` WHERE `weight_id`='" . $dwd["id"] . "' ");
-                                    $dfwn = $dfw->num_rows;
-                                    if ($dfwn == 1) {
-                                        $dfwd = $dfw->fetch_assoc();
-                                        $weigdeliveryfee = $dfwd["fee"];
-                                    } else {
-                                        $weigdeliveryfee = 0;
-                                    }
-                                } else {
-                                    $weigdeliveryfee = 0;
+                                $dfw = Database::Search("SELECT * FROM `delivery_fee_for_weight` WHERE `weight_id`='" . $dwd["id"] . "'");
+                                if ($dfw->num_rows == 1) {
+                                    $dfwd = $dfw->fetch_assoc();
+                                    $weigdeliveryfee = $dfwd["fee"] * $qty;
                                 }
                             }
-                        } else {
-                            $weigdeliveryfee = 0;
                         }
 
+                        $delivery_total_fee = $weigdeliveryfee + $deliveryfee;
+                        $prices = number_format($finalPricePerItem, 2, '.', '');
+                        $totalprice = number_format($item_total + $delivery_total_fee, 2, '.', '');
+                        $date = date("Y-m-d H:i:s");
+                        $UNI = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 0, 8);
+
                         try {
+                            Database::IUD("INSERT INTO `cashond` (`date`, `delivery_fee`, `price`, `totalprice`, `discount_pre`, `qty`, `uniq_id`, `product_id`, `batch_id`, `email`, `cashon_status_id`)
+                VALUES ('$date', '$delivery_total_fee', '$prices', '$totalprice', '$discountpre', '$qty', '$UNI', '" . $batch_data["product_id"] . "', '" . $cartdata["batch_id"] . "', '$email', '1')");
 
-                            $delivery_total_fee = $weigdeliveryfee + $deliveryfee;
-                            $price = number_format($item_total, 2, '.', '');
-                            $totalprice = number_format($item_total + $delivery_total_fee, 2, '.', '');
-
-
-                            $UNI = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 0, 8);
-                            Database::IUD("INSERT INTO `cashond` (`delivery_fee`,`price`,`totalprice`, `discount_pre`, `qty`, `uniq_id`, `product_id`, `batch_id`, `email`, `cashon_status_id`)
-                    VALUES ('" . $delivery_total_fee . "','" . $price . "','" . $totalprice . "', '$discountpre', '$qty', '$UNI', '" . $batch_data["product_id"] . "', '" . $cartdata["batch_id"] . "', '$email', '1');");
-                            $out = [
-                                'email' => $email
-                            ];
                             Database::IUD("DELETE FROM `cart` WHERE `user_email` = '$email' AND `batch_id` = '" . $cartdata["batch_id"] . "'");
-                            return $out;
                         } catch (Exception $e) {
                             return "Error inserting cashond order: " . $e->getMessage();
-                            exit();
                         }
                     }
                 }
 
-                $price_tot += $deliveryfee;
-                $price_tot_formatted = number_format($price_tot, 2);
+                return $email;
+
+                //$price_tot += $deliveryfee;
+                //$price_tot_formatted = number_format($price_tot, 2);
 
                 // Optional: Clear cart
                 // Database::IUD("DELETE FROM `cart` WHERE `user_email` = '$email'");
@@ -245,6 +234,34 @@ if (isset($_SESSION["user_vec"])) {
         echo $out; // Output the error message
     }
 } else {
+
+    class Validate
+    {
+        public function get($user_data)
+        {
+            if (empty($user_data['email'])) {
+                return "Please enter your email";
+            } elseif (!filter_var($user_data['email'], FILTER_VALIDATE_EMAIL)) {
+                return "Invalid email format";
+            } elseif (strlen($user_data['email']) > 101) {
+                return "Email is too long";
+            } elseif (empty($user_data['mobile'])) {
+                return "Please enter your mobile number";
+            } elseif (!$this->validateMobile($user_data['mobile'])) {
+                return "Invalid mobile number format. It should be 10 digits.";
+            } elseif (strlen($user_data['address1']) > 60) {
+                return "Address line 1 is too long. Maximum 60 characters allowed.";
+            } else {
+                return 1;
+            }
+        }
+
+        private function validateMobile($mobile)
+        {
+            return preg_match('/^\d{10}$/', $mobile);
+        }
+    }
+
 
     if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
 
@@ -312,7 +329,7 @@ if (isset($_SESSION["user_vec"])) {
             Database::IUD($insertUserQuery, [$email, $fname, $lname, $mobile, $generatedPassword, $address_id], "sssssi");
         } catch (\Throwable $th) {
             echo ("You are already registered or have invalid details.");
-            Database::IUD("DELETE FROM `address` WHERE (`address_id` = '".$address_id."');");
+            Database::IUD("DELETE FROM `address` WHERE (`address_id` = '" . $address_id . "');");
             exit();
         }
 
@@ -371,7 +388,7 @@ if (isset($_SESSION["user_vec"])) {
                         $dfwn = $dfw->num_rows;
                         if ($dfwn == 1) {
                             $dfwd = $dfw->fetch_assoc();
-                            $weigdeliveryfee = $dfwd["fee"];
+                            $weigdeliveryfee = $dfwd["fee"]*$qty;
                         } else {
                             $weigdeliveryfee = 0;
                         }
@@ -386,12 +403,12 @@ if (isset($_SESSION["user_vec"])) {
 
 
             $delivery_total_fee = $weigdeliveryfee + $deliveryfee;
-            $price = number_format($item_total, 2, '.', '');
+            $price = number_format($finalPricePerItem, 2, '.', '');
             $totalprice = number_format($item_total + $delivery_total_fee, 2, '.', '');
-
+            $date = date("Y-m-d H:i:s");
             $UNI = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 0, 8);
-            Database::IUD("INSERT INTO `cashond` (`delivery_fee`,`price`,`totalprice`, `discount_pre`, `qty`, `uniq_id`, `product_id`, `batch_id`, `email`, `cashon_status_id`)
-                    VALUES ('" . $delivery_total_fee . "','" . $price . "','" . $totalprice . "', '$discountpre', '$qty', '$UNI', '" . $batch_data["product_id"] . "', '" . $item['batch_id'] . "', '" . $email . "', '1');");
+            Database::IUD("INSERT INTO `cashond` (`date`,`delivery_fee`,`price`,`totalprice`, `discount_pre`, `qty`, `uniq_id`, `product_id`, `batch_id`, `email`, `cashon_status_id`)
+                    VALUES ('" . $date . "','" . $delivery_total_fee . "','" . $price . "','" . $totalprice . "', '$discountpre', '$qty', '$UNI', '" . $batch_data["product_id"] . "', '" . $item['batch_id'] . "', '" . $email . "', '1');");
 
             echo $email;
 
