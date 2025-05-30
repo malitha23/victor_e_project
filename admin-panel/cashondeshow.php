@@ -45,11 +45,11 @@ if (isset($_SESSION["a"])) {
                         <div class="row">
                             <div class="col-12 text-center mb-3">
                                 <div class="mb-1">
-                                    <span class="h4 mb-9 fw-semibold">Manage Orders&nbsp;&nbsp;<i class="fa fa-archive"
+                                    <span class="h4 mb-9 fw-semibold">Manage COD Orders&nbsp;&nbsp;<i class="fa fa-handshake-o"
                                             aria-hidden="true"></i></span>
                                 </div>
                                 <div>
-                                    <span class="mb-9 text-dark-emphasis">You can manage your ongoing orders here</span>
+                                    <span class="mb-9 text-dark-emphasis">You can manage your cash on delivery orders here</span>
                                 </div>
                             </div>
                         </div>

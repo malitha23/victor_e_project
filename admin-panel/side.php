@@ -59,6 +59,14 @@
           </a>
         </li>
         <li class="sidebar-item">
+          <a class="sidebar-link" href="cashondeshow.php" aria-expanded="false">
+            <span>
+              <i class="fa fa-handshake-o" aria-hidden="true"></i>
+            </span>
+            <span class="hide-menu">COD Orders</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
           <a class="sidebar-link" href="add-product.php" aria-expanded="false">
             <span>
               <i class="fa fa-plus-circle" aria-hidden="true"></i>
@@ -103,7 +111,7 @@
             <span>
               <i class="fa fa-desktop" aria-hidden="true"></i>
             </span>
-            <span class="hide-menu">veiw Data</span>
+            <span class="hide-menu">View Data</span>
           </a>
         </li>
         <li class="sidebar-item">
