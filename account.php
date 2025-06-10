@@ -33,7 +33,7 @@ if (isset($_SESSION["user_vec"])) {
     require_once "connection.php";
     $user_row = Database::Search("SELECT * FROM `user` WHERE `email`='" . $_SESSION["user_vec"]["email"] . "' ");
     $user_data = $user_row->fetch_assoc();
-    ?>
+?>
 
     <body>
 
@@ -212,9 +212,98 @@ if (isset($_SESSION["user_vec"])) {
                             <?php
                             }
                             ?>
+                            <!-- cash on delivery !-->
+                            <?php
+                            $cashon = Database::Search("SELECT * FROM `cashond` WHERE `email`='" . $user_data["email"] . "' ");
+                            $cashon_num = $cashon->num_rows;
+                            if ($cashon_num > 0) {
+                                $corderdata = $cashon->fetch_assoc();
 
+                            ?>
+                                <div class="row border rounded-16 p-3 mt-10 hover-border-main-600 transition-1">
+                                    <div class="col-12">
+                                        <div class="row mt-10">
+                                            <h5>cash on delivery</h5>
+                                        </div>
+                                        <div class="row mt-10">
+                                            <!-- Left Side: Product Details -->
+                                            <div class="col-8 text-sm">
+                                                <p class="mb-0"><strong>Order ID : </strong><?php echo $corderdata["uniq_id"] ?></p>
+                                                <p class="mb-0"><strong>Date : </strong><?php echo $corderdata["date"] ?></p>
+                                            </div>
+                                            <?php
+                                            $costatus = Database::Search("SELECT * FROM `cashon_status` WHERE `id`='" . $corderdata["cashon_status_id"] . "' ");
+                                            $costatusnum = $costatus->num_rows;
+                                            for ($i = 0; $i < $costatusnum; $i++) {
+                                                $cosdata = $costatus->fetch_assoc();
+                                                $cancel = "Cancel Order";
+                                            ?>
+                                                <!-- Right Side: Delivery Status Button -->
+                                                <div class="col-4 text-end">
+                                                    <button class="btn p-18 btn-main"><?php echo  $cosdata["name"] ?></button>
+                                                    <button class="btn p-18 btn-main unique-animation-class" onclick="confirmCancelOrder('<?php echo $corderdata["uniq_id"] ?>');"><?php echo $cancel ?></button>
+                                                </div>
+                                                <style>
+                                                    .unique-animation-class {
+                                                        opacity: 0;
+                                                        transform: translateY(20px);
+                                                        /* Start 20px below its final position */
+                                                        animation: slideUp 0.6s ease-out forwards;
+                                                    }
+
+                                                    @keyframes slideUp {
+                                                        from {
+                                                            opacity: 0;
+                                                            transform: translateY(20px);
+                                                        }
+
+                                                        to {
+                                                            opacity: 1;
+                                                            transform: translateY(0);
+                                                        }
+                                                    }
+                                                </style>
+                                            <?php
+                                            }
+                                            ?>
+                                        </div>
+                                        <div class="row px-10">
+                                            <?php
+                                            $cproduct = Database::Search("SELECT * FROM `product` WHERE `id`='" . $corderdata["product_id"] . "' ");
+                                            $cproductdata = $cproduct->fetch_assoc();
+                                            ?>
+                                            <!-- Order Item Start -->
+                                            <div class="col-12 d-flex align-items-center p-10 border-bottom">
+                                                <?php
+                                                $cpic = Database::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $cproductdata["id"] . "' AND `name`='Image 1' ");
+                                                $cpic_d = $cpic->fetch_assoc();
+                                                if (empty($cpic_d["path"])) {
+                                                    $cpth = "assets/images/thumbs/vendors-two-icon1.png";
+                                                } else {
+                                                    $cpth = "admin-panel/" . $cpic_d["path"];
+                                                }
+                                                ?>
+                                                <img src="<?php echo $cpth ?>" alt="Product Image" class="rounded me-10 img-fluid" width="80">
+                                                <div class="flex-grow-1">
+                                                    <p class="mb-1 text-gray-500"><?php echo $cproductdata["title"]; ?></p>
+                                                    <p class="mb-1 text-gray-500 text-sm">
+                                                        <span class="text-main me-10">Rs <?php echo $corderdata["totalprice"]; ?></span>
+                                                        <span class="text-success"><?php echo $corderdata["qty"]; ?></span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <!-- Order Item End -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                            <!-- cash on delivery !-->
                         </div>
                     </div>
+
 
                     <!-- details 2 -->
                     <div class="col-12 col-md-6 col-lg-8 d-none" id="secondDiv">
@@ -422,6 +511,62 @@ if (isset($_SESSION["user_vec"])) {
         <script src="assets/js/main.js"></script>
         <script src="sahan.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            function confirmCancelOrder(orderId) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you really want to cancel this order? This action cannot be undone.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, cancel it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // User confirmed, now send the XMLHttpRequest
+                        sendCancellationRequest(orderId);
+                    }
+                });
+            }
+
+            function sendCancellationRequest(orderId) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "cashoordercan.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Handle the response from cashoordercan.php
+                        var response = this.responseText;
+                        if (response === "success") { // Assuming "success" is returned by PHP on success
+                            Swal.fire(
+                                'Cancelled!',
+                                'Your order has been cancelled.',
+                                'success'
+                            ).then(() => {
+                                // Optional: Reload the page or update UI after successful cancellation
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'There was an issue cancelling your order: ' + response,
+                                'error'
+                            );
+                        }
+                    } else if (this.readyState == 4 && this.status != 200) {
+                        Swal.fire(
+                            'Error!',
+                            'Failed to connect to the server. Please try again.',
+                            'error'
+                        );
+                    }
+                };
+
+                // Send the orderId to cashoordercan.php
+                xhr.send("uniq_id=" + orderId);
+            }
+        </script>
     </body>
 <?php
 } else {

@@ -60,7 +60,7 @@ if (isset($_SESSION["a"])) {
                                             <?php
                                             $oorderst = Databases::Search("SELECT * FROM `order_status` WHERE `status`='Delivered' ");
                                             $oorderstd = $oorderst->fetch_assoc();
-                                            $order = Databases::Search("SELECT * FROM `order` WHERE `Order_status_id`='".$oorderstd["id"]."' ");
+                                            $order = Databases::Search("SELECT * FROM `order` WHERE `Order_status_id`='" . $oorderstd["id"] . "' ");
                                             $ordernum = $order->num_rows;
                                             for ($i = 0; $i < $ordernum; $i++) {
                                                 $orderdata = $order->fetch_assoc();
@@ -103,7 +103,7 @@ if (isset($_SESSION["a"])) {
                                                                 $ostatus = Databases::Search("SELECT * FROM `order_status` WHERE `id`='" . $orderdata["Order_status_id"] . "' ");
                                                                 $ostatusdata = $ostatus->fetch_assoc();
                                                                 ?>
-                                                                <div class="p-2"><a class="btn btn-warning" data-bs-toggle="modal" ><?php echo $ostatusdata["status"]; ?></a>
+                                                                <div class="p-2"><a class="btn btn-warning" data-bs-toggle="modal"><?php echo $ostatusdata["status"]; ?></a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -154,7 +154,115 @@ if (isset($_SESSION["a"])) {
                                             <?php
                                             }
                                             ?>
+
+                                            <!-- cash on !-->
+                                            <div class="row">
+                                                <h1>cash on delivery</h1>
+                                                <?php
+                                                $cashon = Databases::Search("SELECT * FROM `cashond` WHERE `cashon_status_id`='22' ");
+                                                if ($cashon->num_rows == 0) {
+                                                    echo '<div class="col-12 text-center mt-5"><h4 class="text-danger">No Cash on Delivery Orders Found</h4></div>';
+                                                    exit();
+                                                }
+                                                $cashon_num = $cashon->num_rows;
+                                                for ($i = 0; $i < $cashon_num; $i++) {
+                                                    $cashon_data = $cashon->fetch_assoc();
+                                                    $cuser = Databases::Search("SELECT * FROM `user` WHERE `email`='" . $cashon_data["email"] . "' ");
+                                                    $cuserdata = $cuser->fetch_assoc();
+                                                    $adress = Databases::Search("SELECT * FROM `address` WHERE `address_id`='" . $cuserdata["adress_id"] . "' ");
+                                                    $adressnum = $adress->num_rows;
+                                                    if ($adressnum == 1) {
+                                                        $addressdeta = $adress->fetch_assoc();
+                                                        $city = Databases::Search("SELECT * FROM `city` WHERE `city_id`='" . $addressdeta["city_city_id"] . "' ");
+                                                        $citydata = $city->fetch_assoc();
+                                                        $distric_has_city = Databases::Search("SELECT * FROM `city_has_distric` WHERE `city_city_id`='" . $addressdeta["city_city_id"] . "' ");
+                                                        $distric_has_city_data = $distric_has_city->fetch_assoc();
+                                                        $distric = Databases::Search("SELECT * FROM `distric` WHERE `distric_id`='" . $distric_has_city_data["distric_distric_id"] . "' ");
+                                                        $districdata = $distric->fetch_assoc();
+                                                    } else {
+                                                        $addressdeta = 0;
+                                                    }
+                                                     $status = Databases::Search("SELECT * FROM `cashon_status` WHERE `id` = '" . $cashon_data["cashon_status_id"] . "'");
+                                                    $statusdata = $status->fetch_assoc();
+                                                ?>
+                                                    <div class="row">
+                                                        <div class="col-12 border border-dark-subtle shadow mt-3">
+                                                            <div class="row mt-2">
+                                                                <div class="d-flex">
+                                                                    <div class="p-2 w-100">
+                                                                        <div><b>Name : </b> <?php echo $cuserdata["fname"] . " " . $cuserdata["lname"]  ?> &nbsp;&nbsp;&nbsp; <span class="tex-r">* USER ACCOUNT</span></div>
+                                                                        <div><b>Mobile : </b> <?php echo $cuserdata["mobile"]; ?></div>
+                                                                        <div><b>Email : </b> <?php echo $cuserdata["email"]; ?></div>
+                                                                        <div><b>Address : </b> <?php echo  $addressdeta["line_1"] ?>, <?php echo  $addressdeta["line_2"] ?>,<?php echo $citydata["name"] ?>, <?php echo $districdata["name"] ?></div>
+                                                                        <div><b>Registered Date Time : </b> <?php echo $cuserdata["date"] ?></div>
+                                                                        <div><b>Invoice Date Time : </b> <b><?php echo $cashon_data["date"] ?></b></div>
+                                                                    </div>
+                                                                    <div class="p-2">
+                                                                        <a class="btn btn-warning" data-bs-toggle="modal"><?php echo  $statusdata["name"]; ?></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <?php
+                                                            $batch = Databases::Search("SELECT * FROM batch WHERE `id` = '" . $cashon_data["batch_id"] . "'");
+                                                            $batchdata = $batch->fetch_assoc();
+
+                                                            $product = Databases::Search("SELECT * FROM product WHERE `id` = '" . $batchdata["product_id"] . "'");
+                                                            $productdata = $product->fetch_assoc();
+                                                            ?>
+                                                            <div class="row justify-content-center">
+                                                                <div class="col-12 px-3 pt-4 pb-5 rounded-2">
+                                                                    <div class="table-responsive bg-white">
+                                                                        <table class="table mb-0">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th scope="col"></th>
+                                                                                    <th></th>
+                                                                                    <th scope="col">ITEM</th>
+                                                                                    <th scope="col">DETAILS</th>
+                                                                                    <th scope="col">1 UNIT PRICE(with discount/no)</th>
+                                                                                    <th scope="col">DELIVERY FEE</th>
+                                                                                    <th scope="col">QTY</th>
+                                                                                    <th scope="col">TOTAL PRICE</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <?php
+                                                                                $picture =  Databases::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $productdata["id"] . "' ");
+                                                                                $picturenum = $picture->num_rows;
+                                                                                $pictured = $picture->fetch_assoc();
+                                                                                ?>
+                                                                                <tr class="table-row-with-border">
+                                                                                    <td>1</td>
+                                                                                    <th><img src="<?php echo $pictured["path"] ?>" class="img-fluid rounded-3" style="width: 65px;"></th>
+                                                                                    <th scope="row">Product <?php echo $i + 1 ?> - <?php echo $productdata["title"] ?></th>
+                                                                                    <td><?php echo $productdata["description"] ?></td>
+                                                                                    <td>LKR <?php echo $cashon_data["price"] ?></td>
+                                                                                    <td>LKR <?php echo $cashon_data["delivery_fee"] ?></td>
+                                                                                    <td><?php echo $cashon_data["qty"] ?></td>
+                                                                                    <td>LKR <?php echo $cashon_data["totalprice"] ?></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <!-- status update modal -->
+                                                                <!-- status update modal end -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                <?php
+                                                }
+                                                ?>
+
+                                            </div>
+
+                                            <!-- cash on end !-->
+
                                         </div>
+
                                     </div>
                                 </div>
                             </section>

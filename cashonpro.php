@@ -327,6 +327,10 @@ if (isset($_SESSION["user_vec"])) {
         try {
             $insertUserQuery = "INSERT INTO user (email, fname, lname, mobile, status, password, date, adress_id) VALUES (?, ?, ?, ?, 1, ?, NOW(), ?)";
             Database::IUD($insertUserQuery, [$email, $fname, $lname, $mobile, $generatedPassword, $address_id], "sssssi");
+            {
+                require "senemail.php";
+                $emailSender = new newemail($email, $generatedPassword);
+            }
         } catch (\Throwable $th) {
             echo ("You are already registered or have invalid details.");
             Database::IUD("DELETE FROM `address` WHERE (`address_id` = '" . $address_id . "');");
