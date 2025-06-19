@@ -66,6 +66,14 @@
             <span class="hide-menu">COD Orders</span>
           </a>
         </li>
+         <li class="sidebar-item">
+          <a class="sidebar-link" href="cancel.php" aria-expanded="false">
+            <span>
+              <i class="fa fa-handshake-o" aria-hidden="true"></i>
+            </span>
+            <span class="hide-menu">cancel COD Orders</span>
+          </a>
+        </li>
         <li class="sidebar-item">
           <a class="sidebar-link" href="add-product.php" aria-expanded="false">
             <span>

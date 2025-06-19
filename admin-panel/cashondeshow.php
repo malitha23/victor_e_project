@@ -91,75 +91,79 @@ if (isset($_SESSION["a"])) {
                                                 $status = Databases::Search("SELECT * FROM `cashon_status` WHERE `id` = '" . $ORDER["cashon_status_id"] . "'");
                                                 $statusdata = $status->fetch_assoc();
 
-                                                $batch = Databases::Search("SELECT * FROM batch WHERE `id` = '" . $ORDER["batch_id"] . "'");
-                                                $batchdata = $batch->fetch_assoc();
-                                                if ($batchdata["Delete"] == 1) {
-                                                    echo '<div class="text-center mt-5"><h5 class="text-danger">Batch is not available.</h5></div>';
-                                                    exit();
-                                                }
-                                                $product = Databases::Search("SELECT * FROM product WHERE `id` = '" . $batchdata["product_id"] . "'");
-                                                $productdata = $product->fetch_assoc();
+                                                if ($statusdata["id"] == 22) {
+                                                } else {
+                                                    $batch = Databases::Search("SELECT * FROM batch WHERE `id` = '" . $ORDER["batch_id"] . "'");
+                                                    $batchdata = $batch->fetch_assoc();
+                                                    if ($batchdata["Delete"] == 1) {
+                                                        echo '<div class="text-center mt-5"><h5 class="text-danger">Batch is not available.</h5></div>';
+                                                        exit();
+                                                    }
+                                                    $product = Databases::Search("SELECT * FROM product WHERE `id` = '" . $batchdata["product_id"] . "'");
+                                                    $productdata = $product->fetch_assoc();
                                             ?>
-                                                <!-- order start -->
-                                                <div class="row">
-                                                    <div class="col-12 border border-dark-subtle shadow mt-3">
-                                                        <div class="row mt-2">
-                                                            <div class="d-flex">
-                                                                <div class="p-2 w-100">
-                                                                    <div><b>Name : </b> <?php echo $userdata["fname"] . " " . $userdata["lname"] ?> <span class="tex-r">* GUEST ACCOUNT</span></div>
-                                                                    <div><b>Mobile : </b> <?php echo $userdata["mobile"] ?> </div>
-                                                                    <div><b>Email : </b> <?php echo $userdata["email"] ?></div>
-                                                                    <div><b>Address : </b><?php echo $addressdata["line_1"] . " " . $addressdata["line_2"] . " " . $citydata["name"] . " " . $districtdata["name"] ?></div>
-                                                                    <div><b>Date Time : </b><?php echo $ORDER["date"] ?></div>
-                                                                </div>
-                                                                <div class="p-2">
-                                                                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#statusModal"
-                                                                        data-order-id="<?php echo $ORDER['id']; ?>" data-order-email="<?php echo $userdata['email']; ?>">
-                                                                        <?php echo $statusdata["name"] ?>
-                                                                    </a>
+                                                    <!-- order start -->
+                                                    <div class="row">
+                                                        <div class="col-12 border border-dark-subtle shadow mt-3">
+                                                            <div class="row mt-2">
+                                                                <div class="d-flex">
+                                                                    <div class="p-2 w-100">
+                                                                        <div><b>Name : </b> <?php echo $userdata["fname"] . " " . $userdata["lname"] ?> <span class="tex-r">* GUEST ACCOUNT</span></div>
+                                                                        <div><b>Mobile : </b> <?php echo $userdata["mobile"] ?> </div>
+                                                                        <div><b>Email : </b> <?php echo $userdata["email"] ?></div>
+                                                                        <div><b>Address : </b><?php echo $addressdata["line_1"] . " " . $addressdata["line_2"] . " " . $citydata["name"] . " " . $districtdata["name"] ?></div>
+                                                                        <div><b>Date Time : </b><?php echo $ORDER["date"] ?></div>
+                                                                    </div>
+                                                                    <div class="p-2">
+                                                                        <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#statusModal"
+                                                                            data-order-id="<?php echo $ORDER['id']; ?>" data-order-email="<?php echo $userdata['email']; ?>">
+                                                                            <?php echo $statusdata["name"] ?>
+                                                                        </a>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row justify-content-center">
-                                                            <div class="col-12 px-3 pt-4 pb-5 rounded-2">
-                                                                <div class="table-responsive bg-white">
-                                                                    <table class="table mb-0">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th scope="col"></th>
-                                                                                <th></th>
-                                                                                <th scope="col">ITEM</th>
-                                                                                <th scope="col">DETAILS</th>
-                                                                                <th scope="col">1 UNIT PRICE(with discount/no)</th>
-                                                                                <th scope="col">DELIVERY FEE</th>
-                                                                                <th scope="col">QTY</th>
-                                                                                <th scope="col">TOTAL PRICE</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <?php
-                                                                            $picture =  Databases::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $productdata["id"] . "' ");
-                                                                            $picturenum = $picture->num_rows;
-                                                                            $pictured = $picture->fetch_assoc();
-                                                                            ?>
-                                                                            <tr class="table-row-with-border">
-                                                                                <td>1</td>
-                                                                                <th><img src="<?php echo $pictured["path"] ?>" class="img-fluid rounded-3" style="width: 65px;"></th>
-                                                                                <th scope="row">Product <?php echo $i + 1 ?> - <?php echo $productdata["title"] ?></th>
-                                                                                <td><?php echo $productdata["description"] ?></td>
-                                                                                <td>LKR <?php echo $ORDER["price"] ?></td>
-                                                                                <td>LKR <?php echo $ORDER["delivery_fee"] ?></td>
-                                                                                <td><?php echo $ORDER["qty"] ?></td>
-                                                                                <td>LKR <?php echo $ORDER["totalprice"] ?></td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
+                                                            <div class="row justify-content-center">
+                                                                <div class="col-12 px-3 pt-4 pb-5 rounded-2">
+                                                                    <div class="table-responsive bg-white">
+                                                                        <table class="table mb-0">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th scope="col"></th>
+                                                                                    <th></th>
+                                                                                    <th scope="col">ITEM</th>
+                                                                                    <th scope="col">DETAILS</th>
+                                                                                    <th scope="col">1 UNIT PRICE(with discount/no)</th>
+                                                                                    <th scope="col">DELIVERY FEE</th>
+                                                                                    <th scope="col">QTY</th>
+                                                                                    <th scope="col">TOTAL PRICE</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <?php
+                                                                                $picture =  Databases::Search("SELECT * FROM `picture`  WHERE `product_id`='" . $productdata["id"] . "' ");
+                                                                                $picturenum = $picture->num_rows;
+                                                                                $pictured = $picture->fetch_assoc();
+                                                                                ?>
+                                                                                <tr class="table-row-with-border">
+                                                                                    <td>1</td>
+                                                                                    <th><img src="<?php echo $pictured["path"] ?>" class="img-fluid rounded-3" style="width: 65px;"></th>
+                                                                                    <th scope="row">Product <?php echo $i + 1 ?> - <?php echo $productdata["title"] ?></th>
+                                                                                    <td><?php echo $productdata["description"] ?></td>
+                                                                                    <td>LKR <?php echo $ORDER["price"] ?></td>
+                                                                                    <td>LKR <?php echo $ORDER["delivery_fee"] ?></td>
+                                                                                    <td><?php echo $ORDER["qty"] ?></td>
+                                                                                    <td>LKR <?php echo $ORDER["totalprice"] ?></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            <?php } ?>
+                                            <?php
+                                                }
+                                            } ?>
 
                                             <!-- Status Update Modal (only once) -->
                                             <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
@@ -226,6 +230,7 @@ if (isset($_SESSION["a"])) {
                                 </div>
                             </section>
                         </div>
+
                     </div>
                 </div>
             </div>
