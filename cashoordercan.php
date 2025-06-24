@@ -23,7 +23,7 @@ if (isset($_POST['uniq_id'])) {
         $user_email = $cashon_data['email'];
 
         // Send Email to Admin
-        $admin_email = "jayasundarasahan913@gmail.com"; // Admin email address
+        $admin_email = "info@shelfampy.com"; // Admin email address
 
         $mail = new PHPMailer(true);
         try {
