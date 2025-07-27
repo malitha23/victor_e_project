@@ -32,9 +32,9 @@ class Database
 
             $host = isset($_ENV['DB_HOST']) ? $_ENV['DB_HOST'] : 'localhost';
             $port = isset($_ENV['DB_PORT']) ? $_ENV['DB_PORT'] : 3306;
-            $username = isset($_ENV['DB_USERNAME']) ? $_ENV['DB_USERNAME'] : 'root';
-            $password = isset($_ENV['DB_PASSWORD']) ? $_ENV['DB_PASSWORD'] : 'Uditha1#';
-            $database = isset($_ENV['DB_DATABASE']) ? $_ENV['DB_DATABASE'] : 'victore';
+            $username = isset($_ENV['DB_USERNAME']) ? $_ENV['DB_USERNAME'] : 'u247981053_ampy';
+            $password = isset($_ENV['DB_PASSWORD']) ? $_ENV['DB_PASSWORD'] : 'vics2025IIdb@#';
+            $database = isset($_ENV['DB_DATABASE']) ? $_ENV['DB_DATABASE'] : 'u247981053_shelf';
 
             // Establish the database connection
             Database::$connection = new mysqli($host, $username, $password, $database, $port);
