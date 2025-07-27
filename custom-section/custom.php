@@ -44,32 +44,32 @@
                 const aboutUsSections = [{
                         title1: "Who We Are",
                         title2: "Creative team from Lanka",
-                        image: "img/man-with-beer-svgrepo-com.svg",
-                        href: "../file-1.php"
+                        image: "custom-section/img/man-with-beer-svgrepo-com.svg",
+                        href: "file-1.php"
                     },
                     {
                         title1: "What We Do",
                         title2: "Building online store platforms",
-                        image: "img/business-person-to-guide-left-hand-svgrepo-com.svg",
-                        href: "../file-2.php"
+                        image: "custom-section/img/business-person-to-guide-left-hand-svgrepo-com.svg",
+                        href: "file-2.php"
                     },
                     {
                         title1: "Why Choose Us",
                         title2: "Trusted by locals, built global",
-                        image: "img/man-with-computer-and-headset-svgrepo-com.svg",
-                        href: "../file-4.php"
+                        image: "custom-section/img/man-with-computer-and-headset-svgrepo-com.svg",
+                        href: "file-4.php"
                     },
                     {
                         title1: "Our Mission",
                         title2: "Empowering Lankan businesses",
-                        image: "img/man-with-hand-on-chin-svgrepo-com.svg",
-                        href: "../file-3.php"
+                        image: "custom-section/img/man-with-hand-on-chin-svgrepo-com.svg",
+                        href: "file-3.php"
                     },
                     {
                         title1: "Our Vision",
                         title2: "Smart commerce for everyone",
-                        image: "img/man-with-magnifying-glass-svgrepo-com.svg",
-                        href: "../file-5.php"
+                        image: "custom-section/img/man-with-magnifying-glass-svgrepo-com.svg",
+                        href: "file-5.php"
                     }
                 ];
 
